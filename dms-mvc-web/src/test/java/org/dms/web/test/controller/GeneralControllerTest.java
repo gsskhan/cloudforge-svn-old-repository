@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = { "file:/media/RUN_FILESTORE/workspace_lin32/DMSmvc/src/main/webapp/WEB-INF/dms-servlet.xml"})
+@ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/dms-servlet.xml"})
 @TransactionConfiguration(transactionManager = "dbTxManager")
 @Transactional
 public class GeneralControllerTest {

@@ -5,7 +5,7 @@
   <artifactId>DMSmvc</artifactId>
   <packaging>war</packaging>
   <version>0.1</version>
-  <name>DMSmvc Maven Webapp</name>
+  <name>DMS mvc Webapp</name>
   <url>http://maven.apache.org</url>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -182,7 +182,7 @@
 	</dependency>
   </dependencies>
    <build>
-    <finalName>DMSmvc</finalName>
+    <finalName>dms-mvc-web</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
