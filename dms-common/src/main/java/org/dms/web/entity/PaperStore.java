@@ -1,0 +1,125 @@
+package org.dms.web.entity;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Arrays;
+
+import javax.persistence.*;
+
+/**
+ * @author gsskhan - To hold each paper contents
+ */
+
+@Entity
+@Table(name="PAPER_STORE")
+public class PaperStore implements Serializable{
+	
+	private static final long serialVersionUID = 4298340509308384389L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="PAPER_STORE_ID")
+	private long paperStoreId;
+	
+	@Column(name="PAPER_NUMBER", nullable= false)
+	private long paperNumber;
+	
+	@Column(name="PAPER_VERSION", nullable= false)
+	private int paperVersion;
+	
+	@Column(name="PAPER_TITLE", nullable= false, length=500)
+	private String paperTitle;
+	
+	@Lob
+	@Column(name="PAPER_DATA", nullable= false)
+	private byte[] paperData;
+	
+	@Column(name="CREATED_BY_USER_ID", nullable= false)
+	private long createdByUserId;
+	
+	@Column(name="CREATION_TIME", nullable= false)
+	private Timestamp creationTime;
+	
+	public PaperStore() {
+		super();
+	}
+
+	public PaperStore(long paperNumber, int paperVersion, String paperTitle,
+			byte[] paperData, long createdByUserId, Timestamp creationTime) {
+		super();
+		this.paperNumber = paperNumber;
+		this.paperVersion = paperVersion;
+		this.paperTitle = paperTitle;
+		this.paperData = paperData;
+		this.createdByUserId = createdByUserId;
+		this.creationTime = creationTime;
+	}
+
+	public long getPaperStoreId() {
+		return paperStoreId;
+	}
+
+	public void setPaperStoreId(long paperStoreId) {
+		this.paperStoreId = paperStoreId;
+	}
+
+	public long getPaperNumber() {
+		return paperNumber;
+	}
+
+	public void setPaperNumber(long paperNumber) {
+		this.paperNumber = paperNumber;
+	}
+
+	public int getPaperVersion() {
+		return paperVersion;
+	}
+
+	public void setPaperVersion(int paperVersion) {
+		this.paperVersion = paperVersion;
+	}
+
+	public String getPaperTitle() {
+		return paperTitle;
+	}
+
+	public void setPaperTitle(String paperTitle) {
+		this.paperTitle = paperTitle;
+	}
+
+	public byte[] getPaperData() {
+		return paperData;
+	}
+
+	public void setPaperData(byte[] paperData) {
+		this.paperData = paperData;
+	}
+
+	public long getCreatedByUserId() {
+		return createdByUserId;
+	}
+
+	public void setCreatedByUserId(long createdByUserId) {
+		this.createdByUserId = createdByUserId;
+	}
+
+	public Timestamp getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(Timestamp creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	@Override
+	public String toString() {
+		return "PaperStore [paperStoreId=" + paperStoreId + ", paperNumber="
+				+ paperNumber + ", paperVersion=" + paperVersion
+				+ ", paperTitle=" + paperTitle + ", paperData="
+				+ Arrays.toString(paperData) + ", createdByUserId="
+				+ createdByUserId + ", creationTime=" + creationTime + "]";
+	}
+	
+	
+
+}
