@@ -3,6 +3,7 @@ package org.dms.web.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -18,7 +19,7 @@ public class PaperStore implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="PAPER_STORE_ID")
+	@Column(name="PAPER_STORE_ID", unique = true, nullable = false)
 	private long paperStoreId;
 	
 	@Column(name="PAPER_NUMBER", nullable= false)
@@ -40,12 +41,20 @@ public class PaperStore implements Serializable{
 	@Column(name="CREATION_TIME", nullable= false)
 	private Timestamp creationTime;
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="paperStoreRef")
+	private Set<PaperStatusInfo> paperStatusInfos;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="paperStoreRef")
+	private Set<PaperWorkflow> paperWorkflows;	
+	
 	public PaperStore() {
 		super();
 	}
-
+	
 	public PaperStore(long paperNumber, int paperVersion, String paperTitle,
-			byte[] paperData, long createdByUserId, Timestamp creationTime) {
+			byte[] paperData, long createdByUserId, Timestamp creationTime,
+			Set<PaperStatusInfo> paperStatusInfos,
+			Set<PaperWorkflow> paperWorkflows) {
 		super();
 		this.paperNumber = paperNumber;
 		this.paperVersion = paperVersion;
@@ -53,6 +62,8 @@ public class PaperStore implements Serializable{
 		this.paperData = paperData;
 		this.createdByUserId = createdByUserId;
 		this.creationTime = creationTime;
+		this.paperStatusInfos = paperStatusInfos;
+		this.paperWorkflows = paperWorkflows;
 	}
 
 	public long getPaperStoreId() {
@@ -111,15 +122,32 @@ public class PaperStore implements Serializable{
 		this.creationTime = creationTime;
 	}
 
+	public Set<PaperStatusInfo> getPaperStatusInfos() {
+		return paperStatusInfos;
+	}
+
+	public void setPaperStatusInfos(Set<PaperStatusInfo> paperStatusInfos) {
+		this.paperStatusInfos = paperStatusInfos;
+	}
+
+	public Set<PaperWorkflow> getPaperWorkflows() {
+		return paperWorkflows;
+	}
+
+	public void setPaperWorkflows(Set<PaperWorkflow> paperWorkflows) {
+		this.paperWorkflows = paperWorkflows;
+	}
+
 	@Override
 	public String toString() {
 		return "PaperStore [paperStoreId=" + paperStoreId + ", paperNumber="
 				+ paperNumber + ", paperVersion=" + paperVersion
 				+ ", paperTitle=" + paperTitle + ", paperData="
 				+ Arrays.toString(paperData) + ", createdByUserId="
-				+ createdByUserId + ", creationTime=" + creationTime + "]";
+				+ createdByUserId + ", creationTime=" + creationTime
+				+ ", paperStatusInfos=" + paperStatusInfos
+				+ ", paperWorkflows=" + paperWorkflows + "]";
 	}
-	
 	
 
 }
