@@ -43,11 +43,11 @@ public class PaperStoreDaoTest {
 		genericDao.saveEntity(newPaper);		
 		log.info("saved - " + newPaper);
 		
-		PaperStatusInfo statusInfo = new PaperStatusInfo(newPaper, false, 0, null, false, 0, null, false, 0, null, "dummy test");
+		PaperStatusInfo statusInfo = new PaperStatusInfo(newPaper, false, 0, null, false, 0, null, false, 0, null, "status info dummy test");
 		genericDao.saveEntity(statusInfo);
 		log.info("saved - "+ statusInfo);
 		
-		PaperWorkflow workflow = new PaperWorkflow(newPaper, 0, null, false, null, "dummy test");
+		PaperWorkflow workflow = new PaperWorkflow(newPaper, 0, null, false, null, "workflow dummy test");
 		genericDao.saveEntity(workflow);
 		log.info("saved - "+ workflow);
 		
@@ -62,6 +62,7 @@ public class PaperStoreDaoTest {
 	@Ignore
 	public void displayFewPaperDetails(){
 		log.info("Displaying few details papers -");
+		
 		List<Object[]> paperList = genericDao.getList(
 			  " select p.paperStoreId , p.paperTitle, e.examId "
 			+ " from PaperStore p , Examination e "
@@ -71,6 +72,22 @@ public class PaperStoreDaoTest {
 			String paperTitle = (String) obj[1];
 			long examId = (long) obj[2];
 			log.info("PaperId = "+paperId +", PaperTitle="+ paperTitle +", ExamId="+ examId);
+		}
+		
+		List<PaperStore> allpaperList = genericDao.getListWhereEq(PaperStore.class, null, 100);
+		for (PaperStore paperStore : allpaperList) {
+			log.info( "PaperId = "+paperStore.getPaperStoreId() 
+					+ ", PaperTitle="+ paperStore.getPaperTitle() 
+					+ ", ExamId="+ paperStore.getExamination().getExamId()
+					);
+			for (PaperStatusInfo statusInfo : paperStore.getPaperStatusInfos()) {
+				log.info("Status id = "+ statusInfo.getPaperStatusId()
+						+", Comments ="+statusInfo.getComments());
+			}
+			for (PaperWorkflow workflow : paperStore.getPaperWorkflows()) {
+				log.info("Workflow id = "+ workflow.getWorkflowId()
+						+", Comments =" + workflow.getComments());
+			}
 		}
 	}
 
