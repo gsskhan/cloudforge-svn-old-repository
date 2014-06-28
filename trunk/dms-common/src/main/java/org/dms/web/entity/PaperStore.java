@@ -47,14 +47,17 @@ public class PaperStore implements Serializable{
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="paperStoreRef")
 	private Set<PaperWorkflow> paperWorkflows;	
 	
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="paperStoreRef")
+	private Examination examination;
+	
 	public PaperStore() {
 		super();
 	}
-	
+
 	public PaperStore(long paperNumber, int paperVersion, String paperTitle,
 			byte[] paperData, long createdByUserId, Timestamp creationTime,
 			Set<PaperStatusInfo> paperStatusInfos,
-			Set<PaperWorkflow> paperWorkflows) {
+			Set<PaperWorkflow> paperWorkflows, Examination examination) {
 		super();
 		this.paperNumber = paperNumber;
 		this.paperVersion = paperVersion;
@@ -64,6 +67,7 @@ public class PaperStore implements Serializable{
 		this.creationTime = creationTime;
 		this.paperStatusInfos = paperStatusInfos;
 		this.paperWorkflows = paperWorkflows;
+		this.examination = examination;
 	}
 
 	public long getPaperStoreId() {
@@ -138,6 +142,14 @@ public class PaperStore implements Serializable{
 		this.paperWorkflows = paperWorkflows;
 	}
 
+	public Examination getExamination() {
+		return examination;
+	}
+
+	public void setExamination(Examination examination) {
+		this.examination = examination;
+	}
+
 	@Override
 	public String toString() {
 		return "PaperStore [paperStoreId=" + paperStoreId + ", paperNumber="
@@ -146,8 +158,8 @@ public class PaperStore implements Serializable{
 				+ Arrays.toString(paperData) + ", createdByUserId="
 				+ createdByUserId + ", creationTime=" + creationTime
 				+ ", paperStatusInfos=" + paperStatusInfos
-				+ ", paperWorkflows=" + paperWorkflows + "]";
-	}
-	
+				+ ", paperWorkflows=" + paperWorkflows + ", examination="
+				+ examination + "]";
+	}	
 
 }
