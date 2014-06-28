@@ -2,6 +2,7 @@ package org.dms.web.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -29,6 +30,9 @@ public class Examination implements Serializable{
 	@Column(name="EXAM_OWNER", nullable=false)
 	private long examOwner;
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="examRef")
+	private Set<Assignment> assignments;
+	
 	public Examination() {
 		super();
 	}
@@ -40,6 +44,16 @@ public class Examination implements Serializable{
 		this.examStartTime = examStartTime;
 		this.examEndTime = examEndTime;
 		this.examOwner = examOwner;
+	}
+	
+	public Examination(PaperStore paperStoreRef, Timestamp examStartTime,
+			Timestamp examEndTime, long examOwner, Set<Assignment> assignments) {
+		super();
+		this.paperStoreRef = paperStoreRef;
+		this.examStartTime = examStartTime;
+		this.examEndTime = examEndTime;
+		this.examOwner = examOwner;
+		this.assignments = assignments;
 	}
 
 	public long getExamId() {
@@ -82,12 +96,21 @@ public class Examination implements Serializable{
 		this.examOwner = examOwner;
 	}
 
+	public Set<Assignment> getAssignments() {
+		return assignments;
+	}
+
+	public void setAssignments(Set<Assignment> assignments) {
+		this.assignments = assignments;
+	}
+
 	@Override
 	public String toString() {
 		return "Examination [examId=" + examId + ", paperStoreRef="
 				+ paperStoreRef + ", examStartTime=" + examStartTime
 				+ ", examEndTime=" + examEndTime + ", examOwner=" + examOwner
-				+ "]";
-	}	
+				+ ", assignments=" + assignments + "]";
+	}
+	
 
 }
