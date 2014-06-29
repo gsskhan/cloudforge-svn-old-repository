@@ -8,6 +8,11 @@
 
 <div class="panel-group" id="accordion">
 	<div class="panel panel-info">
+		<div class="panel-heading" style="text-align: center; font-size: 12px; color: black;">
+			<c:out value="${sysmsg}" default="Administration Zone - changes performed are irreversible."/>
+		</div>
+	</div>
+	<div class="panel panel-info">
 		<div class="panel-heading" data-toggle="collapse"
 			data-parent="#accordion" data-target="#collapseOne">
 			<h3 class="panel-title">Manage System Users</h3>
