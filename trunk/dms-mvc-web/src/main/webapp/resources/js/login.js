@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$('#pbodyid').hide();
+	//$('#pbodyid').hide();
 	$('#pheaderid').click(function() {
 		$('#pbodyid').slideToggle("slow");
 	});
