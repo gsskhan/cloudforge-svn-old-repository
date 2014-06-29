@@ -2,6 +2,7 @@ package org.dms.web.test.controller;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class GeneralControllerTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testGetUserRoles() throws Exception {
 		log.info("performing mock call..");
 		this.mockMvc.perform(get("/usermanage/rolelist").accept(MediaType.APPLICATION_JSON))
