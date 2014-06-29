@@ -4,6 +4,7 @@
 <%@taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <script type="text/javascript" src="resources/js/manage_users.js"></script>
 <script type="text/javascript" src="resources/js/manage_constants.js"></script>
+<script type="text/javascript" src="resources/js/manage_paper.js"></script>
 
 <div class="panel-group" id="accordion">
 	<div class="panel panel-info">
@@ -53,6 +54,30 @@
 						<!-- START: code to edit or delete constant-->
 						<jsp:include page="/WEB-INF/pages/admin/edit_del_constant.jsp"></jsp:include>
 						<!-- END: code to edit or delete user -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading" data-toggle="collapse"
+			data-parent="#accordion" data-target="#collapseThree">
+			<h3 class="panel-title">Manage Papers</h3>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse">
+			<div class="panel-body">
+				<div id="papermanagetabs">
+					<ul>
+						<li><a href="#papermanagetab-1"><span>Add</span></a></li>
+						<li><a href="#papermanagetab-2"><span>Modify - Remove</span></a></li>
+					</ul>
+					<div id="papermanagetab-1">
+						<!-- START: code to upload new paper form -->
+						<jsp:include page="/WEB-INF/pages/admin/add_paper.jsp"></jsp:include>
+						<!-- END: code to upload new paper form -->
+					</div>
+					<div id="papermanagetab-2">
+						
 					</div>
 				</div>
 			</div>
