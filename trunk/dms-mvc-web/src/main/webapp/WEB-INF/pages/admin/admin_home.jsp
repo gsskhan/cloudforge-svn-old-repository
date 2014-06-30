@@ -6,12 +6,17 @@
 <script type="text/javascript" src="resources/js/manage_constants.js"></script>
 <script type="text/javascript" src="resources/js/manage_paper.js"></script>
 
+<c:if test="${status eq null}">
+	<div class="alert alert-warning" style="text-align: center;">Administration Zone - changes performed are irreversible.</div>
+</c:if>
+<c:if test="${status eq 'success'}">
+	<div class="alert alert-success" style="text-align: center;"><c:out value="${statusmsg}"/></div>
+</c:if>
+<c:if test="${status eq 'error'}">
+	<div class="alert alert-danger" style="text-align: center;"><c:out value="${statusmsg}"/></div>
+</c:if>
+
 <div class="panel-group" id="accordion">
-	<div class="panel panel-info">
-		<div class="panel-heading" style="text-align: center; font-size: 12px; color: black;">
-			<c:out value="${sysmsg}" default="Administration Zone - changes performed are irreversible."/>
-		</div>
-	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading" data-toggle="collapse"
 			data-parent="#accordion" data-target="#collapseOne">
