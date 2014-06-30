@@ -30,10 +30,12 @@ public class UploadController {
 				log.info("recieved file name= "+mpf.getOriginalFilename()+" , file size= "+mpf.getSize()/1024 +" Kb.");
 				FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/tmp/"+mpf.getOriginalFilename()));
 				log.info("saved to disk.");
-				mav.getModel().put("sysmsg", "Paper uploaded successfully.");
+				mav.getModel().put("statusmsg", "Paper uploaded successfully.");
+				mav.getModel().put("status", "success");
 			}
 		} catch (IOException e) {
-			mav.getModel().put("sysmsg", "Paper upload un-successfull, please try again.");
+			mav.getModel().put("statusmsg", "Paper upload un-successfull, please try again.");
+			mav.getModel().put("status", "error");
 			log.error("Error in uploading new paper.", e);
 		}				
 		return mav;	
