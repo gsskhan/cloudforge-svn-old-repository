@@ -6,5 +6,9 @@
 <bean id="loginService" class="org.dms.web.bo.impl.LoginServiceImpl" />
 <bean id="constantsService" class="org.dms.web.bo.impl.ConstantsServiceImpl" />
 <bean id="userService" class="org.dms.web.bo.impl.UserServiceImpl" />
+<bean id="paperService" class="org.dms.web.bo.impl.PaperServiceImpl" />
+
+<bean id="random" class="java.util.Random" scope="prototype"/>
+<bean id="randomNumberGenerator" class="org.dms.web.core.RandomNumberGenerator" scope="prototype" />
 
 </beans>
