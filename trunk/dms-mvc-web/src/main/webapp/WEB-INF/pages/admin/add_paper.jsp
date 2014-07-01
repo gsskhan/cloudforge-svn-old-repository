@@ -4,8 +4,17 @@
 		<label for="paper-title-id" class="control-label">Paper Title:</label> 
 		<input type="text" name="paper-title" id="paper-title-id" required="required" class="form-control" />	
 		
-		<label for="fileupload" class="control-label">Select file:</label> 
-		<input id="fileupload" type="file" name="newfile" class="form-control" >
+		<label for="file-upload-id" class="control-label">Select file:</label> 
+		<input id="file-upload-id" type="file" name="new-file" class="form-control" required="required">
+		
+		<div class="checkbox">
+		<label><input type="checkbox" checked="checked" disabled="disabled" required="required">Assign for authorization</label>
+		</div>
+		
+		<label for="select-auth-name-id" class="control-label">Select authorizer's name:</label>
+		<select id="select-auth-name-id" name="auth-username" required="required" class="form-control" >
+			<!-- <option value="----">-- SELECT --</option> -->
+		</select>
 				
 		<input type="text" name="uploader-name" value="${sUserName}" hidden="true">
 		<br>			
