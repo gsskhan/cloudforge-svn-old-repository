@@ -78,6 +78,14 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
+	public User findUserHavingName(String username) throws DmsException {
+		hqlparam.clear();
+		hqlparam.put("uname", username);
+		User usr = genericDao.getEntity(" from User where username = :uname ", hqlparam);
+		return usr;
+	}
+	
+	@Override
 	public List<User> findUsersWithNameLike(String keyword) throws DmsException{	
 		List<User> tmpList = new ArrayList<User>();
 		if (keyword == null || keyword.isEmpty()) {
@@ -133,6 +141,6 @@ public class UserServiceImpl implements UserService{
 	}
 	public void setGenericDao(GenericDao genericDao) {
 		this.genericDao = genericDao;
-	}
+	}	
 
 }

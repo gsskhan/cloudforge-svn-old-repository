@@ -54,6 +54,14 @@ public class PaperStatusInfo implements Serializable{
 	}	
 		
 	public PaperStatusInfo(PaperStore paperStoreRef, boolean authorized,
+			String comments) {
+		super();
+		this.paperStoreRef = paperStoreRef;
+		this.authorized = authorized;
+		this.comments = comments;
+	}
+
+	public PaperStatusInfo(PaperStore paperStoreRef, boolean authorized,
 			long authorizedBy, Timestamp authorizationTime, boolean approved,
 			long approvedBy, Timestamp approvalTime, boolean rejected,
 			long rejectedBy, Timestamp rejectionTime, String comments) {
