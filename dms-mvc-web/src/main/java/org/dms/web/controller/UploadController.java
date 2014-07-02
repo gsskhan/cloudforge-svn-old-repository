@@ -1,17 +1,22 @@
 package org.dms.web.controller;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dms.web.bo.PaperService;
 import org.dms.web.constants.ViewConstants;
+import org.dms.web.core.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,5 +56,18 @@ public class UploadController {
 			log.error("Error in uploading new paper.", e);
 		}				
 		return mav;	
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/authorizerslist/{uname}")
+	public String getAuthorizersNamesListFor(@PathVariable("uname") String uploaderName){
+		log.info("searching all the possible system user names who could be authorizer, when uploader is "+ uploaderName+" .");
+		List<String> names = new ArrayList<String>();
+		try {
+			names = paperService.getAuthorizerListWhenCreatorIs(uploaderName);
+		} catch (Exception e) {
+			log.error("error in getting authorizers name list.", e);
+		}		
+		return JsonUtil.getJsonAsString(names);
 	}
 }
