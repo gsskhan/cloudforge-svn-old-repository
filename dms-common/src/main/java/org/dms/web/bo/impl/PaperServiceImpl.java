@@ -43,7 +43,7 @@ public class PaperServiceImpl implements PaperService {
 			throw new DmsRuntimeException("No record of user having name as "+uploaderName+" found in database.");
 		}
 		if (authorizer == null) {
-			throw new DmsRuntimeException("No record of user having name as "+uploaderName+" found in database.");
+			throw new DmsRuntimeException("No record of user having name as "+authorizer+" found in database.");
 		}
 		/* create new paper record, status info and workflow for this newly created paper. */
 		PaperStore paper = new PaperStore(randumNumber.getRandomLong(), 0, paperTitle , uploadedData, creator.getUserId(), currentTime, null, null, null);
