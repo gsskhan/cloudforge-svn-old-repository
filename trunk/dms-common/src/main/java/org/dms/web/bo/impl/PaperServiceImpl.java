@@ -1,7 +1,11 @@
 package org.dms.web.bo.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -27,8 +31,9 @@ public class PaperServiceImpl implements PaperService {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private RandomNumberGenerator randumNumber;
+	private RandomNumberGenerator randumNumber;	
 	
+	private Map<String, Object> hqlparam = new HashMap<String, Object>();
 	
 	@Override
 	public String addNewPaperToStore(String paperTitle, byte[] uploadedData, String uploaderName, boolean assignForauthorization, String assignedAuthorizerName) throws DmsException {
@@ -61,6 +66,31 @@ public class PaperServiceImpl implements PaperService {
 		genericDao.saveEntity(authoWorkflow);
 		log.info("saved paper aothorization pending workflow , id = "+ authoWorkflow.getWorkflowId());
 		return "New paper {number "+paper.getPaperNumber()+"/version "+paper.getPaperVersion()+"} stored into database.";
+	}
+
+	/**
+	 * All types of users except the "Creator of paper" and "Student" cannot be authorizer. 
+	 * @return list of system user names who could be chosen for authorizing a paper.
+	 * @param creatorName name of the system user who is creating/uploading the paper initially. 
+	 */
+	@Override
+	public List<String> getAuthorizerListWhenCreatorIs(String creatorName) throws DmsException {
+		List<String> tmpList = new ArrayList<String>();
+		if (StringUtils.isEmpty(creatorName)) {
+			throw new DmsException("creator's name not received.");
+		}
+		User creator = userService.findUserHavingName(creatorName);
+		if (creator == null) {
+			throw new DmsException(creatorName +" is not a valid system user name.");
+		}
+		hqlparam.clear();
+		String hql = " select distinct username from User where username != :vname "
+					+ "and role != :vrole ";
+		hqlparam.put("vname", creatorName);
+		hqlparam.put("vrole", SystemConstants.ROLE_STUDENT.getValue());
+		tmpList = genericDao.getList(hql, hqlparam, 1000000);
+		log.info("found "+tmpList.size()+" possible authorizer names.");
+		return tmpList;
 	}
 
 }
