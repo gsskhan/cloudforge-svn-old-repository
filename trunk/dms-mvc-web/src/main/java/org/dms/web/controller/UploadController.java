@@ -1,13 +1,11 @@
 package org.dms.web.controller;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.dms.web.bo.PaperService;
 import org.dms.web.constants.ViewConstants;
-import org.dms.web.exception.DmsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -31,7 +29,9 @@ public class UploadController {
 	@RequestMapping(value="/upload-new-paper", method=RequestMethod.POST)
 	public ModelAndView uploadNewPaper(MultipartHttpServletRequest request
 			, @RequestParam(value="paper-title") String title
-			, @RequestParam(value="uploader-name") String uploaderName){
+			, @RequestParam(value="uploader-name") String uploaderName
+			, @RequestParam(value="assign-for-authorization", required= false) boolean assignForAuthorization
+			, @RequestParam(value="auth-username") String authorizerName){
 		ModelAndView mav = new ModelAndView(ViewConstants.ADMIN_HOME_PAGE.getValue());
 		try {
 			log.info("uploading new paper for user "+uploaderName+"...");
@@ -39,13 +39,13 @@ public class UploadController {
 			while (itr.hasNext()) {
 				MultipartFile mpf = request.getFile(itr.next());
 				log.info("recieved file name= "+mpf.getOriginalFilename()+" , file size= "+mpf.getSize()/1024 +" Kb.");
-				statusmsg = paperService.addNewPaperToStore(title, mpf.getBytes(), uploaderName);
+				statusmsg = paperService.addNewPaperToStore(title, mpf.getBytes(), uploaderName, assignForAuthorization, authorizerName);
 				FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("/tmp/"+mpf.getOriginalFilename()));
 				log.info("saved to disk at /tmp/"+ mpf.getOriginalFilename());
 				mav.getModel().put("statusmsg", "Paper upload successfull. "+statusmsg);
 				mav.getModel().put("status", "success");
 			}
-		} catch (IOException | DmsException e) {
+		} catch (Exception e) {
 			mav.getModel().put("statusmsg", "Paper upload un-successfull, please try again. "+ e.getMessage());
 			mav.getModel().put("status", "error");
 			log.error("Error in uploading new paper.", e);
