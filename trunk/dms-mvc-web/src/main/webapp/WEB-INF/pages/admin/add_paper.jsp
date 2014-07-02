@@ -13,10 +13,10 @@
 		
 		<label for="select-auth-name-id" class="control-label">Select authorizer's name:</label>
 		<select id="select-auth-name-id" name="auth-username" required="required" class="form-control" >
-			<option value="----">-- SELECT --</option>
+			<!-- <option value="----">-- SELECT --</option> -->
 		</select>
 				
-		<input type="text" name="uploader-name" value="${sUserName}" hidden="true">
+		<input id="uploader-name-id" type="text" name="uploader-name" value="${sUserName}" hidden="true">
 		<br>			
 		<input type="submit" value="Upload" class="btn btn-primary btn-sm" />
 	</div>
