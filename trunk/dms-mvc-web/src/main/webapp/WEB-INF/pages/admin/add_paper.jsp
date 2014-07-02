@@ -16,7 +16,7 @@
 			<!-- <option value="----">-- SELECT --</option> -->
 		</select>
 				
-		<input id="uploader-name-id" type="text" name="uploader-name" value="${sUserName}" hidden="true">
+		<input id="uploader-name-id" type="text" name="uploader-name" value="${sUserName}" hidden="true" />
 		<br>			
 		<input type="submit" value="Upload" class="btn btn-primary btn-sm" />
 	</div>
