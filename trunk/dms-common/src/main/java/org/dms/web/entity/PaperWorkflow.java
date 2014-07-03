@@ -28,6 +28,9 @@ public class PaperWorkflow implements Serializable {
 	@Column(name="COMPLETED")
 	private boolean completed;
 	
+	@Column(name="COMPLETED_BY_USER_ID")
+	private long completedByUserId;
+	
 	@Column(name="COMPLETION_TIME")
 	private Timestamp completionTime;
 	
@@ -39,13 +42,14 @@ public class PaperWorkflow implements Serializable {
 	}
 		
 	public PaperWorkflow(PaperStore paperStoreRef, long assignedToUserId,
-			Timestamp assignedOnTime, boolean completed,
+			Timestamp assignedOnTime, boolean completed, long completedByUserId,
 			Timestamp completionTime, String comments) {
 		super();
 		this.paperStoreRef = paperStoreRef;
 		this.assignedToUserId = assignedToUserId;
 		this.assignedOnTime = assignedOnTime;
 		this.completed = completed;
+		this.completedByUserId = completedByUserId;
 		this.completionTime = completionTime;
 		this.comments = comments;
 	}
@@ -90,6 +94,14 @@ public class PaperWorkflow implements Serializable {
 		this.completed = completed;
 	}
 
+	public long getCompletedByUserId() {
+		return completedByUserId;
+	}
+
+	public void setCompletedByUserId(long completedByUserId) {
+		this.completedByUserId = completedByUserId;
+	}
+
 	public Timestamp getCompletionTime() {
 		return completionTime;
 	}
@@ -111,9 +123,10 @@ public class PaperWorkflow implements Serializable {
 		return "PaperWorkflow [workflowId=" + workflowId + ", paperStoreRef="
 				+ paperStoreRef + ", assignedToUserId=" + assignedToUserId
 				+ ", assignedOnTime=" + assignedOnTime + ", completed="
-				+ completed + ", completionTime=" + completionTime
-				+ ", comments=" + comments + "]";
+				+ completed + ", completedByUserId=" + completedByUserId
+				+ ", completionTime=" + completionTime + ", comments="
+				+ comments + "]";
 	}
-
+	
 
 }
