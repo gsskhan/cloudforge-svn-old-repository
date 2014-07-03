@@ -11,7 +11,6 @@ $(document).ready(function() {
 	$(dropdown).click(function() {
 		window.alert('Fetching list of possible authorizing users. Please be patient while data loads.');
 		var uploadername = $(uploaderNameTextbox).val();
-		window.alert('uploader name = '+uploadername);
 		//send request
 		$.getJSON("authorizerslist/"+ uploadername,function(jd){
 			$(dropdown).empty();
