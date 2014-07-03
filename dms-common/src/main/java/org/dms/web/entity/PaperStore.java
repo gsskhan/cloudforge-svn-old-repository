@@ -2,7 +2,6 @@ package org.dms.web.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -154,9 +153,8 @@ public class PaperStore implements Serializable{
 	public String toString() {
 		return "PaperStore [paperStoreId=" + paperStoreId + ", paperNumber="
 				+ paperNumber + ", paperVersion=" + paperVersion
-				+ ", paperTitle=" + paperTitle + ", paperData="
-				+ Arrays.toString(paperData) + ", createdByUserId="
-				+ createdByUserId + ", creationTime=" + creationTime
+				+ ", paperTitle=" + paperTitle //+ ", paperData="	+ Arrays.toString(paperData)
+				+ ", createdByUserId=" + createdByUserId + ", creationTime=" + creationTime
 				+ ", paperStatusInfos=" + paperStatusInfos
 				+ ", paperWorkflows=" + paperWorkflows + ", examination="
 				+ examination + "]";

@@ -47,7 +47,7 @@ public class PaperStoreDaoTest {
 		genericDao.saveEntity(statusInfo);
 		log.info("saved - "+ statusInfo);
 		
-		PaperWorkflow workflow = new PaperWorkflow(newPaper, 0, null, false, null, "workflow dummy test");
+		PaperWorkflow workflow = new PaperWorkflow(newPaper, 0, null, false, 0, null, "workflow dummy test");
 		genericDao.saveEntity(workflow);
 		log.info("saved - "+ workflow);
 		

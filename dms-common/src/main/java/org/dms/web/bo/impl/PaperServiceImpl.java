@@ -58,11 +58,11 @@ public class PaperServiceImpl implements PaperService {
 		PaperStatusInfo statusInfo= new PaperStatusInfo(paper, false,  "new paper '"+paperTitle +"' has been uploaded.");
 		genericDao.saveEntity(statusInfo);
 		log.info("saved new paper status info , id = "+ statusInfo.getPaperStatusId());
-		PaperWorkflow workflow = new PaperWorkflow(paper, creator.getUserId(), currentTime, true, currentTime, SystemConstants.PAPER_STATUS_CREATED.getValue() +" - "+ paperTitle);
+		PaperWorkflow workflow = new PaperWorkflow(paper, creator.getUserId(), currentTime, true, creator.getUserId(), currentTime, SystemConstants.PAPER_STATUS_CREATED.getValue() +" - "+ paperTitle);
 		genericDao.saveEntity(workflow);
 		log.info("saved new paper creation workflow , id = "+ workflow.getWorkflowId());
 		/* Create a new workflow for authorization pending */
-		PaperWorkflow authoWorkflow = new PaperWorkflow(paper, authorizer.getUserId(), currentTime, false, null, SystemConstants.PAPER_STATUS_PEND_AUTH.getValue());
+		PaperWorkflow authoWorkflow = new PaperWorkflow(paper, authorizer.getUserId(), currentTime, false, 0, null, SystemConstants.PAPER_STATUS_PEND_AUTH.getValue());
 		genericDao.saveEntity(authoWorkflow);
 		log.info("saved paper aothorization pending workflow , id = "+ authoWorkflow.getWorkflowId());
 		return "New paper {number "+paper.getPaperNumber()+"/version "+paper.getPaperVersion()+"} stored into database.";
