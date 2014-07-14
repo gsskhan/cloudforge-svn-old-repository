@@ -118,10 +118,10 @@
 	</dependency>
 	<!-- MySql jdbc odbc jar -->
 	<dependency>
-  		<groupId>mysql</groupId>
-  		<artifactId>mysql</artifactId>
-  		<version>5.0.8</version>
-  	</dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.31</version>
+	</dependency>
   	<!-- HSQLDB jdbc driver 
   	<dependency>
   		<groupId>hsqldb</groupId>
