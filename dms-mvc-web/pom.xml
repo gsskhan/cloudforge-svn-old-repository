@@ -131,11 +131,15 @@
 		<!-- MySql jdbc odbc jar -->
 		<dependency>
 			<groupId>mysql</groupId>
-			<artifactId>mysql</artifactId>
-			<version>5.0.8</version>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.31</version>
 		</dependency>
-		<!-- HSQLDB jdbc driver <dependency> <groupId>hsqldb</groupId> <artifactId>hsqldb</artifactId> 
-			<version>2.3.2</version> </dependency> -->
+		<!-- HSQLDB jdbc driver 
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId> 
+			<version>2.3.2</version>
+		</dependency> -->
 		<!-- iText for pdf support -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
