@@ -18,8 +18,8 @@
 	<dependencies>
 		<!-- dms-common -->
 		<dependency>
-			<groupId>dms-common</groupId>
-			<artifactId>dms-common</artifactId>
+			<groupId>dms-common-hib</groupId>
+			<artifactId>dms-common-hib</artifactId>
 			<version>0.1</version>
 			<scope>compile</scope>
 		</dependency>
