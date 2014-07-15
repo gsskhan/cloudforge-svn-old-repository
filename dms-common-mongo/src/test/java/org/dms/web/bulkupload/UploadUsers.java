@@ -29,20 +29,19 @@ public class UploadUsers {
 		log.info("spring initialized sucessfully ...");
 		
 		Users tmpUser = new Users(randomGen.getRandomLong(), "gs2k", "password", "Ramgarh cantt, India", "gs2k@dms.org", "ADMINISTRATOR");
-		addOrUpdateUser(tmpUser,mongoTemplate);		
+		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);		
 		tmpUser = new Users(randomGen.getRandomLong(),"BheshanBedi", "bb1298", "Delhi, India",	"bheshan@dms.org", "TEACHER");
-		addOrUpdateUser(tmpUser,mongoTemplate);
+		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);
 		tmpUser = new Users(randomGen.getRandomLong(),"AmitShah", "as1298", "Jaipur, India", "amit.shah@dms.org", "PRINCIPAL");
-		addOrUpdateUser(tmpUser,mongoTemplate);
+		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);
 		tmpUser = new Users(randomGen.getRandomLong(), "RahulKumar", "rk1298", "Kolkata, India", "rahul.kr@dms.org", "STUDENT");
-		addOrUpdateUser(tmpUser,mongoTemplate);
+		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);
 		
 		log.info("Total users in system = "+usersRepository.count());
 		log.info("completed ...");
 	}
 	
-	private static void addOrUpdateUser(Users toSaveUserDetails, MongoTemplate mongoTemplate ){
-		log.info("Processing record, "+ toSaveUserDetails);
+	private static void addOrUpdateUser(Users toSaveUserDetails, UsersRepository usersRepository, MongoTemplate mongoTemplate ){
 		Update update = new Update();
 		update.set("userid", toSaveUserDetails.getUserId());
 		update.set("username", toSaveUserDetails.getUsername());
@@ -52,10 +51,11 @@ public class UploadUsers {
 		update.set("role", toSaveUserDetails.getRole());		
 		WriteResult writeResult = mongoTemplate.upsert(Query.query(Criteria.where("username").is(toSaveUserDetails.getUsername())), update, Users.class);
 		if (writeResult.isUpdateOfExisting()) {
-			log.info("Record updated");
+			log.info("Record updated.");
 		} else {
-			log.info("Record inserted with id = "+ writeResult.getUpsertedId());
+			log.info("New record inserted with id = "+ writeResult.getUpsertedId());
 		}
+		log.info(usersRepository.findOneByUsername(toSaveUserDetails.getUsername()));
 	}
 
 }
