@@ -11,6 +11,11 @@ public class RandomNumberGenerator {
 		int posRandInt = random.nextInt(Integer.MAX_VALUE );
 		return (new Date().getTime()+ posRandInt) ;
 	}
+	
+	public int getRandomInt(){
+		int posRandInt = random.nextInt(Integer.MAX_VALUE );
+		return posRandInt;
+	}
 
 	public Random getRandom() {
 		return random;
