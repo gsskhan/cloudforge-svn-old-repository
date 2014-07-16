@@ -24,21 +24,21 @@ public class Constants {
 	@Field(value="variablevalue")
 	private String variableValue;
 	
-	@Field(value="parentVariableId")
-	private int parentvariableid;
+	@Field(value="parentvariableid")
+	private int parentVariableId;
 	
 	public Constants() {
 		super();
 	}	
 
 	public Constants(int constantId, String variableName, int variableId,
-			String variableValue, int parentvariableid) {
+			String variableValue, int parentVariableId) {
 		super();
 		this.constantId = constantId;
 		this.variableName = variableName;
 		this.variableId = variableId;
 		this.variableValue = variableValue;
-		this.parentvariableid = parentvariableid;
+		this.parentVariableId = parentVariableId;
 	}
 
 
@@ -82,12 +82,12 @@ public class Constants {
 		this.variableValue = variableValue;
 	}
 
-	public int getParentvariableid() {
-		return parentvariableid;
+	public int getParentVariableId() {
+		return parentVariableId;
 	}
 
-	public void setParentvariableid(int parentvariableid) {
-		this.parentvariableid = parentvariableid;
+	public void setParentVariableId(int parentVariableId) {
+		this.parentVariableId = parentVariableId;
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class Constants {
 		return "Constants [id=" + id + ", constantId=" + constantId
 				+ ", variableName=" + variableName + ", variableId="
 				+ variableId + ", variableValue=" + variableValue
-				+ ", parentvariableid=" + parentvariableid + "]";
+				+ ", parentVariableId=" + parentVariableId + "]";
 	}
 
 }
