@@ -1,7 +1,6 @@
 package org.dms.web.bulkupload;
 
 import org.apache.log4j.Logger;
-import org.dms.web.core.RandomNumberGenerator;
 import org.dms.web.document.Users;
 import org.dms.web.repository.UsersRepository;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -25,16 +24,15 @@ public class UploadUsers {
 												,"/spring/applicationContext-core.xml");
 		MongoTemplate mongoTemplate = ctx.getBean(MongoTemplate.class);
 		UsersRepository usersRepository = ctx.getBean(UsersRepository.class);
-		RandomNumberGenerator randomGen = ctx.getBean(RandomNumberGenerator.class);
 		log.info("spring initialized sucessfully ...");
 		
-		Users tmpUser = new Users(randomGen.getRandomLong(), "gs2k", "password", "Ramgarh cantt, India", "gs2k@dms.org", "ADMINISTRATOR");
+		Users tmpUser = new Users( "gs2k", "password", "Ramgarh cantt, India", "gs2k@dms.org", "ADMINISTRATOR");
 		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);		
-		tmpUser = new Users(randomGen.getRandomLong(),"BheshanBedi", "bb1298", "Delhi, India",	"bheshan@dms.org", "TEACHER");
+		tmpUser = new Users("BheshanBedi", "bb1298", "Delhi, India",	"bheshan@dms.org", "TEACHER");
 		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);
-		tmpUser = new Users(randomGen.getRandomLong(),"AmitShah", "as1298", "Jaipur, India", "amit.shah@dms.org", "PRINCIPAL");
+		tmpUser = new Users("AmitShah", "as1298", "Jaipur, India", "amit.shah@dms.org", "PRINCIPAL");
 		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);
-		tmpUser = new Users(randomGen.getRandomLong(), "RahulKumar", "rk1298", "Kolkata, India", "rahul.kr@dms.org", "STUDENT");
+		tmpUser = new Users( "RahulKumar", "rk1298", "Kolkata, India", "rahul.kr@dms.org", "STUDENT");
 		addOrUpdateUser(tmpUser,usersRepository, mongoTemplate);
 		
 		log.info("Total users in system = "+usersRepository.count());
@@ -43,7 +41,6 @@ public class UploadUsers {
 	
 	private static void addOrUpdateUser(Users toSaveUserDetails, UsersRepository usersRepository, MongoTemplate mongoTemplate ){
 		Update update = new Update();
-		update.set("userid", toSaveUserDetails.getUserId());
 		update.set("username", toSaveUserDetails.getUsername());
 		update.set("password", toSaveUserDetails.getPassword());
 		update.set("address", toSaveUserDetails.getAddress());

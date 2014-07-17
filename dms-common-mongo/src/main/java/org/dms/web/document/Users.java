@@ -12,10 +12,6 @@ public class Users {
 	@Id
 	private String id;
 	
-	@Field(value="userid")
-	@Indexed(name="useridIdx",unique=true,dropDups=true)
-	private long userId;
-	
 	@Field(value="username")
 	@Indexed(name="usernameIdx",unique=true,dropDups=true)
 	private String username;
@@ -36,16 +32,15 @@ public class Users {
 		super();
 	}
 
-	public Users(long userId, String username, String password, String address,
+	public Users(String username, String password, String address,
 			String email, String role) {
 		super();
-		this.userId = userId;
 		this.username = username;
 		this.password = password;
 		this.address = address;
 		this.email = email;
 		this.role = role;
-	}
+	}	
 
 
 	public String getId() {
@@ -54,14 +49,6 @@ public class Users {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -106,7 +93,7 @@ public class Users {
 
 	@Override
 	public String toString() {
-		return "Users [id=" + id + ", userId=" + userId + ", username="
+		return "Users [id=" + id + ", username="
 				+ username + ", password=" + password + ", address=" + address
 				+ ", email=" + email + ", role=" + role + "]";
 	}
