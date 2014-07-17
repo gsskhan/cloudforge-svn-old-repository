@@ -3,13 +3,14 @@ package org.dms.web.action;
 import java.util.List;
 
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.dms.web.bo.ConstantsService;
 import org.dms.web.bo.UserService;
-import org.dms.web.entity.*;
+import org.dms.web.document.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -83,7 +84,7 @@ public class RegisterAction extends ActionSupport implements ServletRequestAware
 			this.clearErrorsAndMessages();
 			String userIdString = request.getParameter("userid");
 			try {
-				User modUser = userService.findUserHavingId(userIdString);
+				Users modUser = userService.findUserHavingId(userIdString);
 				if (modUser == null) {
 					this.addActionError("Sorry! Couldn't get user record to edit. Please try again.");
 					return ERROR;
