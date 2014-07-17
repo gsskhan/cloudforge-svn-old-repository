@@ -1,19 +1,19 @@
 package org.dms.web.document;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="constants")
+@CompoundIndexes(value={
+		@CompoundIndex(def="{'variablename':1,'variablevalue':1}", name="varaibleNameAndValueIdx", unique=true)
+})
 public class Constants {
 	
 	@Id
 	private String id;
-	
-	@Field(value="constantid")
-	@Indexed(name="constantidIdx",unique= true, dropDups = true)
-	private int constantId;
 	
 	@Field(value="variablename")
 	private String variableName;
@@ -31,10 +31,9 @@ public class Constants {
 		super();
 	}	
 
-	public Constants(int constantId, String variableName, int variableId,
+	public Constants(String variableName, int variableId,
 			String variableValue, int parentVariableId) {
 		super();
-		this.constantId = constantId;
 		this.variableName = variableName;
 		this.variableId = variableId;
 		this.variableValue = variableValue;
@@ -46,16 +45,8 @@ public class Constants {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setConstantId(String id) {
 		this.id = id;
-	}
-
-	public int getConstantId() {
-		return constantId;
-	}
-
-	public void setConstantId(int constantId) {
-		this.constantId = constantId;
 	}
 
 	public String getVariableName() {
@@ -92,8 +83,7 @@ public class Constants {
 
 	@Override
 	public String toString() {
-		return "Constants [id=" + id + ", constantId=" + constantId
-				+ ", variableName=" + variableName + ", variableId="
+		return "Constants [id=" + id + ", variableName=" + variableName + ", variableId="
 				+ variableId + ", variableValue=" + variableValue
 				+ ", parentVariableId=" + parentVariableId + "]";
 	}

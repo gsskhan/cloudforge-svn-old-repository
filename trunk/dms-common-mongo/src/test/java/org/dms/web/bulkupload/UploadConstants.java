@@ -1,7 +1,6 @@
 package org.dms.web.bulkupload;
 
 import org.apache.log4j.Logger;
-import org.dms.web.core.RandomNumberGenerator;
 import org.dms.web.document.Constants;
 import org.dms.web.repository.ConstantsRepository;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -26,29 +25,28 @@ public class UploadConstants {
 												,"/spring/applicationContext-core.xml");
 		MongoTemplate mongoTemplate = ctx.getBean(MongoTemplate.class);
 		ConstantsRepository constantsRepository = ctx.getBean(ConstantsRepository.class);
-		RandomNumberGenerator randomGen = ctx.getBean(RandomNumberGenerator.class);
 		log.info("spring initialized sucessfully ...");
 		
-		Constants constant = new Constants(randomGen.getRandomInt(),"ACCESS TYPE", 10, "ADMINISTRATOR", 0);
+		Constants constant = new Constants("ACCESS TYPE", 10, "ADMINISTRATOR", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
-		constant = new Constants(randomGen.getRandomInt(),"ACCESS TYPE", 10, "PRINCIPAL", 0);
+		constant = new Constants("ACCESS TYPE", 10, "PRINCIPAL", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );			
-		constant = new Constants(randomGen.getRandomInt(),"ACCESS TYPE", 10, "TEACHER", 0);
+		constant = new Constants("ACCESS TYPE", 10, "TEACHER", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );			
-		constant = new Constants(randomGen.getRandomInt(),"ACCESS TYPE", 10, "STUDENT", 0);
+		constant = new Constants("ACCESS TYPE", 10, "STUDENT", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
 		
-		constant = new Constants(randomGen.getRandomInt(),"PAPER STATUS", 11, "CREATED", 0);
+		constant = new Constants("PAPER STATUS", 11, "CREATED", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
-		constant = new Constants(randomGen.getRandomInt(),"PAPER STATUS", 11, "PENDING AUTHORIZATION", 0);
+		constant = new Constants("PAPER STATUS", 11, "PENDING AUTHORIZATION", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
-		constant = new Constants(randomGen.getRandomInt(),"PAPER STATUS", 11, "PENDING APPROVAL", 0);
+		constant = new Constants("PAPER STATUS", 11, "PENDING APPROVAL", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
-		constant = new Constants(randomGen.getRandomInt(),"PAPER STATUS", 11, "APPROVED", 0);
+		constant = new Constants("PAPER STATUS", 11, "APPROVED", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
-		constant = new Constants(randomGen.getRandomInt(),"PAPER STATUS", 11, "AUTHORIZED", 0);
+		constant = new Constants("PAPER STATUS", 11, "AUTHORIZED", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
-		constant = new Constants(randomGen.getRandomInt(),"PAPER STATUS", 11, "REJECTED", 0);
+		constant = new Constants("PAPER STATUS", 11, "REJECTED", 0);
 		addOrUpdateConstants(constant, constantsRepository, mongoTemplate );
 		
 		log.info("Total constants in system = "+constantsRepository.count());
@@ -57,7 +55,6 @@ public class UploadConstants {
 	
 	private static void addOrUpdateConstants(Constants toBeSavedConstant, ConstantsRepository constantsRepository, MongoTemplate mongoTemplate){
 		Update update = new Update();
-		update.set("constantid", toBeSavedConstant.getConstantId());
 		update.set("variablename", toBeSavedConstant.getVariableName());
 		update.set("variableid", toBeSavedConstant.getVariableId());
 		update.set("variablevalue", toBeSavedConstant.getVariableValue());
