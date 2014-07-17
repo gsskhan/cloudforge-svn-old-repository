@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -32,8 +33,8 @@ public class PaperStores {
 	@Field(value="data")
 	private byte[] data;
 
-	@Field(value="createdbyuserid")
-	private long createdByUserId;
+	@DBRef
+	private Users createdByUser;
 
 	@Field(value="creationtime")
 	private Timestamp creationTime;
@@ -78,12 +79,12 @@ public class PaperStores {
 		this.data = data;
 	}
 
-	public long getCreatedByUserId() {
-		return createdByUserId;
+	public Users getCreatedByUser() {
+		return createdByUser;
 	}
 
-	public void setCreatedByUserId(long createdByUserId) {
-		this.createdByUserId = createdByUserId;
+	public void setCreatedByUser(Users createdByUser) {
+		this.createdByUser = createdByUser;
 	}
 
 	public Timestamp getCreationTime() {
@@ -98,8 +99,8 @@ public class PaperStores {
 	public String toString() {
 		return "PaperStores [id=" + id + ", number=" + number + ", version="
 				+ version + ", title=" + title + ", data record byte length="
-				+ Arrays.toString(data).length() + ", createdByUserId="
-				+ createdByUserId + ", creationTime=" + creationTime + "]";
+				+ Arrays.toString(data).length() + ", createdByUser="
+				+ createdByUser + ", creationTime=" + creationTime + "]";
 	}		
 	
 	
