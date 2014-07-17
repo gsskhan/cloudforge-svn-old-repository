@@ -8,7 +8,7 @@
 
 <context:component-scan base-package="org.dms.web" />
 
-<import resource="classpath*:/spring/applicationContext-dbaccess.xml"/>
+<import resource="classpath*:/spring/applicationContext-mongo.xml"/>
 <import resource="classpath*:/spring/applicationContext-aop.xml"/>
 <import resource="classpath*:/spring/applicationContext-core.xml"/>
 <import resource="classpath*:/spring/applicationContext-action.xml"/>

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.dms.web.dao.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -16,8 +14,6 @@ public class JsonSearchVarName extends ActionSupport{
 	private Logger log = Logger.getLogger(JsonSearchVarName.class);
 	
 	private List<String> varNamesList;
-	@Autowired
-	private GenericDao genericDao;
 	
 	public String execute() {
 		log.info("Begin finding all VARIABLE NAMES");
@@ -25,7 +21,7 @@ public class JsonSearchVarName extends ActionSupport{
 		
 		List<String> tempList = new ArrayList<String>();
 		try {
-			tempList = genericDao.getList("select distinct variable from Constants ", null, 10000);
+			/*tempList = genericDao.getList("select distinct variable from Constants ", null, 10000);*/
 			this.varNamesList = tempList;	
 			log.info("Returned VariableList = " + varNamesList);
 		} catch (Exception e) {
@@ -50,11 +46,4 @@ public class JsonSearchVarName extends ActionSupport{
 	public void setVarNamesList(List<String> varNamesList) {
 		this.varNamesList = varNamesList;
 	}
-	public GenericDao getGenericDao() {
-		return genericDao;
-	}
-	public void setGenericDao(GenericDao genericDao) {
-		this.genericDao = genericDao;
-	}
-
 }

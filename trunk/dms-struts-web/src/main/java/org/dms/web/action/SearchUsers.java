@@ -2,7 +2,7 @@ package org.dms.web.action;
 
 import org.apache.log4j.Logger;
 import org.dms.web.bo.UserService;
-import org.dms.web.entity.*;
+import org.dms.web.document.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class SearchUsers extends ActionSupport {
 	
 	// properties mainly for search form
 	private String searchkeyword;
-	private List<User> usersList;
+	private List<Users> usersList;
 
 	@Autowired
 	private UserService userService;
@@ -29,7 +29,7 @@ public class SearchUsers extends ActionSupport {
 	public String searchUserWithKeyword(){
 		log.info("Starting to search user(s) with keyword = "+ searchkeyword);
 		this.clearErrorsAndMessages();
-		usersList = new ArrayList<User>();
+		usersList = new ArrayList<Users>();
 		usersList.clear();		
 		try {		
 			usersList = userService.findUsersWithNameLike(searchkeyword);
@@ -53,10 +53,10 @@ public class SearchUsers extends ActionSupport {
 	public void setSearchkeyword(String searchkeyword) {
 		this.searchkeyword = searchkeyword;
 	}
-	public List<User> getUsersList() {
+	public List<Users> getUsersList() {
 		return usersList;
 	}
-	public void setUsersList(List<User> usersList) {
+	public void setUsersList(List<Users> usersList) {
 		this.usersList = usersList;
 	}
 	public UserService getUserService() {

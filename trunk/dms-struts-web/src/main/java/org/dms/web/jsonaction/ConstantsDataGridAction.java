@@ -6,20 +6,16 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dms.web.document.Constants;
 
 import com.opensymphony.xwork2.ActionSupport;
-import org.dms.web.dao.*;
-import org.dms.web.entity.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ConstantsDataGridAction extends ActionSupport {
 
 	private static final long serialVersionUID = -4165314824096999147L;
 	private static final Log log = LogFactory.getLog(ConstantsDataGridAction.class);
-	
-	// Conatants Dao
-	@Autowired
-	private GenericDao genericDao;
 	
 	// Result List
     private List<Constants> gridConstantsList;
@@ -65,7 +61,8 @@ public class ConstantsDataGridAction extends ActionSupport {
     	try {
     		
     		// get all constants records from db.
-    		gridConstantsList = genericDao.getList("from Constants", null, 10000);
+    		/*gridConstantsList = genericDao.getList("from Constants", null, 10000);*/
+    		gridConstantsList = new ArrayList<Constants>();
 			log.info("Built list with count of records = "+ gridConstantsList.size());
 			
 			// sort the list if required.
@@ -274,18 +271,11 @@ public class ConstantsDataGridAction extends ActionSupport {
 
 	public Constants findById(List<Constants> list, int id){
 		for (Constants c : list) {
-			if (c.getConstantId() == id) {
+			/*if (c.getConstantId() == id) {
 				return c;
-			}
+			}*/
 		}
 		return null;
-	}
-
-	public GenericDao getGenericDao() {
-		return genericDao;
-	}
-	public void setGenericDao(GenericDao genericDao) {
-		this.genericDao = genericDao;
 	}
 
 	
