@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @CompoundIndexes(value={
 		@CompoundIndex(def="{'variablename':1,'variablevalue':1}", name="varaibleNameAndValueIdx", unique=true)
 })
-public class Constants {
+public class Constants implements Comparable<Constants>{
 	
 	@Id
 	private String id;
@@ -88,4 +88,9 @@ public class Constants {
 				+ ", parentVariableId=" + parentVariableId + "]";
 	}
 
+
+	// To compare data on UI(esp. for grids)
+	public int compareTo(Constants o) {
+		return this.variableName.toLowerCase().compareTo(o.getVariableName().toLowerCase());
+	}
 }
