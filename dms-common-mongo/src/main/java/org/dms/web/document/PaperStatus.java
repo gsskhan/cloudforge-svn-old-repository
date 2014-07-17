@@ -19,8 +19,8 @@ public class PaperStatus {
 	@Field(value="authorized")
 	private boolean authorized;
 
-	@Field(value="authorizedby")
-	private long authorizedBy;
+	@DBRef
+	private Users authorizedBy;
 
 	@Field(value="authorizationtime")
 	private Timestamp authorizationTime;
@@ -28,8 +28,8 @@ public class PaperStatus {
 	@Field(value="approved")
 	private boolean approved;
 
-	@Field(value="approvedby")
-	private long approvedBy;
+	@DBRef
+	private Users approvedBy;
 
 	@Field(value="approvaltime")
 	private Timestamp approvalTime;
@@ -37,8 +37,8 @@ public class PaperStatus {
 	@Field(value="rejected")
 	private boolean rejected;
 
-	@Field(value="rejectedby")
-	private long rejectedBy;
+	@DBRef
+	private Users rejectedBy;
 
 	@Field(value="rejectiontime")
 	private Timestamp rejectionTime;
@@ -51,9 +51,9 @@ public class PaperStatus {
 	}
 
 	public PaperStatus(PaperStores paperStores, boolean authorized,
-			long authorizedBy, Timestamp authorizationTime, boolean approved,
-			long approvedBy, Timestamp approvalTime, boolean rejected,
-			long rejectedBy, Timestamp rejectionTime, String comments) {
+			Users authorizedBy, Timestamp authorizationTime, boolean approved,
+			Users approvedBy, Timestamp approvalTime, boolean rejected,
+			Users rejectedBy, Timestamp rejectionTime, String comments) {
 		super();
 		this.paperStores = paperStores;
 		this.authorized = authorized;
@@ -92,11 +92,11 @@ public class PaperStatus {
 		this.authorized = authorized;
 	}
 
-	public long getAuthorizedBy() {
+	public Users getAuthorizedBy() {
 		return authorizedBy;
 	}
 
-	public void setAuthorizedBy(long authorizedBy) {
+	public void setAuthorizedBy(Users authorizedBy) {
 		this.authorizedBy = authorizedBy;
 	}
 
@@ -116,11 +116,11 @@ public class PaperStatus {
 		this.approved = approved;
 	}
 
-	public long getApprovedBy() {
+	public Users getApprovedBy() {
 		return approvedBy;
 	}
 
-	public void setApprovedBy(long approvedBy) {
+	public void setApprovedBy(Users approvedBy) {
 		this.approvedBy = approvedBy;
 	}
 
@@ -140,11 +140,11 @@ public class PaperStatus {
 		this.rejected = rejected;
 	}
 
-	public long getRejectedBy() {
+	public Users getRejectedBy() {
 		return rejectedBy;
 	}
 
-	public void setRejectedBy(long rejectedBy) {
+	public void setRejectedBy(Users rejectedBy) {
 		this.rejectedBy = rejectedBy;
 	}
 
