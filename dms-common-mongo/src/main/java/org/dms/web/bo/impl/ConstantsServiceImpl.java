@@ -14,6 +14,7 @@ import org.dms.web.bo.ConstantsService;
 import org.dms.web.core.PdfUtil;
 import org.dms.web.document.Constants;
 import org.dms.web.exception.DmsRuntimeException;
+import org.dms.web.repository.ConstantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.itextpdf.text.Document;
@@ -24,6 +25,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class ConstantsServiceImpl implements ConstantsService {
 	
 	private Logger log = Logger.getLogger(this.getClass());
+	
+	@Autowired
+	private ConstantsRepository constantsRepository;
 
 	@Override
 	public String addNewConstant(String variableName, int variableId,
@@ -40,8 +44,12 @@ public class ConstantsServiceImpl implements ConstantsService {
 
 	@Override
 	public List<String> findAllValuesForVariable(String variable) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> tmpList = new ArrayList<String>();
+		for (Constants cons : constantsRepository.findDistinctVariableValueByVariableName(variable)) {
+			tmpList.add(cons.getVariableValue());
+		}
+		log.info("found LOVs as "+tmpList+" from db for variable - "+ variable);
+		return tmpList;
 	}
 
 	@Override
