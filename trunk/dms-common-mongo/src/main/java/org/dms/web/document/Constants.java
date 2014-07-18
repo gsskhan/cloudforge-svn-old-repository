@@ -45,7 +45,7 @@ public class Constants implements Comparable<Constants>{
 		return id;
 	}
 
-	public void setConstantId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
