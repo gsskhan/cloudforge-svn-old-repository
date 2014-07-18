@@ -19,7 +19,7 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 	private Logger log =  Logger.getLogger(ConstantsManageAction.class);
 	
 	// Fields primarily for adding/editing/deleting constants
-	private int constantId;
+	private String constantId;
 	private String varname;
 	private int varid;
 	private String value;
@@ -52,7 +52,7 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 	public String deleteConstant(){
 		this.clearErrorsAndMessages();
 		String tempConstantIdString = request.getParameter("constId"); // 'constId value is received from HttpServletRequest'
-		msg = constantsService.removeConstant(new Integer(tempConstantIdString));		
+		msg = constantsService.removeConstant(tempConstantIdString);		
 		this.addActionMessage(msg);
 		log.info(msg);
 		return SUCCESS;
@@ -63,7 +63,7 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 			this.clearErrorsAndMessages();
 			// get the constId from HttpServletRequest
 			String tempConstantId = request.getParameter("constId");
-			Constants cons = constantsService.findConstants(new Integer(tempConstantId));
+			Constants cons = constantsService.findConstants(tempConstantId);
 			request.setAttribute("oldconstant", cons);
 			msg = "Please edit required feilds and press 'Modify'.";
 		} catch (Exception e) {
@@ -112,10 +112,10 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 	public void setServletRequest(HttpServletRequest req) {
 		this.request = req;		
 	}
-	public int getConstantId() {
+	public String getConstantId() {
 		return constantId;
 	}
-	public void setConstantId(int constantId) {
+	public void setConstantId(String constantId) {
 		this.constantId = constantId;
 	}	
 	public String getVarname() {

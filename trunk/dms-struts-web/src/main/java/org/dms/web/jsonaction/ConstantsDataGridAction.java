@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dms.web.bo.ConstantsService;
 import org.dms.web.document.Constants;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -16,6 +17,9 @@ public class ConstantsDataGridAction extends ActionSupport {
 
 	private static final long serialVersionUID = -4165314824096999147L;
 	private static final Log log = LogFactory.getLog(ConstantsDataGridAction.class);
+	
+	@Autowired
+	private ConstantsService constantsService;
 	
 	// Result List
     private List<Constants> gridConstantsList;
@@ -61,8 +65,7 @@ public class ConstantsDataGridAction extends ActionSupport {
     	try {
     		
     		// get all constants records from db.
-    		/*gridConstantsList = genericDao.getList("from Constants", null, 10000);*/
-    		gridConstantsList = new ArrayList<Constants>();
+    		gridConstantsList = constantsService.findAllConstants();
 			log.info("Built list with count of records = "+ gridConstantsList.size());
 			
 			// sort the list if required.
@@ -107,7 +110,7 @@ public class ConstantsDataGridAction extends ActionSupport {
     		    // Search Constants
     			log.info("Begin searching for constants - searchString = "+ searchString+", searchOper ="+searchOper);
     		    if (searchString != null && searchOper != null) {
-    		    	int id = Integer.parseInt(searchString);
+    		    	String id = searchString;
         			if (searchOper.equalsIgnoreCase("eq")) {
         			    log.info("search id equals " + id);
         			    List<Constants> cList = new ArrayList<Constants>();
@@ -269,11 +272,11 @@ public class ConstantsDataGridAction extends ActionSupport {
     	this.totalrows = totalrows;
     }
 
-	public Constants findById(List<Constants> list, int id){
+	public Constants findById(List<Constants> list, String id){
 		for (Constants c : list) {
-			/*if (c.getConstantId() == id) {
+			if (c.getId().equalsIgnoreCase(id)) {
 				return c;
-			}*/
+			}
 		}
 		return null;
 	}

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dms.web.bo.ConstantsService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -15,13 +17,16 @@ public class JsonSearchVarName extends ActionSupport{
 	
 	private List<String> varNamesList;
 	
+	@Autowired
+	private ConstantsService constantsService;
+	
 	public String execute() {
 		log.info("Begin finding all VARIABLE NAMES");
 		this.clearErrorsAndMessages();
 		
 		List<String> tempList = new ArrayList<String>();
 		try {
-			/*tempList = genericDao.getList("select distinct variable from Constants ", null, 10000);*/
+			tempList = constantsService.findAllVariableNames();
 			this.varNamesList = tempList;	
 			log.info("Returned VariableList = " + varNamesList);
 		} catch (Exception e) {
