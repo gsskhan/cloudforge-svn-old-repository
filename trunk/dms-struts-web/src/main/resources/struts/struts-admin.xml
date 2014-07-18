@@ -23,7 +23,7 @@
 		 <action name="jsonsample" class="registerAction">
 		 	<interceptor-ref name="basicStack"></interceptor-ref>
 		 	<result type="json" >
-		 		<param name="excludeProperties">genericDao</param>
+		 		<param name="excludeProperties">usersRepository</param>
 		 	</result>
 		 </action>
 		 <action name="addUser" class="org.dms.web.action.RegisterAction" method="addUser">
