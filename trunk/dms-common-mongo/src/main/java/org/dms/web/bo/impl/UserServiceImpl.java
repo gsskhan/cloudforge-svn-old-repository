@@ -44,9 +44,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public String deleteUserHavingId(String userId) throws DmsException {
-		// TODO Auto-generated method stub
-		return null;
+	public String deleteUserHavingId(String userId) throws DmsException {		
+		return "Deleted "+usersRepository.deleteUsersById(userId)+" user(s) with id as "+userId+".";
 	}
 
 	@Override
@@ -56,16 +55,17 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public String updateUser(long userid, String username, String password,
-			String address, String email, String role) throws DmsException {
-		// TODO Auto-generated method stub
-		return null;
+	public String updateUser(String userid, String username, String password, String address, String email, String role) throws DmsException {
+		Users usr = new Users(username, password, address, email, role);
+		usr.setId(userid);
+		usr = usersRepository.save(usr);
+		log.info("Updated user record, final contents as in db - "+ usr);
+		return "Updated user having id as "+ usr.getId();
 	}
 
 	@Override
 	public Users findUserHavingId(String userId) throws DmsException {
-		// TODO Auto-generated method stub
-		return null;
+		return usersRepository.findOneById(userId);
 	}
 
 	@Override
@@ -76,8 +76,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<Users> findUsersWithNameLike(String uname) throws DmsException {
-		// TODO Auto-generated method stub
-		return null;
+		return usersRepository.findByUsernameRegex(uname);
 	}
 
 	@Override
