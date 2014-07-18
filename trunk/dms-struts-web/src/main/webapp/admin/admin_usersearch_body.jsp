@@ -43,7 +43,7 @@
 				<tbody class="ui-widget-content ui-corner-all">
 					<s:iterator id="user" value="users">
 					<tr>
-						<td><s:property value="userId"/></td>
+						<td><s:property value="id"/></td>
 						<td><s:property value="username"/></td>
 						<td><s:property value="password"/></td>
 						<td><s:property value="address"/></td>
@@ -51,13 +51,13 @@
 						<td><s:property value="role"/></td>
 						<td>
 							<s:url id="url" action="putUserRecord">
-								<s:param name="userid"><s:property value="userId"/></s:param>
+								<s:param name="userid"><s:property value="id"/></s:param>
 							</s:url>
 							<s:a href="%{url}">Edit</s:a>
 						</td>
 						<td>
 							<s:url id="url" action="delUser">
-								<s:param name="userid"><s:property value="userId"/></s:param>
+								<s:param name="userid"><s:property value="id"/></s:param>
 							</s:url>
 							<s:a href="%{url}">Delete</s:a>
 						</td>
@@ -70,7 +70,7 @@
 			<br/>
 			
 			<!-- Form to display details of user being edited. -->
-			<s:if test="#request.moduser.userId!=null">
+			<s:if test="#request.moduser.id!=null">
 				<div id="editUserDiv" style="text-align: left;vertical-align: top;" >
 					<table width="500">
 						<thead class="ui-widget-header ui-corner-all">
@@ -84,7 +84,7 @@
 								<s:form labelposition="left" action="modifyUser">
 									<s:textfield label="User Id" required="true" labelposition="left" name="userId" readonly="true"  >
 										<s:param name="value">
-											<s:property value="#request.moduser.userId"/>
+											<s:property value="#request.moduser.id"/>
 										</s:param>			  
 									 </s:textfield>
 									<s:textfield label="User Name" required="true" labelposition="left" name="username" readonly="true"  >

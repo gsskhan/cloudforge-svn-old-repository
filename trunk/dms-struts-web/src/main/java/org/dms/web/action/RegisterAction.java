@@ -20,7 +20,7 @@ public class RegisterAction extends ActionSupport implements ServletRequestAware
 	private static final long serialVersionUID = -6524688616443882468L;
 	private Logger log = Logger.getLogger(RegisterAction.class);
 	
-	private long userId;
+	private String userId;
 	private String username;
 	private String password;
 	private String address;
@@ -154,10 +154,10 @@ public class RegisterAction extends ActionSupport implements ServletRequestAware
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;		
 	}
-	public long getUserId() {
+	public String getUserId() {
 		return userId; // Using only for edit method
 	}
-	public void setUserId(long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId; // Using only for edit method
 	}	
 	public String getUsername() {
