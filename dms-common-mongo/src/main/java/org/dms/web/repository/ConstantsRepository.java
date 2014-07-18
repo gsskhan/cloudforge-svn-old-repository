@@ -11,5 +11,11 @@ public interface ConstantsRepository extends MongoRepository<Constants, Serializ
 	Constants findOneByVariableNameAndVariableValue(String variableName, String variableValue);
 	
 	List<Constants> findDistinctVariableValueByVariableName(String variableName);
+	
+	List<Constants> findByVariableNameRegex(String variableName);
+	
+	Long deleteConstantsById(String id);
+	
+	Constants findOneById(String id); 
 
 }
