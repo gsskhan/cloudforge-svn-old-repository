@@ -56,7 +56,7 @@
 		 <action name="gridConstantDataProvider" class="org.dms.web.jsonaction.ConstantsDataGridAction">
 		 	<interceptor-ref name="basicStack"></interceptor-ref>
 		 	<result type="json">
-		 		<param name="excludeProperties">genericDao</param>
+		 		<param name="excludeProperties">constantsRepository</param>
 		 	</result>
 		 </action>
 		 <action name="addNewConstant" class="org.dms.web.action.ConstantsManageAction" method="addConstant">
@@ -67,7 +67,7 @@
 		 <action name="jsonVarNameAction" class="jsonSearchVarName">
 		 	<interceptor-ref name="basicStack"></interceptor-ref>
 		 	<result type="json">
-		 		<param name="excludeProperties">genericDao</param>
+		 		<param name="excludeProperties">constantsRepository</param>
 		 	</result>
 		 </action>
 		 <action name="searchConstants" class="org.dms.web.action.ConstantsManageAction" method="searchConstants">

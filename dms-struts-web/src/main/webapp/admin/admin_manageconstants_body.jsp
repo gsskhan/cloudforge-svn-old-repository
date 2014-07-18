@@ -34,13 +34,12 @@
 					width="250"
 					autowidth="true"
 					loadingText="Please wait loading data..."	
-					cssStyle="font: monospace; font-size: 9px"				
-					
+					cssStyle="font: monospace; font-size: 9px"
 				>
-					<sjg:gridColumn name="constantId" index="constantId" title="CONSTANT ID" width="20" formatter="integer" sortable="false" displayTitle="false" />
-					<sjg:gridColumn name="variable" index="variable" title="VARIABLE NAME" width="50" sortable="true"/>
+					<sjg:gridColumn name="id" index="id" title="CONSTANT ID" width="20" sortable="false" displayTitle="false" />
+					<sjg:gridColumn name="variableName" index="variableName" title="VARIABLE NAME" width="50" sortable="true"/>
 					<sjg:gridColumn name="variableId" index="variableId" width="20" title="VARIABLE ID" formatter="integer" sortable="false"/>
-					<sjg:gridColumn name="value" index="value" width="50" title="VALUE" sortable="false"/>
+					<sjg:gridColumn name="variableValue" index="variableValue" width="50" title="VALUE" sortable="false"/>
 					<sjg:gridColumn name="parentVariableId" index="parentVariableId" width="20" title="PARENT VARIABLE ID"  formatter="integer" sortable="false"/>
 	                
 				</sjg:grid>				
@@ -103,20 +102,20 @@
 				  	<tbody class="ui-widget-content ui-corner-all">
 						<s:iterator id="const" value="searchResultList">
 						<tr>
-							<td><s:property value="constantId"/></td>
-							<td><s:property value="variable"/></td>
+							<td><s:property value="id"/></td>
+							<td><s:property value="variableName"/></td>
 							<td><s:property value="variableId"/></td>
-							<td><s:property value="value"/></td>
+							<td><s:property value="variableValue"/></td>
 							<td><s:property value="parentVariableId"/></td>	
 							<td>
 								<s:url id="url" action="setConstantRecordAction">
-									<s:param name="constId"><s:property value="constantId"/></s:param>
+									<s:param name="constId"><s:property value="id"/></s:param>
 								</s:url>
 								<s:a href="%{url}">Edit</s:a>
 							</td>
 							<td>
 								<s:url id="url" action="deleteConstantAction">
-									<s:param name="constId"><s:property value="constantId"/></s:param>
+									<s:param name="constId"><s:property value="id"/></s:param>
 								</s:url>
 								<s:a href="%{url}">Delete</s:a>
 							</td>					
@@ -132,12 +131,12 @@
 		  	  			
 		  	  			<s:textfield label="Constant Id" required="true" labelposition="left" name="constantId" readonly="true">
 								<s:param name="value">
-									<s:property value="#request.oldconstant.constantId"/>
+									<s:property value="#request.oldconstant.id"/>
 								</s:param>	  
 						</s:textfield>
 						<s:textfield label="Variable Name" required="true" labelposition="left" name="varname" readonly="true" >
 								<s:param name="value">
-									<s:property value="#request.oldconstant.variable"/>
+									<s:property value="#request.oldconstant.variableName"/>
 								</s:param>	  
 						</s:textfield>
 						<s:textfield label="Variable Id" required="true" labelposition="left" name="varid" >
@@ -147,7 +146,7 @@
 						</s:textfield>
 						<s:textfield label="Value" required="true" labelposition="left" name="value" >
 								<s:param name="value">
-									<s:property value="#request.oldconstant.value"/>
+									<s:property value="#request.oldconstant.variableValue"/>
 								</s:param>	  
 						</s:textfield>
 						<s:textfield label="Variable Parent Id" required="true" labelposition="left" name="varparentid" >
