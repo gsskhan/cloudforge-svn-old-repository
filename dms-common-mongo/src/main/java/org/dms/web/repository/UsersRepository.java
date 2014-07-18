@@ -11,4 +11,10 @@ public interface UsersRepository extends MongoRepository<Users, Serializable>{
 	List<Users> findByUsername(String username);
 	
 	Users findOneByUsername(String username);
+	
+	List<Users> findByUsernameRegex(String username);
+	
+	Long deleteUsersById(String id);
+	
+	Users findOneById(String id);
 }
