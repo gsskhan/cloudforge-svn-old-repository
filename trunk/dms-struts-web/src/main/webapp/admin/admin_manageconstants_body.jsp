@@ -67,7 +67,10 @@
       		<div id="editDelDiv" align="left" style="font-size: 12px">
       			<p align="center">Please enter/select a Variable Name and press "Search" to find matching records.</p>
       			<hr/>
-      			<br/>
+				<div class="ui-widget report-download">
+					<s:url id="ajax" value="downloadReportAllConstants"/>
+					<s:a href="%{ajax}">Download Report (All Constants)</s:a>				
+				</div>
       			<s:form action="searchConstants" labelposition="left">
       				<s:url id="getVarNamesURL" action="jsonVarNameAction"/> 
 			    	<sj:select

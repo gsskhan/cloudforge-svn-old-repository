@@ -12,7 +12,7 @@
 			<!-- Form to search the user and display their details -->
 			<strong>Please enter a keyword and press "Search" to find matching system users.</strong>
 			<hr/>
-			<div class="ui-widget report-for-users">
+			<div class="ui-widget report-download">
 				<s:url id="ajax" value="downloadReportAllUsers"/>
 				<s:a href="%{ajax}">Download Report (All Users)</s:a>				
 			</div>

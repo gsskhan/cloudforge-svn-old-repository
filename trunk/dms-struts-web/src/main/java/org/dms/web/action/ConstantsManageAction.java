@@ -1,6 +1,8 @@
 package org.dms.web.action;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,8 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 
 	private static final long serialVersionUID = -7922651409954732630L;	
 	private Logger log =  Logger.getLogger(ConstantsManageAction.class);
+	
+	private InputStream fileInputStream;
 	
 	// Fields primarily for adding/editing/deleting constants
 	private String constantId;
@@ -73,6 +77,13 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 			return ERROR;
 		}		
 		this.addActionMessage(msg);
+		return SUCCESS;
+	}
+	
+	public String getPdfReportForAllConstants(){
+		byte[] bytebuf = constantsService.buildPdfListOfAllConstants();
+		fileInputStream = new ByteArrayInputStream(bytebuf);
+		log.info("created and set to stream a report(.pdf) of all constants from db ...");
 		return SUCCESS;
 	}
 	
@@ -159,5 +170,8 @@ public class ConstantsManageAction extends ActionSupport implements ServletReque
 	}
 	public void setConstantsService(ConstantsService constantsService) {
 		this.constantsService = constantsService;
+	}
+	public InputStream getFileInputStream() {
+		return fileInputStream;
 	}
 }

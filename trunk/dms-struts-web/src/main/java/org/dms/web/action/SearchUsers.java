@@ -18,8 +18,9 @@ public class SearchUsers extends ActionSupport {
 	
 	private Logger log = Logger.getLogger(SearchUsers.class);
 	
-	// properties mainly for search form
 	private InputStream fileInputStream;
+	
+	// properties mainly for search form	
 	private String searchkeyword;
 	private List<Users> usersList;
 
