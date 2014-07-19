@@ -3,10 +3,8 @@ package org.dms.web.bo.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -87,13 +85,36 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<Users> allUsersList() throws DmsException {
-		// TODO Auto-generated method stub
-		return null;
+		return usersRepository.findAll();
 	}
 
 	@Override
 	public byte[] buildPdfListOfAllUsers() {
-		// TODO Auto-generated method stub
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
+			Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
+			PdfWriter.getInstance(document, os);
+			document.open();
+			PdfUtil.addHeader(document);
+			String[] tableColumnNames = {"USER ID","NAME","PASSWORD","ADDRESS","EMAIL","ROLE"};
+			List<ArrayList<Object>> tabdatalist = new LinkedList<ArrayList<Object>>();
+			List<Users> usersList = allUsersList();
+			for (Users user : usersList) {
+				ArrayList<Object> rowdata = new ArrayList<Object>();
+				rowdata.add(user.getId());
+				rowdata.add(user.getUsername());
+				rowdata.add(user.getPassword());
+				rowdata.add(user.getAddress());
+				rowdata.add(user.getEmail());
+				rowdata.add(user.getRole());
+				tabdatalist.add(rowdata);
+			}						
+			PdfUtil.addTable(document, "All users", 6,tableColumnNames , tabdatalist);
+			document.close();
+			log.info("pdf built.");
+			return os.toByteArray();
+		} catch (DocumentException | IOException | DmsException e) {
+			log.error("error in creating pdf.", e);
+		}		
 		return null;
 	}
 	
