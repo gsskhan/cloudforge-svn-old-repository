@@ -1,0 +1,1 @@
+/* JS for admin mode pages use. */

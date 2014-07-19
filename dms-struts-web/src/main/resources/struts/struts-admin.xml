@@ -53,6 +53,14 @@
 			<result name="success">admin_usersearch.jsp</result>
 			<result name="error">admin_usersearch.jsp</result>
 		 </action>
+		 <action name="downloadReportAllUsers" class="org.dms.web.action.SearchUsers" method="getPdfReportForAllUsers" >
+		 	<result name="success" type="stream">
+		 		<param name="contentType">application/octet-stream</param>
+		 		<param name="inputName">fileInputStream</param>
+		 		<param name="contentDisposition">attachment;filename="dms_users.pdf"</param>
+		 		<param name="bufferSize">10240</param>
+		 	</result>
+		 </action>
 		 <action name="gridConstantDataProvider" class="org.dms.web.jsonaction.ConstantsDataGridAction">
 		 	<interceptor-ref name="basicStack"></interceptor-ref>
 		 	<result type="json">

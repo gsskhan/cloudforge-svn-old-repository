@@ -5,6 +5,8 @@ import org.dms.web.bo.UserService;
 import org.dms.web.document.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class SearchUsers extends ActionSupport {
 	private Logger log = Logger.getLogger(SearchUsers.class);
 	
 	// properties mainly for search form
+	private InputStream fileInputStream;
 	private String searchkeyword;
 	private List<Users> usersList;
 
@@ -45,6 +48,12 @@ public class SearchUsers extends ActionSupport {
 		return SUCCESS;
 	}
 	
+	public String getPdfReportForAllUsers(){
+		byte[] bytebuf = userService.buildPdfListOfAllUsers();
+		fileInputStream = new ByteArrayInputStream(bytebuf);
+		log.info("created and set to stream a report(.pdf) of all users from db ...");
+		return SUCCESS;
+	}	
 	
 	// getter - setters
 	public String getSearchkeyword() {
@@ -64,6 +73,9 @@ public class SearchUsers extends ActionSupport {
 	}
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	public InputStream getFileInputStream() {
+		return fileInputStream;
 	}
 	
 

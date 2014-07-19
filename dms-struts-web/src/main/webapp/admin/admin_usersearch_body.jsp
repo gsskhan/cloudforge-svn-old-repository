@@ -12,12 +12,16 @@
 			<!-- Form to search the user and display their details -->
 			<strong>Please enter a keyword and press "Search" to find matching system users.</strong>
 			<hr/>
+			<div class="ui-widget report-for-users">
+				<s:url id="ajax" value="downloadReportAllUsers"/>
+				<s:a href="%{ajax}">Download Report (All Users)</s:a>				
+			</div>
 			<div id="searchFormDiv" style="text-align: left;">
 				<s:form id="searchUserForm" action="searchUserAction" labelposition="left" >
 					<sj:textfield name="searchkeyword" required="true" 
 						 	labelposition="left" label="Keyword: "/>
 					<sj:submit value="Search" indicator="indicator" 
-						 	button="true" buttonIcon="ui-icon-search" /> 
+						 	button="true" buttonIcon="ui-icon-search" />					
 				</s:form>			
 			</div>			
 			
