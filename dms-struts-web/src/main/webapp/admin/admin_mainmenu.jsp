@@ -3,10 +3,7 @@
 <script type="text/javascript" src="../js/admin.js"></script>
 <link href="../css/admin.css" rel="stylesheet" type="text/css" />
 
-<table style="width: 100%; height: 100%">
- <tr align="left">
-  <td valign="top">
-  
+<div style="position: relative;z-index: 9999;">  
   	<sj:menu id="mainMenuList" cssStyle="width:100%; font-size: 12px;" >	
 	
 	<s:if test="#session.uname==null">
@@ -22,13 +19,8 @@
 			</sj:menu>			
 		</sj:menuItem>
 		<sj:menuItem title="Static Constants" href="admin_manageconstants.jsp" menuIcon="ui-icon-arrow-4-diag"/>			
-		<sj:menuItem title="Manage Paper" href="admin_uploadpaper.jsp" menuIcon="ui-icon-arrow-4-diag"/>
+		<sj:menuItem title="Manage Paper" href="admin_managepapers.jsp" menuIcon="ui-icon-arrow-4-diag"/>
 	</s:else>	
-	</sj:menu>
-  	
-  	
-  </td>	
- </tr>
-</table>	
+	</sj:menu>	
 
-
+</div>
