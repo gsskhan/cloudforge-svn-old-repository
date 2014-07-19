@@ -1,5 +1,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags" %>
+<script type="text/javascript" src="../js/admin.js"></script>
+<link href="../css/admin.css" rel="stylesheet" type="text/css" />
 
 <table style="width: 100%; height: 100%">
  <tr align="left">
