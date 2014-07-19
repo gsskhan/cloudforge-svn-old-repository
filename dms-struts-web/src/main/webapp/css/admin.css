@@ -1,10 +1,10 @@
 @CHARSET "UTF-8";
 
-.report-for-users{
+.report-download{
 	text-align: right;	
 }
 
-.report-for-users a{
+.report-download a{
 	color: #2E6E9E;
 	font-weight: bold;
 }

@@ -101,7 +101,16 @@
 		 	<result name="input">admin_manageconstants.jsp</result>
 		 	<result name="success">admin_manageconstants.jsp</result>
 			<result name="error">admin_manageconstants.jsp</result>
-		 </action>		 	
+		 </action>
+		 <action name="downloadReportAllConstants" class="org.dms.web.action.ConstantsManageAction" method="getPdfReportForAllConstants">
+		 	<interceptor-ref name="basicStack"></interceptor-ref>
+		 	<result name="success" type="stream">
+		 		<param name="contentType">application/octet-stream</param>
+		 		<param name="inputName">fileInputStream</param>
+		 		<param name="contentDisposition">attachment;filename="dms_constants.pdf"</param>
+		 		<param name="bufferSize">10240</param>
+		 	</result>
+		 </action>
  	</package>
 
 </struts>
