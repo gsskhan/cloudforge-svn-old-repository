@@ -3,11 +3,9 @@ package org.dms.web.bo.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.dms.web.bo.ConstantsService;
 import org.dms.web.core.PdfUtil;
 import org.dms.web.document.Constants;
-import org.dms.web.exception.DmsRuntimeException;
 import org.dms.web.repository.ConstantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -98,9 +95,31 @@ public class ConstantsServiceImpl implements ConstantsService {
 
 	@Override
 	public byte[] buildPdfListOfAllConstants() {
-		// TODO Auto-generated method stub
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
+			Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
+			PdfWriter.getInstance(document, os);
+			document.open();
+			PdfUtil.addHeader(document);
+			String[] tableColumnNames = {"ID","VARIABLE","VARIABLE ID","VALUE","PARENT VARIABLE ID"};
+			List<ArrayList<Object>> tabdatalist = new LinkedList<ArrayList<Object>>();
+			List<Constants> constList = findAllConstants();
+			for (Constants con : constList) {
+				ArrayList<Object> rowdata = new ArrayList<Object>();
+				rowdata.add(con.getId());
+				rowdata.add(con.getVariableName());
+				rowdata.add(con.getVariableId());
+				rowdata.add(con.getVariableValue());
+				rowdata.add(con.getParentVariableId());
+				tabdatalist.add(rowdata);
+			}						
+			PdfUtil.addTable(document, "All constants", 5,tableColumnNames , tabdatalist);
+			document.close();
+			log.info("pdf built.");
+			return os.toByteArray();
+		} catch (DocumentException | IOException e) {
+			log.error("error in creating pdf.", e);
+		}		
 		return null;
 	}
-
 
 }

@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public byte[] buildPdfListOfAllUsers() {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
-			Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
+			Document document = new Document(PageSize.A4, 10, 10, 50, 50);
 			PdfWriter.getInstance(document, os);
 			document.open();
 			PdfUtil.addHeader(document);
