@@ -15,4 +15,6 @@
     
     <bean id="jsonSearchVarName" class="org.dms.web.jsonaction.JsonSearchVarName" />
     
+    <bean id="managePapersAction" class="org.dms.web.action.ManagePapersAction" />
+    
 </beans>

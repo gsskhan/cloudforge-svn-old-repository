@@ -111,6 +111,19 @@
 		 		<param name="bufferSize">10240</param>
 		 	</result>
 		 </action>
+		 <action name="getAuthorizerNamesList" class="org.dms.web.action.ManagePapersAction" method="findAuthorizersList">
+		 	<interceptor-ref name="basicStack"></interceptor-ref>
+		 	<result type="json" >
+		 		<param name="excludeProperties">paperService</param>
+		 	</result>
+		 </action>
+		 <action name="addNewPaper" class="org.dms.web.action.ManagePapersAction" method="addNewPaper">
+            <interceptor-ref name="fileUpload"/>
+    		<interceptor-ref name="basicStack"/>
+            <result name="input">admin_managepapers.jsp</result>
+   			<result name="success">admin_managepapers.jsp</result>
+   			<result name="error">admin_managepapers.jsp</result>
+		 </action>
  	</package>
 
 </struts>
