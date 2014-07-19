@@ -18,6 +18,8 @@
 	<constant name="struts.devMode" value="true" />
 	<constant name="struts.action.excludePattern" value="/dmsWebservice*" />
 	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<constant name="struts.multipart.maxSize" value="99999999" />
 		
 	<include file="struts-default.xml" />
 	
@@ -26,6 +28,5 @@
     
     <!-- Struts config files -->
     <include file="struts/struts-admin.xml" />
-	
 	
 </struts>
