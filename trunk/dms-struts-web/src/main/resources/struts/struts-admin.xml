@@ -124,6 +124,12 @@
    			<result name="success">admin_managepapers.jsp</result>
    			<result name="error">admin_managepapers.jsp</result>
 		 </action>
+		 <action name="pendingWorkflowActions" class="org.dms.web.action.ManagePapersAction" method="pendingActionWorkflows">
+    		<interceptor-ref name="basicStack"/>
+            <result name="input">admin_managepapers.jsp</result>
+   			<result name="success">admin_managepapers.jsp</result>
+   			<result name="error">admin_managepapers.jsp</result>
+		 </action>		 
  	</package>
 
 </struts>
