@@ -17,4 +17,6 @@ public interface UsersRepository extends MongoRepository<Users, Serializable>{
 	Long deleteUsersById(String id);
 	
 	Users findOneById(String id);
+	
+	List<Users> findByUsernameNotAndRoleNot(String username,String role);
 }

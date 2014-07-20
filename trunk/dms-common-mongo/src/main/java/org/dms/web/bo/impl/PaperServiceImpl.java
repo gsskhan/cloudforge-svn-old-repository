@@ -3,24 +3,24 @@ package org.dms.web.bo.impl;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dms.web.bo.PaperService;
-import org.dms.web.bo.UserService;
-import org.dms.web.core.RandomNumberGenerator;
 import org.dms.web.core.SystemConstants;
+import org.dms.web.dao.SequenceDao;
+import org.dms.web.document.PaperStatus;
+import org.dms.web.document.PaperStores;
+import org.dms.web.document.PaperWorkflow;
 import org.dms.web.document.Users;
 import org.dms.web.exception.DmsException;
 import org.dms.web.exception.DmsRuntimeException;
+import org.dms.web.repository.PaperStatusRepository;
+import org.dms.web.repository.PaperStoresRepository;
+import org.dms.web.repository.PaperWorkflowRepository;
 import org.dms.web.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 public class PaperServiceImpl implements PaperService {
 
@@ -29,17 +29,47 @@ public class PaperServiceImpl implements PaperService {
 	@Autowired
 	private UsersRepository usersRepository;
 	@Autowired
-	private MongoTemplate mongoTemplate;
-
+	private PaperStoresRepository paperStoresRepository;
+	@Autowired
+	private PaperStatusRepository statusRepository;
+	@Autowired
+	private PaperWorkflowRepository workflowRepository; 
+	@Autowired
+	private SequenceDao sequenceDao;
+	
+	/* 
+	 * To add new paper to system.
+	 */
 	@Override
-	public String addNewPaperToStore(String paperTitle, byte[] uploadedData, String uploaderName, boolean assignForauthorization,
-			String assignedAuthorizerName) throws DmsException {
-		log.info("paper title-"+paperTitle);
-		log.info("data-"+uploadedData.length);
-		log.info("uploaderName-"+uploaderName);
-		log.info("assignForauthorization-"+assignForauthorization);
-		log.info("assignedAuthorizerName-"+assignedAuthorizerName);
-		return "upload successfull.";
+	public String addNewPaperToStore(String paperTitle, byte[] uploadedData, String uploaderName, boolean assignForauthorization,String assignedAuthorizerName) throws DmsException {
+		if(StringUtils.isEmpty(paperTitle)||StringUtils.isEmpty(uploaderName)||StringUtils.isEmpty(assignedAuthorizerName)){
+			throw new DmsException( "either of paper title/owner name/assigned username is null or empty");
+		}
+		Timestamp currentTime = new Timestamp(new Date().getTime());
+		Users creator = usersRepository.findOneByUsername(uploaderName);
+		Users authorizer =usersRepository.findOneByUsername(assignedAuthorizerName);
+		if (creator == null) {
+			throw new DmsRuntimeException("No record of user having name as "+uploaderName+" found in database.");
+		}
+		if (authorizer == null) {
+			throw new DmsRuntimeException("No record of user having name as "+authorizer+" found in database.");
+		}
+		
+		/* create new paper record, status info and workflow for this newly created paper. */
+		PaperStores paperstores = paperStoresRepository.save(new PaperStores(sequenceDao.getNextSequenceId(SystemConstants.PAPER_STORES_SEQUENCE.getValue())
+				, 0, paperTitle, uploadedData, creator, currentTime));
+		log.info("saved new record to paper stores at "+ paperstores.getId());
+		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, "New paper '"+paperTitle+"' uploaded"));
+		log.info("saved new record for paper status at "+ paperStatus.getId());
+		PaperWorkflow workflow = workflowRepository.save(new PaperWorkflow(paperstores, creator, currentTime
+				, creator, true, currentTime, SystemConstants.PAPER_STATUS_CREATED.getValue()+" - " +paperTitle));
+		log.info("saved new workflow record for paper creation completion at "+ workflow.getId());
+		
+		/* Create a new workflow for authorization pending */
+		workflow = workflowRepository.save(new PaperWorkflow(paperstores, authorizer, currentTime
+				, null, false, null, SystemConstants.PAPER_STATUS_PEND_AUTH.getValue()));
+		log.info("saved new paper authorization pending workflow");
+		return "New paper {number "+paperstores.getNumber()+"/version "+paperstores.getVersion()+"} stored into database.";
 	}
 
 	@Override
@@ -52,8 +82,7 @@ public class PaperServiceImpl implements PaperService {
 		if (creator == null) {
 			throw new DmsException(creatorName +" is not a valid system user name.");
 		}
-		for(Users usr :mongoTemplate.find(Query.query(Criteria.where("username").ne(creatorName)
-									.and("role").ne(SystemConstants.ROLE_STUDENT.getValue())), Users.class)){
+		for(Users usr : usersRepository.findByUsernameNotAndRoleNot(creatorName, SystemConstants.ROLE_STUDENT.getValue())){
 			tmpList.add(usr.getUsername());
 		}
 		log.info("found LOVs of possible authorizers name as "+ tmpList);

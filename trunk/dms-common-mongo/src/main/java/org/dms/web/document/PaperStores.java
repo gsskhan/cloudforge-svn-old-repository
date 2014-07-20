@@ -38,6 +38,22 @@ public class PaperStores {
 
 	@Field(value="creationtime")
 	private Timestamp creationTime;
+	
+	public PaperStores() {
+		super();
+	}
+
+	public PaperStores(long number, int version, String title, byte[] data,
+			Users createdByUser, Timestamp creationTime) {
+		super();
+		this.number = number;
+		this.version = version;
+		this.title = title;
+		this.data = data;
+		this.createdByUser = createdByUser;
+		this.creationTime = creationTime;
+	}
+	
 
 	public String getId() {
 		return id;

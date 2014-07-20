@@ -8,6 +8,9 @@
 <bean id="userService" class="org.dms.web.bo.impl.UserServiceImpl" />
 <bean id="paperService" class="org.dms.web.bo.impl.PaperServiceImpl" />
 
+<bean id="sequenceDao" class="org.dms.web.dao.impl.SequenceDaoImpl"/>
+
+
 <bean id="random" class="java.util.Random"  scope="singleton"/>
 <bean id="randomNumberGenerator" class="org.dms.web.core.RandomNumberGenerator">
 	<property name="random" ref="random" />
