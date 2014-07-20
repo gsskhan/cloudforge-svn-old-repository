@@ -66,7 +66,15 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 			log.error("error adding new paper", e);
 			return ERROR;
 		}
+		this.clearfields();
 		return SUCCESS;
+	}
+	
+	private void clearfields(){
+		this.papertitle ="";
+		this.fileUpload = null;
+		this.authrequired = true;
+		this.authorizerName = "";		
 	}
 
 	// getter-setter methods	
