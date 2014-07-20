@@ -7,13 +7,10 @@
 <div class="ui-widget ui-widget-content ui-corner-all" style="width: 100%;height:100%;min-height:700px">
 	<s:actionmessage theme="jquery" />
 	<s:actionerror theme="jquery" />
-	<br />
-	<!-- Form to upload new paper -->
+	<!-- Form to upload new paper & check pending workflows -->
 	<div id="paper-wf-container" align="left" style="font-size: 12px;">
-		<div style="float: left; width: 40%; height: 250px; overflow: scroll;"
-			class="ui-widget-content ui-corner-all">
-			<p align="center">Select the file, fill out details and press
-				'Save' to upload new document.</p>
+		<div style="float: left; width: 40%; height: 250px; overflow: scroll; margin-left: 2px;" class="ui-widget-content ui-corner-all">
+			<p align="center">Please fill-in the form and press 'Save' to upload new document.</p>
 			<hr />
 			<s:form action="addNewPaper" enctype="multipart/form-data"
 				method="post">
@@ -40,15 +37,14 @@
 					cssStyle="width:100px;" />
 			</s:form>
 		</div>
-		<div
-			style="float: right; width: 59%; height: 250px; vertical-align: top; text-align: left; overflow: scroll;" class="ui-widget-content ui-corner-all">
+		<div style="float: right; width: 59%; height: 250px; vertical-align: top; text-align: left; overflow: scroll;" class="ui-widget-content ui-corner-all">
 			<p align="center">Workflow(s) pending for action</p>
 			<hr />
 			<div class="report-download">
 				<s:url id="pendingwfurl" value="pendingWorkflowActions" />
 				<s:a href="%{pendingwfurl}" button="false">Find Workflows</s:a>
 			</div>
-			<table>
+			<table style="font-size: 10px; width: 100%">
 				<thead class="ui-widget-header ui-corner-all">
 					<tr align="center">
 						<th>PAPER NUMBER</th>
