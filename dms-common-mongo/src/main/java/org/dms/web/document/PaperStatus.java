@@ -51,6 +51,14 @@ public class PaperStatus {
 	}
 
 	public PaperStatus(PaperStores paperStores, boolean authorized,
+			String comments) {
+		super();
+		this.paperStores = paperStores;
+		this.authorized = authorized;
+		this.comments = comments;
+	}
+
+	public PaperStatus(PaperStores paperStores, boolean authorized,
 			Users authorizedBy, Timestamp authorizationTime, boolean approved,
 			Users approvedBy, Timestamp approvalTime, boolean rejected,
 			Users rejectedBy, Timestamp rejectionTime, String comments) {
