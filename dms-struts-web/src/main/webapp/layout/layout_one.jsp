@@ -13,10 +13,9 @@
 </head>
 <body style="font-family: Courier New;font-size: 12px; background-color:#E1F0FF; ">
 
-<table width="100%" cellspacing="2" align="center" style="border:1;">
-
+<table style="border:1;width: 100%; padding: 1px;">
 		<tr>
-			<td  colspan="2" height="100">
+			<td  colspan="2" height="50">
 				<tiles:insertAttribute name = "header" />			
 			</td>
 		</tr>
@@ -30,7 +29,7 @@
 			</td>
 		</tr>
 	
-		<tr height="50">
+		<tr height="25">
 			<td colspan="2">
 				<tiles:insertAttribute name = "footer" />
 			</td>
