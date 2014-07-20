@@ -12,7 +12,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.dms.web.bo.PaperService;
+import org.dms.web.bo.WorkflowService;
 import org.dms.web.exception.DmsException;
+import org.dms.web.vo.PendingActionWorkflow;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -22,6 +24,7 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	private static final long serialVersionUID = 7393984910913039847L;
 	private Logger log = Logger.getLogger(this.getClass());
 
+	// form fields for adding new paper
 	private String papertitle;
 	
 	private File fileUpload;
@@ -32,15 +35,20 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	private String authorizerName;
 	private String ownername;
 	
-	private List<String> authorizersNameList;
+	private List<String> authorizersNameList;	
+	private List<PendingActionWorkflow> pendingActionWorkflowsList;
+	
 	private HttpServletRequest request;
 
 	@Autowired
 	private PaperService paperService;
+	@Autowired
+	private WorkflowService workflowService;
 
 	public String findAuthorizersList(){
 		authorizersNameList = new ArrayList<String>();
 		try {
+			this.clearErrorsAndMessages();
 			String creator = request.getParameter("creatorname");				
 			authorizersNameList = paperService.getAuthorizerListWhenCreatorIs(creator);
 		} catch (DmsException e) {
@@ -53,10 +61,13 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	
 	public String addNewPaper(){
 		try {
+			this.clearErrorsAndMessages();
 			log.info("Uploading "+fileUploadFileName + ", content-type : "+ fileUploadContentType+" .");
 			byte[] databuf = IOUtils.toByteArray(new FileInputStream(fileUpload));
 			String msg =paperService.addNewPaperToStore(papertitle, databuf, ownername, authrequired, authorizerName);
 			this.addActionMessage(msg);
+			// Re-load list of workflows pending for action
+			this.pendingActionWorkflows();
 		} catch (IOException | DmsException e) {
 			this.addActionError("Error in adding/processing new paper. Error: "+ e.getMessage());
 			log.error("error adding new paper", e);
@@ -67,6 +78,17 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 			return ERROR;
 		}
 		this.clearfields();
+		return SUCCESS;
+	}
+	
+	public String pendingActionWorkflows(){		
+		try {
+			this.clearErrorsAndMessages();			
+			pendingActionWorkflowsList = workflowService.getWorkflowsPendingActions();
+		} catch (Exception e) {
+			this.addActionError("Unable to retrive list of workflows pending actions.");
+			log.error("error finding list of workflows pending actions.", e);
+		}
 		return SUCCESS;
 	}
 	
@@ -131,5 +153,10 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	public void setAuthorizersNameList(List<String> authorizersNameList) {
 		this.authorizersNameList = authorizersNameList;
 	}
-
+	public List<PendingActionWorkflow> getPendingActionWorkflowsList() {
+		return pendingActionWorkflowsList;
+	}
+	public void setPendingActionWorkflowsList(List<PendingActionWorkflow> pendingActionWorkflowsList) {
+		this.pendingActionWorkflowsList = pendingActionWorkflowsList;
+	}
 }
