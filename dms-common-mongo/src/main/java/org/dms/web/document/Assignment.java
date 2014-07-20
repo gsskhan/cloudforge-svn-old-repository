@@ -1,12 +1,14 @@
 package org.dms.web.document;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Document(collection="assignment")
 public class Assignment {
@@ -20,8 +22,9 @@ public class Assignment {
 	@DBRef
 	private Users assignedToUser;
 	
+	@DateTimeFormat(iso=ISO.DATE_TIME)
 	@Field(value="timewhenassigned")
-	private Timestamp timeWhenAssigned;
+	private Date timeWhenAssigned;
 	
 	@Field(value="completed")
 	private boolean completed;
@@ -35,7 +38,7 @@ public class Assignment {
 
 	@PersistenceConstructor
 	public Assignment(Examination exam, Users assignedToUser,
-			Timestamp timeWhenAssigned, boolean completed,
+			Date timeWhenAssigned, boolean completed,
 			AssignmentResponse assignmentResponse) {
 		super();
 		this.exam = exam;
@@ -69,11 +72,11 @@ public class Assignment {
 		this.assignedToUser = assignedToUser;
 	}
 
-	public Timestamp getTimeWhenAssigned() {
+	public Date getTimeWhenAssigned() {
 		return timeWhenAssigned;
 	}
 
-	public void setTimeWhenAssigned(Timestamp timeWhenAssigned) {
+	public void setTimeWhenAssigned(Date timeWhenAssigned) {
 		this.timeWhenAssigned = timeWhenAssigned;
 	}
 

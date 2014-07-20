@@ -1,11 +1,13 @@
 package org.dms.web.document;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Document(collection="paperstatus")
 public class PaperStatus {
@@ -22,8 +24,9 @@ public class PaperStatus {
 	@DBRef
 	private Users authorizedBy;
 
+	@DateTimeFormat(iso=ISO.DATE_TIME)
 	@Field(value="authorizationtime")
-	private Timestamp authorizationTime;
+	private Date authorizationTime;
 
 	@Field(value="approved")
 	private boolean approved;
@@ -32,7 +35,7 @@ public class PaperStatus {
 	private Users approvedBy;
 
 	@Field(value="approvaltime")
-	private Timestamp approvalTime;
+	private Date approvalTime;
 
 	@Field(value="rejected")
 	private boolean rejected;
@@ -41,7 +44,7 @@ public class PaperStatus {
 	private Users rejectedBy;
 
 	@Field(value="rejectiontime")
-	private Timestamp rejectionTime;
+	private Date rejectionTime;
 
 	@Field(value="comments")
 	private String comments;
@@ -59,9 +62,9 @@ public class PaperStatus {
 	}
 
 	public PaperStatus(PaperStores paperStores, boolean authorized,
-			Users authorizedBy, Timestamp authorizationTime, boolean approved,
-			Users approvedBy, Timestamp approvalTime, boolean rejected,
-			Users rejectedBy, Timestamp rejectionTime, String comments) {
+			Users authorizedBy, Date authorizationTime, boolean approved,
+			Users approvedBy, Date approvalTime, boolean rejected,
+			Users rejectedBy, Date rejectionTime, String comments) {
 		super();
 		this.paperStores = paperStores;
 		this.authorized = authorized;
@@ -108,11 +111,11 @@ public class PaperStatus {
 		this.authorizedBy = authorizedBy;
 	}
 
-	public Timestamp getAuthorizationTime() {
+	public Date getAuthorizationTime() {
 		return authorizationTime;
 	}
 
-	public void setAuthorizationTime(Timestamp authorizationTime) {
+	public void setAuthorizationTime(Date authorizationTime) {
 		this.authorizationTime = authorizationTime;
 	}
 
@@ -132,11 +135,11 @@ public class PaperStatus {
 		this.approvedBy = approvedBy;
 	}
 
-	public Timestamp getApprovalTime() {
+	public Date getApprovalTime() {
 		return approvalTime;
 	}
 
-	public void setApprovalTime(Timestamp approvalTime) {
+	public void setApprovalTime(Date approvalTime) {
 		this.approvalTime = approvalTime;
 	}
 
@@ -156,11 +159,11 @@ public class PaperStatus {
 		this.rejectedBy = rejectedBy;
 	}
 
-	public Timestamp getRejectionTime() {
+	public Date getRejectionTime() {
 		return rejectionTime;
 	}
 
-	public void setRejectionTime(Timestamp rejectionTime) {
+	public void setRejectionTime(Date rejectionTime) {
 		this.rejectionTime = rejectionTime;
 	}
 
