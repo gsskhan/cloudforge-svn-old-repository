@@ -1,12 +1,15 @@
 package org.dms.web.document;
 
-import java.sql.Timestamp;
+
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Document(collection="examination")
 public class Examination {
@@ -17,11 +20,13 @@ public class Examination {
 	@DBRef
 	private PaperStores paperStores;
 	
+	@DateTimeFormat(iso=ISO.DATE_TIME)
 	@Field(value="starttime")
-	private Timestamp startTime;
+	private Date startTime;
 
+	@DateTimeFormat(iso=ISO.DATE_TIME)
 	@Field(value="endtime")
-	private Timestamp endtime;
+	private Date endtime;
 
 	@Field(value="examowner")
 	private long examowner;
@@ -31,8 +36,8 @@ public class Examination {
 	}
 
 	@PersistenceConstructor
-	public Examination(PaperStores paperStores, Timestamp startTime,
-			Timestamp endtime, long examowner) {
+	public Examination(PaperStores paperStores, Date startTime,
+			Date endtime, long examowner) {
 		super();
 		this.paperStores = paperStores;
 		this.startTime = startTime;
@@ -56,19 +61,19 @@ public class Examination {
 		this.paperStores = paperStores;
 	}
 
-	public Timestamp getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Timestamp startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public Timestamp getEndtime() {
+	public Date getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(Timestamp endtime) {
+	public void setEndtime(Date endtime) {
 		this.endtime = endtime;
 	}
 

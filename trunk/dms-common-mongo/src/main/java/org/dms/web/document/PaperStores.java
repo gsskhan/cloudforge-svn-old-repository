@@ -1,7 +1,8 @@
 package org.dms.web.document;
 
-import java.sql.Timestamp;
+
 import java.util.Arrays;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -37,14 +38,14 @@ public class PaperStores {
 	private Users createdByUser;
 
 	@Field(value="creationtime")
-	private Timestamp creationTime;
+	private Date creationTime;
 	
 	public PaperStores() {
 		super();
 	}
 
 	public PaperStores(long number, int version, String title, byte[] data,
-			Users createdByUser, Timestamp creationTime) {
+			Users createdByUser, Date creationTime) {
 		super();
 		this.number = number;
 		this.version = version;
@@ -103,11 +104,11 @@ public class PaperStores {
 		this.createdByUser = createdByUser;
 	}
 
-	public Timestamp getCreationTime() {
+	public Date getCreationTime() {
 		return creationTime;
 	}
 
-	public void setCreationTime(Timestamp creationTime) {
+	public void setCreationTime(Date creationTime) {
 		this.creationTime = creationTime;
 	}
 

@@ -1,6 +1,5 @@
 package org.dms.web.bo.impl;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +44,7 @@ public class PaperServiceImpl implements PaperService {
 		if(StringUtils.isEmpty(paperTitle)||StringUtils.isEmpty(uploaderName)||StringUtils.isEmpty(assignedAuthorizerName)){
 			throw new DmsException( "either of paper title/owner name/assigned username is null or empty");
 		}
-		Timestamp currentTime = new Timestamp(new Date().getTime());
+		Date currentDatetime = new Date();
 		Users creator = usersRepository.findOneByUsername(uploaderName);
 		Users authorizer =usersRepository.findOneByUsername(assignedAuthorizerName);
 		if (creator == null) {
@@ -57,16 +56,16 @@ public class PaperServiceImpl implements PaperService {
 		
 		/* create new paper record, status info and workflow for this newly created paper. */
 		PaperStores paperstores = paperStoresRepository.save(new PaperStores(sequenceDao.getNextSequenceId(SystemConstants.PAPER_STORES_SEQUENCE.getValue())
-				, 0, paperTitle, uploadedData, creator, currentTime));
+				, 0, paperTitle, uploadedData, creator, currentDatetime));
 		log.info("saved new record to paper stores at "+ paperstores.getId());
-		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, "New paper '"+paperTitle+"' uploaded"));
+		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, "New paper '"+paperTitle+"' uploaded"));		
 		log.info("saved new record for paper status at "+ paperStatus.getId());
-		PaperWorkflow workflow = workflowRepository.save(new PaperWorkflow(paperstores, creator, currentTime
-				, creator, true, currentTime, SystemConstants.PAPER_STATUS_CREATED.getValue()+" - " +paperTitle));
+		PaperWorkflow workflow = workflowRepository.save(new PaperWorkflow(paperstores, creator, currentDatetime
+				, creator, true, currentDatetime, SystemConstants.PAPER_STATUS_CREATED.getValue()+" - " +paperTitle));
 		log.info("saved new workflow record for paper creation completion at "+ workflow.getId());
 		
 		/* Create a new workflow for authorization pending */
-		workflow = workflowRepository.save(new PaperWorkflow(paperstores, authorizer, currentTime
+		workflow = workflowRepository.save(new PaperWorkflow(paperstores, authorizer, currentDatetime
 				, null, false, null, SystemConstants.PAPER_STATUS_PEND_AUTH.getValue()));
 		log.info("saved new paper authorization pending workflow");
 		return "New paper {number "+paperstores.getNumber()+"/version "+paperstores.getVersion()+"} stored into database.";

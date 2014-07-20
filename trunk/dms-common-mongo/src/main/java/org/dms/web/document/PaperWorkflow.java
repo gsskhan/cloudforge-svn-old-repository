@@ -1,11 +1,13 @@
 package org.dms.web.document;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Document(collection = "paperworkflow")
 public class PaperWorkflow {
@@ -18,9 +20,10 @@ public class PaperWorkflow {
 	
 	@DBRef
 	private Users assignedToUser;
-
+	
+	@DateTimeFormat(iso=ISO.DATE_TIME)
 	@Field(value="assignedontime")
-	private Timestamp assignedOnTime;
+	private Date assignedOnTime;
 
 	@DBRef
 	private Users completedByUser;
@@ -28,8 +31,9 @@ public class PaperWorkflow {
 	@Field(value="completed")
 	private boolean completed;
 	
+	@DateTimeFormat(iso=ISO.DATE_TIME)
 	@Field(value="completiontime")
-	private Timestamp completionTime;
+	private Date completionTime;
 
 	@Field(value="comments")
 	private String comments;
@@ -39,8 +43,8 @@ public class PaperWorkflow {
 	}
 
 	public PaperWorkflow(PaperStores paperStores, Users assignedToUser,
-			Timestamp assignedOnTime, Users completedByUser,
-			boolean completed, Timestamp completionTime, String comments) {
+			Date assignedOnTime, Users completedByUser,
+			boolean completed, Date completionTime, String comments) {
 		super();
 		this.paperStores = paperStores;
 		this.assignedToUser = assignedToUser;
@@ -75,11 +79,11 @@ public class PaperWorkflow {
 		this.assignedToUser = assignedToUser;
 	}
 
-	public Timestamp getAssignedOnTime() {
+	public Date getAssignedOnTime() {
 		return assignedOnTime;
 	}
 
-	public void setAssignedOnTime(Timestamp assignedOnTime) {
+	public void setAssignedOnTime(Date assignedOnTime) {
 		this.assignedOnTime = assignedOnTime;
 	}
 
@@ -99,11 +103,11 @@ public class PaperWorkflow {
 		this.completed = completed;
 	}
 
-	public Timestamp getCompletionTime() {
+	public Date getCompletionTime() {
 		return completionTime;
 	}
 
-	public void setCompletionTime(Timestamp completionTime) {
+	public void setCompletionTime(Date completionTime) {
 		this.completionTime = completionTime;
 	}
 
