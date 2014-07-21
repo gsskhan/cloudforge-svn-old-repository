@@ -4,16 +4,15 @@
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags"%>
 <!DOCTYPE html>
 
-<div class="ui-widget ui-widget-content ui-corner-all" style="width: 100%;height:100%;min-height:700px">
+<div class="manage-paper-container ui-widget ui-widget-content ui-corner-all">
 	<s:actionmessage theme="jquery" />
 	<s:actionerror theme="jquery" />
 	<!-- Form to upload new paper & check pending workflows -->
 	<div id="paper-wf-container" align="left" style="font-size: 12px;">
-		<div style="float: left; width: 40%; height: 250px; overflow: scroll; margin-left: 2px;" class="ui-widget-content ui-corner-all">
-			<p align="center">Please fill-in the form and press 'Save' to upload new document.</p>
-			<hr />
-			<s:form action="addNewPaper" enctype="multipart/form-data"
-				method="post">
+		<div class="paper-container ui-widget-content ui-corner-all">
+			<h4 align="center">Please fill-in the form and press 'Save' to upload new document.</h4>
+			<hr/><br/><br/>
+			<s:form action="addNewPaper" enctype="multipart/form-data" method="post">
 				<sj:textfield name="papertitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" />
 				<s:file name="fileUpload" label="File" requiredLabel="true" labelposition="left" required="true" />
 				<s:checkbox name="authrequired" label="Authorization Required" requiredLabel="true" fieldValue="true" value="true" labelposition="left" required="true" />
@@ -37,8 +36,8 @@
 					cssStyle="width:100px;" />
 			</s:form>
 		</div>
-		<div style="float: right; width: 59%; height: 250px; vertical-align: top; text-align: left; overflow: scroll;" class="ui-widget-content ui-corner-all">
-			<p align="center">Workflow(s) pending for action</p>
+		<div class="wf-container ui-widget-content ui-corner-all">
+			<h4 align="center">Workflow(s) pending for action</h4>
 			<hr />
 			<div class="report-download">
 				<s:url id="pendingwfurl" value="pendingWorkflowActions" />
@@ -77,8 +76,8 @@
 		<div style="clear: both;"></div>
 	</div>
 	<!-- Form to check workflow -->
-	<div id="check-workflow" align="center" style="font-size: 12px">
-		<p align="center">Work on workflow</p>
+	<div class="paper-manage-body ui-widget-content ui-corner-all">
+		<h4 align="center">Section for completing paper. Please select the incomplete workflow(s), fill details and submit.</h4>
 		<hr />
 	</div>
 </div>
