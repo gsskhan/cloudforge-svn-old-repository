@@ -5,37 +5,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<sj:head jquerytheme="redmond" jqueryui="true"/>
-	<title>
-			<tiles:insertAttribute name ="title" defaultValue="Document Management System"/>
-	</title>
-	
+<sj:head jquerytheme="redmond" jqueryui="true" />
+<title><tiles:insertAttribute name="title"
+		defaultValue="Document Management System" /></title>
+
 </head>
-<body style="font-family: Courier New;font-size: 12px; background-color:#E1F0FF; ">
-
-<table style="border:1;width: 100%; padding: 1px;">
+<body style="font-family: Courier New; font-size: 12px; background-color: #E1F0FF;">
+	<table style="border: 1; width: 1280px; padding: 1px;">
 		<tr>
-			<td  colspan="2" height="50">
-				<tiles:insertAttribute name = "header" />			
+			<td colspan="2" height="50"><tiles:insertAttribute name="header" />
 			</td>
 		</tr>
 
-		<tr height="800" >
-			<td width="20%" valign="top">
-				<tiles:insertAttribute name="menu"/>	
+		<tr height="800">
+			<td width="20%" valign="top"><tiles:insertAttribute name="menu" />
 			</td>
-			<td width="80%" align="center" valign="top">
-				<tiles:insertAttribute name = "body" />		
-			</td>
+			<td width="80%" align="center" valign="top"><tiles:insertAttribute
+					name="body" /></td>
 		</tr>
-	
+
 		<tr height="25">
-			<td colspan="2">
-				<tiles:insertAttribute name = "footer" />
-			</td>
+			<td colspan="2"><tiles:insertAttribute name="footer" /></td>
 		</tr>
 
-</table>
+	</table>
 
 </body>
 </html>
