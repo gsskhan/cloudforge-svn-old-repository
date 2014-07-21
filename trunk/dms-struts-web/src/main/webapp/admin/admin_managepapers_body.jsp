@@ -75,6 +75,15 @@
 		</div>
 		<div style="clear: both;"></div>
 	</div>
+	<!-- Form to find a paper -->
+	<div class="find-paper-container ui-widget-content ui-corner-all">
+		<h5 align="center">Search papers (Please enter paper number and version)</h5>
+		<s:form action="findPaper">
+				Paper Number:<s:textfield name="searchpapernumber" theme="simple"/>
+				Version:<s:textfield name="searchpaperversion" label="Version" requiredLabel="true" theme="simple"/>
+				<s:submit value="Find Paper" theme="simple"></s:submit>
+		</s:form>
+	</div>
 	<!-- Form to check workflow -->
 	<div class="paper-manage-body ui-widget-content ui-corner-all">
 		<h4 align="center">Section for completing paper. Please select the incomplete workflow(s), fill details and submit.</h4>
