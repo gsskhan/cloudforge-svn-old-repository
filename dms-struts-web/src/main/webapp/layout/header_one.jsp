@@ -1,9 +1,23 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
+<script type="text/javascript">
+/* Auto update date time*/
+jQuery(document).ready(function() {
+    var datediv = jQuery('#current-datetime');  
+    function updateTime() {
+        var now = new Date();
+        datediv.text(now.toString());        
+    }  
+    updateTime();
+    setInterval(updateTime, 1000); // 1 * 1000 miliseconds
+});
+</script>
+
 <table class="ui-widget ui-widget-header" style="width:100%;height:100%">
 	<tr>
 		<td align="left" valign="bottom" class="text" width="20%">
-			<s:date name="new java.util.Date()" format="dd MMMM yyyy hh:mm:ss"/>
+			<%-- <s:date name="new java.util.Date()" format="dd MMMM yyyy hh:mm:ss" /> --%>
+			<div id="current-datetime" style="font-size: 10px;"></div>
 		</td>
 	
 	<td align="center" valign="bottom" width="20%" style="font-size: 10px">
