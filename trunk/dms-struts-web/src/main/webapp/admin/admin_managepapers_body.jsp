@@ -10,10 +10,10 @@
 		<!-- Form to find a paper -->
 	<div class="find-paper-container ui-widget-content ui-corner-all">
 		<h4 align="center">Search papers (Please enter paper number and version)</h4>
-		<s:form action="findPaper">
+		<s:form action="findPaperAction">
 				Paper Number:<s:textfield name="searchpapernumber" theme="simple"/>
 				Version:<s:textfield name="searchpaperversion" label="Version" requiredLabel="true" theme="simple"/>
-				<s:submit value="Find Paper" theme="simple"></s:submit>
+				<s:submit value="Find Paper" theme="simple" />
 		</s:form>
 	</div>
 	<!-- Form to upload new paper & check pending workflows -->
