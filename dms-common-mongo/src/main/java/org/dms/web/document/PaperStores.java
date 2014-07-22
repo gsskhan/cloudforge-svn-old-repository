@@ -33,6 +33,9 @@ public class PaperStores {
 
 	@Field(value="data")
 	private byte[] data;
+	
+	@Field(value="originalfilename")
+	private String originalFilename;
 
 	@DBRef
 	private Users createdByUser;
@@ -44,13 +47,14 @@ public class PaperStores {
 		super();
 	}
 
-	public PaperStores(long number, int version, String title, byte[] data,
+	public PaperStores(long number, int version, String title, byte[] data, String originalFilename,
 			Users createdByUser, Date creationTime) {
 		super();
 		this.number = number;
 		this.version = version;
 		this.title = title;
 		this.data = data;
+		this.originalFilename = originalFilename;
 		this.createdByUser = createdByUser;
 		this.creationTime = creationTime;
 	}
@@ -94,6 +98,14 @@ public class PaperStores {
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	public String getOriginalFilename() {
+		return originalFilename;
+	}
+
+	public void setOriginalFilename(String originalFilename) {
+		this.originalFilename = originalFilename;
 	}
 
 	public Users getCreatedByUser() {

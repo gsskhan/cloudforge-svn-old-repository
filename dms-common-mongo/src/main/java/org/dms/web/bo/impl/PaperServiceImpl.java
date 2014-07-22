@@ -2,7 +2,9 @@ package org.dms.web.bo.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -40,7 +42,7 @@ public class PaperServiceImpl implements PaperService {
 	 * To add new paper to system.
 	 */
 	@Override
-	public String addNewPaperToStore(String paperTitle, byte[] uploadedData, String uploaderName, boolean assignForauthorization,String assignedAuthorizerName) throws DmsException {
+	public String addNewPaperToStore(String paperTitle, byte[] uploadedData, String uploadedFilename, String uploaderName, boolean assignForauthorization,String assignedAuthorizerName) throws DmsException {
 		if(StringUtils.isEmpty(paperTitle)||StringUtils.isEmpty(uploaderName)||StringUtils.isEmpty(assignedAuthorizerName)){
 			throw new DmsException( "either of paper title/owner name/assigned username is null or empty");
 		}
@@ -56,7 +58,7 @@ public class PaperServiceImpl implements PaperService {
 		
 		/* create new paper record, status info and workflow for this newly created paper. */
 		PaperStores paperstores = paperStoresRepository.save(new PaperStores(sequenceDao.getNextSequenceId(SystemConstants.PAPER_STORES_SEQUENCE.getValue())
-				, 0, paperTitle, uploadedData, creator, currentDatetime));
+				, 0, paperTitle, uploadedData, uploadedFilename, creator, currentDatetime));
 		log.info("saved new record to paper stores at "+ paperstores.getId());
 		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, "New paper '"+paperTitle+"' uploaded"));		
 		log.info("saved new record for paper status at "+ paperStatus.getId());
@@ -86,6 +88,18 @@ public class PaperServiceImpl implements PaperService {
 		}
 		log.info("found LOVs of possible authorizers name as "+ tmpList);
 		return tmpList;
+	}
+
+	@Override
+	public Map<String, Object> getPaperContents(long searchpapernumber, int searchpaperversion) throws DmsException {
+		PaperStores paper = paperStoresRepository.findOneByNumberAndVersion(searchpapernumber, searchpaperversion);
+		Map<String, Object> map = null;
+		if(paper != null) {
+			map = new HashMap<String, Object>();
+			map.put("data", paper.getData());
+			map.put("filename", paper.getOriginalFilename());
+		}
+		return map;
 	}
 	
 	
