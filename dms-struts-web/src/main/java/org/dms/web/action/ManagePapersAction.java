@@ -1,10 +1,13 @@
 package org.dms.web.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,9 +39,16 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	private String ownername;
 	
 	private List<String> authorizersNameList;	
+	private HttpServletRequest request;
+	
+	// fields to get pending workflows
 	private List<PendingActionWorkflow> pendingActionWorkflowsList;
 	
-	private HttpServletRequest request;
+	// fields to find a paper
+	private long searchpapernumber;
+	private int searchpaperversion;
+	private InputStream fileInputStream;
+	
 
 	@Autowired
 	private PaperService paperService;
@@ -64,7 +74,7 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 			this.clearErrorsAndMessages();
 			log.info("Uploading "+fileUploadFileName + ", content-type : "+ fileUploadContentType+" .");
 			byte[] databuf = IOUtils.toByteArray(new FileInputStream(fileUpload));
-			String msg =paperService.addNewPaperToStore(papertitle, databuf, ownername, authrequired, authorizerName);
+			String msg =paperService.addNewPaperToStore(papertitle, databuf, fileUploadFileName, ownername, authrequired, authorizerName);
 			this.addActionMessage(msg);
 			// Re-load list of workflows pending for action
 			this.pendingActionWorkflows();
@@ -82,13 +92,34 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	
 	public String pendingActionWorkflows(){		
-		try {
-			this.clearErrorsAndMessages();			
+		try {			
 			pendingActionWorkflowsList = workflowService.getWorkflowsPendingActions();
 		} catch (Exception e) {
 			this.addActionError("Unable to retrive list of workflows pending actions.");
 			log.error("error finding list of workflows pending actions.", e);
 		}
+		return SUCCESS;
+	}
+	
+	public String findPaper(){
+		try {
+			this.clearErrorsAndMessages();		
+			Map<String, Object> result = paperService.getPaperContents(searchpapernumber,searchpaperversion);
+			if (result != null) {
+				// set the filename which will be downloaded
+				fileUploadFileName = "Paper("+searchpapernumber+","+searchpaperversion+")_"+ result.get("filename");
+				fileInputStream = new ByteArrayInputStream((byte[]) result.get("data"));
+			} else {
+				this.addActionError("No paper found with number & version. ["+searchpapernumber+","+searchpaperversion+"]. Please retry with valid info.");
+				log.warn("No paper found with number & version. ["+searchpapernumber+","+searchpaperversion+"].");
+				return ERROR;
+			}			
+		} catch (Exception e) {
+			this.addActionError("Unable to find paper with number & version. ["+searchpapernumber+","+searchpaperversion+"].");
+			log.error("Error in finding paper with number & version. ["+searchpapernumber+","+searchpaperversion+"].", e);
+			return ERROR;
+		}
+		log.info("found paper with number & version. ["+searchpapernumber+","+searchpaperversion+"].");
 		return SUCCESS;
 	}
 	
@@ -158,5 +189,23 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	public void setPendingActionWorkflowsList(List<PendingActionWorkflow> pendingActionWorkflowsList) {
 		this.pendingActionWorkflowsList = pendingActionWorkflowsList;
+	}
+	public long getSearchpapernumber() {
+		return searchpapernumber;
+	}
+	public void setSearchpapernumber(long searchpapernumber) {
+		this.searchpapernumber = searchpapernumber;
+	}
+	public int getSearchpaperversion() {
+		return searchpaperversion;
+	}
+	public void setSearchpaperversion(int searchpaperversion) {
+		this.searchpaperversion = searchpaperversion;
+	}
+	public InputStream getFileInputStream() {
+		return fileInputStream;
+	}
+	public void setFileInputStream(InputStream fileInputStream) {
+		this.fileInputStream = fileInputStream;
 	}
 }
