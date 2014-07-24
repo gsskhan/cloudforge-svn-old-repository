@@ -46,7 +46,6 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	
 	// fields to find a paper
 	private long searchpapernumber;
-	private int searchpaperversion;
 	private InputStream fileInputStream;
 	
 
@@ -104,22 +103,22 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	public String findPaper(){
 		try {
 			this.clearErrorsAndMessages();		
-			Map<String, Object> result = paperService.getPaperContents(searchpapernumber,searchpaperversion);
+			Map<String, Object> result = paperService.getPaperContents(searchpapernumber);
 			if (result != null) {
 				// set the filename which will be downloaded
-				fileUploadFileName = "Paper("+searchpapernumber+","+searchpaperversion+")_"+ result.get("filename");
+				fileUploadFileName = "Paper("+searchpapernumber+")_"+ result.get("filename");
 				fileInputStream = new ByteArrayInputStream((byte[]) result.get("data"));
 			} else {
-				this.addActionError("No paper found with number & version. ["+searchpapernumber+","+searchpaperversion+"]. Please retry with valid info.");
-				log.warn("No paper found with number & version. ["+searchpapernumber+","+searchpaperversion+"].");
+				this.addActionError("No paper found with number. ["+searchpapernumber+"]. Please retry with valid info.");
+				log.warn("No paper found with number. ["+searchpapernumber+","+"].");
 				return ERROR;
 			}			
 		} catch (Exception e) {
-			this.addActionError("Unable to find paper with number & version. ["+searchpapernumber+","+searchpaperversion+"].");
-			log.error("Error in finding paper with number & version. ["+searchpapernumber+","+searchpaperversion+"].", e);
+			this.addActionError("Unable to find paper with number. ["+searchpapernumber+"].");
+			log.error("Error in finding paper with number. ["+searchpapernumber+"].", e);
 			return ERROR;
 		}
-		log.info("found paper with number & version. ["+searchpapernumber+","+searchpaperversion+"].");
+		log.info("found paper with number. ["+searchpapernumber+"].");
 		return SUCCESS;
 	}
 	
@@ -195,12 +194,6 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	public void setSearchpapernumber(long searchpapernumber) {
 		this.searchpapernumber = searchpapernumber;
-	}
-	public int getSearchpaperversion() {
-		return searchpaperversion;
-	}
-	public void setSearchpaperversion(int searchpaperversion) {
-		this.searchpaperversion = searchpaperversion;
 	}
 	public InputStream getFileInputStream() {
 		return fileInputStream;

@@ -12,7 +12,6 @@
 		<h4 align="center">Search papers (Please enter paper number and version)</h4>
 		<s:form action="findPaperAction">
 				Paper Number:<s:textfield name="searchpapernumber" theme="simple"/>
-				Version:<s:textfield name="searchpaperversion" label="Version" requiredLabel="true" theme="simple"/>
 				<s:submit value="Find Paper" theme="simple" />
 		</s:form>
 	</div>
@@ -56,7 +55,6 @@
 				<thead class="ui-widget-header ui-corner-all">
 					<tr align="center">
 						<th>PAPER NUMBER</th>
-						<th>PAPER VERSION</th>
 						<th>PAPER TITLE</th>
 						<th>PENDING FOR ACTION BY</th>
 						<th>COMMENTS</th>
@@ -67,7 +65,6 @@
 					<s:iterator value="pendingActionWorkflowsList" var="wf">
 						<tr align="center">
 							<td><s:property value="paperNumber" /></td>
-							<td><s:property value="paperVersion" /></td>
 							<td><s:property value="paperTitle" /></td>
 							<td><s:property value="pendingActionFromUsername" /></td>
 							<td><s:property value="comments" /></td>
