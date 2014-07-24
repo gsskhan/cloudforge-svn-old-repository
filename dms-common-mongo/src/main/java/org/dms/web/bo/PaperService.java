@@ -12,6 +12,6 @@ public interface PaperService {
 	
 	List<String> getAuthorizerListWhenCreatorIs(String creatorName) throws DmsException;
 
-	Map<String, Object> getPaperContents(long searchpapernumber, int searchpaperversion)  throws DmsException;
+	Map<String, Object> getPaperContents(long searchpapernumber)  throws DmsException;
 
 }

@@ -23,10 +23,9 @@ public class WorkflowServiceImpl implements WorkflowService{
 		log.info("searching all workflows with any pending actions.");
 		List<PendingActionWorkflow> tmpList = new ArrayList<PendingActionWorkflow>();
 		for (PaperWorkflow wf : workflowRepository.findByCompletedIsFalse()) {
-			tmpList.add(new PendingActionWorkflow(wf.getPaperStores().getNumber(), wf.getPaperStores().getVersion()
+			tmpList.add(new PendingActionWorkflow(wf.getPaperStores().getNumber()
 					, wf.getPaperStores().getTitle(), wf.getId(), wf.getComments(), wf.getAssignedToUser().getUsername()));
 		}log.info(tmpList.size() +" Record(s) found.");
 		return tmpList;
 	}
-
 }

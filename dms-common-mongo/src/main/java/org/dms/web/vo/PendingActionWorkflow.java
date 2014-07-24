@@ -3,7 +3,6 @@ package org.dms.web.vo;
 public class PendingActionWorkflow {
 	
 	private long paperNumber;
-	private int paperVersion;
 	private String paperTitle;
 	private String workflowId;
 	private String comments;
@@ -13,12 +12,11 @@ public class PendingActionWorkflow {
 		super();
 	}
 	
-	public PendingActionWorkflow(long paperNumber, int paperVersion,
+	public PendingActionWorkflow(long paperNumber,
 			String paperTitle, String workflowId, String comments,
 			String pendingActionFromUsername) {
 		super();
 		this.paperNumber = paperNumber;
-		this.paperVersion = paperVersion;
 		this.paperTitle = paperTitle;
 		this.workflowId = workflowId;
 		this.comments = comments;
@@ -30,12 +28,6 @@ public class PendingActionWorkflow {
 	}
 	public void setPaperNumber(long paperNumber) {
 		this.paperNumber = paperNumber;
-	}
-	public int getPaperVersion() {
-		return paperVersion;
-	}
-	public void setPaperVersion(int paperVersion) {
-		this.paperVersion = paperVersion;
 	}
 	public String getPaperTitle() {
 		return paperTitle;
@@ -65,7 +57,7 @@ public class PendingActionWorkflow {
 	@Override
 	public String toString() {
 		return "PendingActionWorkflow [paperNumber=" + paperNumber
-				+ ", paperVersion=" + paperVersion + ", paperTitle="
+				+ ", paperTitle="
 				+ paperTitle + ", workflowId=" + workflowId + ", comments="
 				+ comments + ", pendingActionFromUsername="
 				+ pendingActionFromUsername + "]";

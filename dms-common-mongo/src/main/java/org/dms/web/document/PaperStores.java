@@ -5,17 +5,12 @@ import java.util.Arrays;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="paperstores")
-@CompoundIndexes(value={
-		@CompoundIndex(def="{'number':1,'version':1}", name="paperNameAndVersionIdx", unique=true, dropDups=true)
-})
 public class PaperStores {
 
 	@Id
@@ -24,9 +19,6 @@ public class PaperStores {
 	@Field(value="number")
 	@Indexed(name="numberIdx",dropDups=true)
 	private long number;
-	
-	@Field(value="version")
-	private int version;
 	
 	@Field(value="title")
 	private String title;
@@ -47,11 +39,10 @@ public class PaperStores {
 		super();
 	}
 
-	public PaperStores(long number, int version, String title, byte[] data, String originalFilename,
+	public PaperStores(long number, String title, byte[] data, String originalFilename,
 			Users createdByUser, Date creationTime) {
 		super();
 		this.number = number;
-		this.version = version;
 		this.title = title;
 		this.data = data;
 		this.originalFilename = originalFilename;
@@ -74,14 +65,6 @@ public class PaperStores {
 
 	public void setNumber(long number) {
 		this.number = number;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
 	}
 
 	public String getTitle() {
@@ -126,8 +109,7 @@ public class PaperStores {
 
 	@Override
 	public String toString() {
-		return "PaperStores [id=" + id + ", number=" + number + ", version="
-				+ version + ", title=" + title + ", data record byte length="
+		return "PaperStores [id=" + id + ", number=" + number + ", title=" + title + ", data record byte length="
 				+ Arrays.toString(data).length() + ", createdByUser="
 				+ createdByUser + ", creationTime=" + creationTime + "]";
 	}		
