@@ -58,7 +58,7 @@ public class PaperServiceImpl implements PaperService {
 		
 		/* create new paper record, status info and workflow for this newly created paper. */
 		PaperStores paperstores = paperStoresRepository.save(new PaperStores(sequenceDao.getNextSequenceId(SystemConstants.PAPER_STORES_SEQUENCE.getValue())
-				, 0, paperTitle, uploadedData, uploadedFilename, creator, currentDatetime));
+				, paperTitle, uploadedData, uploadedFilename, creator, currentDatetime));
 		log.info("saved new record to paper stores at "+ paperstores.getId());
 		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, "New paper '"+paperTitle+"' uploaded"));		
 		log.info("saved new record for paper status at "+ paperStatus.getId());
@@ -70,7 +70,7 @@ public class PaperServiceImpl implements PaperService {
 		workflow = workflowRepository.save(new PaperWorkflow(paperstores, authorizer, currentDatetime
 				, null, false, null, SystemConstants.PAPER_STATUS_PEND_AUTH.getValue()));
 		log.info("saved new paper authorization pending workflow");
-		return "New paper {number "+paperstores.getNumber()+"/version "+paperstores.getVersion()+"} stored into database.";
+		return "New paper {number: "+paperstores.getNumber()+"} stored into database.";
 	}
 
 	@Override
@@ -91,8 +91,8 @@ public class PaperServiceImpl implements PaperService {
 	}
 
 	@Override
-	public Map<String, Object> getPaperContents(long searchpapernumber, int searchpaperversion) throws DmsException {
-		PaperStores paper = paperStoresRepository.findOneByNumberAndVersion(searchpapernumber, searchpaperversion);
+	public Map<String, Object> getPaperContents(long searchpapernumber) throws DmsException {
+		PaperStores paper = paperStoresRepository.findOneByNumber(searchpapernumber);
 		Map<String, Object> map = null;
 		if(paper != null) {
 			map = new HashMap<String, Object>();

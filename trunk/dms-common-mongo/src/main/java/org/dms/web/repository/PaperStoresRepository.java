@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PaperStoresRepository extends MongoRepository<PaperStores, Serializable> {
 	
-	PaperStores findOneByNumberAndVersion(long number, int version);
+	PaperStores findOneByNumber(long number);
 
 }
