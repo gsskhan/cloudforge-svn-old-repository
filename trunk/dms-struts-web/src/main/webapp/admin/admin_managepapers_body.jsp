@@ -85,5 +85,54 @@
 	<div class="paper-manage-body ui-widget-content ui-corner-all">
 		<h4 align="center">Section for completing paper. Please select the incomplete workflow(s), fill details and submit.</h4>
 		<hr />
+			<div style="float: left; width: 50%;" align="left">
+			<s:form>
+				<sj:textfield name="number" label="Paper Number" labelposition="left" readonly="true" />
+				<sj:textfield name="uploadedfilename" label="Uploaded Filename" labelposition="left" readonly="true" />
+				<sj:textfield name="title" label="Title" labelposition="left" requiredLabel="true" required="true" />
+				<sj:textfield name="creatorname" label="Creator" labelposition="left" readonly="true" />
+				<sj:datepicker name="creationtime" label="Creation Time" labelposition="left" readonly="true" />
+				<sj:textfield name="authorizername" label="Authorizer" labelposition="left" readonly="true" />
+				<sj:datepicker name="authorizationtime" label="Authorization Time" labelposition="left" readonly="true" />
+				<sj:textfield name="approvername" label="Approver" labelposition="left" readonly="true" />
+				<sj:datepicker name="approvaltime" label="Approval Time" labelposition="left" readonly="true" />
+				<sj:textfield name="rejectorname" label="Rejector" labelposition="left" readonly="true" />
+				<sj:datepicker name="rejectiontime" label="Rejection Time" labelposition="left" readonly="true" />
+				<sj:radio name="action" label="Action" list="{'Authorize', 'Approve', 'Reject'}" />
+				<sj:textarea name="remarks" label="Remarks" rows="2" cols="45"/>
+				<sj:submit value="Process" button="true" cssStyle="width:100px;" />
+			</s:form>
+			</div>
+			<div style="float: right; width: 50%;">
+			<div style="background-color:#E1F0FF;margin:2px;">Workflow History</div>
+			<table style="font-size: 10px; width: 100%">
+				<thead class="ui-widget-header ui-corner-all">
+					<tr align="center">
+						<th>ASSIGNMENT TIME</th>
+						<th>ASSIGNED TO USER</th>
+						<th>COMPLETION TIME</th>
+						<th>COMPLETED BY USER</th>
+						<th>STATUS</th>
+					</tr>
+				</thead>
+				<tbody class="ui-widget-content ui-corner-all">
+					<s:iterator value="pendingActionWorkflowsList" var="wf">
+						<tr align="center">
+							<td><s:property value="paperNumber" /></td>
+							<td><s:property value="paperTitle" /></td>
+							<td><s:property value="pendingActionFromUsername" /></td>
+							<td><s:property value="comments" /></td>
+							<td><s:url id="url" action="">
+									<s:param name="wfid">
+										<s:property value="workflowId" />
+									</s:param>
+								</s:url> <s:a href="%{url}">Launch</s:a></td>
+							<td>
+						<tr>
+					</s:iterator>
+				</tbody>
+			</table>
+			</div>
+			<div style="clear: both;"></div>		
 	</div>
 </div>
