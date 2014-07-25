@@ -47,7 +47,7 @@
 		<div class="wf-container ui-widget-content ui-corner-all">
 			<h4 align="center">Workflow(s) pending for action</h4>
 			<hr />
-			<div class="report-download">
+			<div class="workflow-link">
 				<s:url id="pendingwfurl" value="pendingWorkflowActions" />
 				<s:a href="%{pendingwfurl}" button="false">Find Workflows</s:a>
 			</div>
@@ -83,13 +83,13 @@
 	</div>
 	<!-- Form to check workflow -->
 	<div class="paper-manage-body ui-widget-content ui-corner-all">
-		<h4 align="center">Section for completing paper. Please select the incomplete workflow(s), fill details and submit.</h4>
+		<h4 align="center">Section for completing paper. Please launch an incomplete workflow(s), select an action and submit.</h4>
 		<hr />
 			<div style="float: left; width: 50%;" align="left">
 			<s:form>
 				<sj:textfield name="number" label="Paper Number" labelposition="left" readonly="true" />
 				<sj:textfield name="uploadedfilename" label="Uploaded Filename" labelposition="left" readonly="true" />
-				<sj:textfield name="title" label="Title" labelposition="left" requiredLabel="true" required="true" />
+				<sj:textfield name="title" label="Title" labelposition="left" readonly="true" />
 				<sj:textfield name="creatorname" label="Creator" labelposition="left" readonly="true" />
 				<sj:datepicker name="creationtime" label="Creation Time" labelposition="left" readonly="true" />
 				<sj:textfield name="authorizername" label="Authorizer" labelposition="left" readonly="true" />
@@ -104,7 +104,13 @@
 			</s:form>
 			</div>
 			<div style="float: right; width: 50%;">
-			<div style="background-color:#E1F0FF;margin:2px;">Workflow History</div>
+			<div class="view-paper">
+				<s:url id="paperurl" value="findPaperByNumberAction" >
+					<s:param name="pnum"><s:property value="number"/></s:param>
+				</s:url>
+				<s:a href="%{paperurl}">Download Paper</s:a>
+			</div>
+			<div class="workflow-history">Workflow History</div>
 			<table style="font-size: 10px; width: 100%">
 				<thead class="ui-widget-header ui-corner-all">
 					<tr align="center">
