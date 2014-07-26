@@ -101,7 +101,7 @@
 					<tr><td>Paper</td><td>
 						<s:url id="paperurl" action="downloadPaper" >
 							<s:param name="paperid"><s:property value="#request.paperstore.id"/></s:param>
-						</s:url><s:a href="%{paperurl}">Download</s:a>
+						</s:url><s:a href="%{paperurl}" cssStyle="color: #2E6E9E;">Download</s:a>
 					</td><tr>
 					<tr><td>Creator</td><td><s:property value="#request.paperstore.createdByUser.username" /></td><tr>
 					<tr><td>Creation Time</td><td><s:date name="#request.paperstore.creationTime" /></td><tr>					
