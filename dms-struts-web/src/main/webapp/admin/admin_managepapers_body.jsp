@@ -40,8 +40,7 @@
 						<s:property value="#session.uname" />
 					</s:param>
 				</s:textfield>
-				<sj:submit value="Save" button="true" indicator="indicator"
-					cssStyle="width:100px;" />
+				<sj:submit value="Save" button="true" cssStyle="width:100px;" />
 			</s:form>
 		</div>
 		<div class="wf-container ui-widget-content ui-corner-all">
@@ -82,10 +81,10 @@
 		<div style="clear: both;"></div>
 	</div>
 	<!-- Form to check workflow -->
-	<div class="paper-manage-body ui-widget-content ui-corner-all">
+	<div class="paper-manage-body ui-widget-content ui-corner-all">		
+		<s:if test="#request.paperstore != null">
 		<h4 align="center">Section for viewing paper. Please enter a paper number on top and search.</h4>
 		<hr />
-		<s:if test="#request.paperstore != null">
 			<div style="float: left; width: 50%;" align="left">
 			<table class="view-paper">
 				<thead class="ui-widget-header ui-corner-all">
@@ -146,6 +145,31 @@
 			</table>
 			</div>
 			<div style="clear: both;"></div>
-		</s:if>	
+		</s:if>
+		<s:else>
+		<h4 align="center">Please launch pending workflows and complete</h4>
+		<hr />
+			<div align="left" style="margin-left: 2px;">
+			<s:form action="processWorkflow">
+				<sj:textfield name="papertitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" readonly="true" />
+				<sj:textfield name="papernumber" label="Paper Number" labelposition="left" requiredLabel="true" required="true" readonly="true"/>
+				<s:div>
+					<s:url var="actionurl" action="findWorkflowActionTextList" />
+					<sj:select href="%{actionurl}" name="actiontext" list="actiontextList"
+					required="true" labelposition="left" label="Action" />
+					<s:url var="ajaxurl" action="getAuthorizerNamesList">
+						<s:param name="creatorname">
+							<s:property value="#session.uname" />
+						</s:param>
+					</s:url>
+					<sj:select href="%{ajaxurl}" name="authorizerName"
+						list="authorizersNameList" required="true" labelposition="left"
+						label="Assign To" />
+				</s:div>
+				<sj:textarea name="remarks" cols="50" rows="3" label="Remarks"></sj:textarea>				
+				<sj:submit value="Process" button="true" cssStyle="width:100px;" />		
+			</s:form>
+			</div>
+		</s:else>
 	</div>
 </div>
