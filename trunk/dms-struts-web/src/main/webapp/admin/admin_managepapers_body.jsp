@@ -9,10 +9,10 @@
 	<s:actionerror theme="jquery" />
 		<!-- Form to find a paper -->
 	<div class="find-paper-container ui-widget-content ui-corner-all">
-		<h4 align="center">Search papers (Please enter paper number and version)</h4>
-		<s:form action="findPaperAction">
+		<h4 align="center">Search papers (Please enter paper number)</h4>
+		<s:form action="searchPaperDetails">
 				Paper Number:<s:textfield name="searchpapernumber" theme="simple"/>
-				<s:submit value="Find Paper" theme="simple" />
+				<s:submit value="Search Paper" theme="simple" />
 		</s:form>
 	</div>
 	<!-- Form to upload new paper & check pending workflows -->
@@ -68,7 +68,7 @@
 							<td><s:property value="paperTitle" /></td>
 							<td><s:property value="pendingActionFromUsername" /></td>
 							<td><s:property value="comments" /></td>
-							<td><s:url id="url" action="">
+							<td><s:url id="url" action="launchWorkflow">
 									<s:param name="wfid">
 										<s:property value="workflowId" />
 									</s:param>
@@ -83,35 +83,46 @@
 	</div>
 	<!-- Form to check workflow -->
 	<div class="paper-manage-body ui-widget-content ui-corner-all">
-		<h4 align="center">Section for completing paper. Please launch an incomplete workflow(s), select an action and submit.</h4>
+		<h4 align="center">Section for viewing paper. Please enter a paper number on top and search.</h4>
 		<hr />
+		<s:if test="#request.paperstore != null">
 			<div style="float: left; width: 50%;" align="left">
-			<s:form>
-				<sj:textfield name="number" label="Paper Number" labelposition="left" readonly="true" />
-				<sj:textfield name="uploadedfilename" label="Uploaded Filename" labelposition="left" readonly="true" />
-				<sj:textfield name="title" label="Title" labelposition="left" readonly="true" />
-				<sj:textfield name="creatorname" label="Creator" labelposition="left" readonly="true" />
-				<sj:datepicker name="creationtime" label="Creation Time" labelposition="left" readonly="true" />
-				<sj:textfield name="authorizername" label="Authorizer" labelposition="left" readonly="true" />
-				<sj:datepicker name="authorizationtime" label="Authorization Time" labelposition="left" readonly="true" />
-				<sj:textfield name="approvername" label="Approver" labelposition="left" readonly="true" />
-				<sj:datepicker name="approvaltime" label="Approval Time" labelposition="left" readonly="true" />
-				<sj:textfield name="rejectorname" label="Rejector" labelposition="left" readonly="true" />
-				<sj:datepicker name="rejectiontime" label="Rejection Time" labelposition="left" readonly="true" />
-				<sj:radio name="action" label="Action" list="{'Authorize', 'Approve', 'Reject'}" />
-				<sj:textarea name="remarks" label="Remarks" rows="2" cols="45"/>
-				<sj:submit value="Process" button="true" cssStyle="width:100px;" />
-			</s:form>
+			<table class="view-paper">
+				<thead class="ui-widget-header ui-corner-all">
+					<tr align="center">
+						<th>PROPERTY</th>
+						<th>VALUE</th>
+					</tr>
+				</thead>
+				   <tbody class="ui-widget-content ui-corner-all" align="left" style="font-size: 12px;">
+				 	<tr><td>Paper Number</td><td><s:property value="#request.paperstore.number" /></td><tr>
+					<tr><td>Paper Title</td><td><s:property value="#request.paperstore.title" /></td><tr>
+					<tr><td>Uploaded Filename</td><td><s:property value="#request.paperstore.originalFilename" /></td><tr>
+					<tr><td>Paper</td><td>
+						<s:url id="paperurl" value="findPaperAction" >
+							<s:param name="pnum"><s:property value="#request.paperstore.number"/></s:param>
+						</s:url><s:a href="%{paperurl}">Download</s:a>
+					</td><tr>
+					<tr><td>Creator</td><td><s:property value="#request.paperstore.createdByUser.username" /></td><tr>
+					<tr><td>Creation Time</td><td><s:date name="#request.paperstore.creationTime" /></td><tr>					
+					<tr><td>Authorized</td><td><s:property value="#request.paperstatus.authorized" /></td><tr>
+					<tr><td>Authorizer</td><td><s:property value="#request.paperstatus.authorizedBy.username" /></td><tr>
+					<tr><td>Authorization Time</td><td><s:date name="#request.paperstatus.authorizationTime" /></td><tr>
+					<tr><td>Approved</td><td><s:property value="#request.paperstatus.approved" /></td><tr>
+					<tr><td>Approver</td><td><s:property value="#request.paperstatus.approvedBy.username" /></td><tr>
+					<tr><td>Approval Time</td><td><s:date name="#request.paperstatus.approvalTime" /></td><tr>
+					<tr><td>Rejected</td><td><s:property value="#request.paperstatus.rejected" /></td><tr>
+					<tr><td>Rejector</td><td><s:property value="#request.paperstatus.rejectedBy.username" /></td><tr>
+					<tr><td>Rejection Time</td><td><s:date name="#request.paperstatus.rejectionTime" /></td><tr>
+					<tr><td>Remarks</td><td><s:textarea theme="simple" readonly="true" cols="30" rows="3">
+						<s:param name="value"><s:property value="#request.paperstatus.comments" /></s:param>
+					</s:textarea></td><tr>				 
+				  </tbody>
+			</table>
 			</div>
 			<div style="float: right; width: 50%;">
-			<div class="view-paper">
-				<s:url id="paperurl" value="findPaperByNumberAction" >
-					<s:param name="pnum"><s:property value="number"/></s:param>
-				</s:url>
-				<s:a href="%{paperurl}">Download Paper</s:a>
-			</div>
 			<div class="workflow-history">Workflow History</div>
-			<table style="font-size: 10px; width: 100%">
+			<table class="view-wf-table">
 				<thead class="ui-widget-header ui-corner-all">
 					<tr align="center">
 						<th>ASSIGNMENT TIME</th>
@@ -122,23 +133,19 @@
 					</tr>
 				</thead>
 				<tbody class="ui-widget-content ui-corner-all">
-					<s:iterator value="pendingActionWorkflowsList" var="wf">
+					<s:iterator value="#request.wflist" status="wflist">
 						<tr align="center">
-							<td><s:property value="paperNumber" /></td>
-							<td><s:property value="paperTitle" /></td>
-							<td><s:property value="pendingActionFromUsername" /></td>
+							<td><s:date name="assignedOnTime"/></td>
+							<td><s:property value="assignedToUser.username" /></td>
+							<td><s:property value="completionTime" /></td>
+							<td><s:property value="completedByUser.username" /></td>
 							<td><s:property value="comments" /></td>
-							<td><s:url id="url" action="">
-									<s:param name="wfid">
-										<s:property value="workflowId" />
-									</s:param>
-								</s:url> <s:a href="%{url}">Launch</s:a></td>
-							<td>
 						<tr>
 					</s:iterator>
 				</tbody>
 			</table>
 			</div>
-			<div style="clear: both;"></div>		
+			<div style="clear: both;"></div>
+		</s:if>	
 	</div>
 </div>

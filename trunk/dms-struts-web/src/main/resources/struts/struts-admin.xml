@@ -139,7 +139,13 @@
             <result name="input">admin_managepapers.jsp</result>
    			<result name="success">admin_managepapers.jsp</result>
    			<result name="error">admin_managepapers.jsp</result>
-		 </action>		 
+		 </action>	
+		  <action name="searchPaperDetails" class="org.dms.web.action.SearchPaperAction" method="findPaperDetailsAll">
+    		<interceptor-ref name="basicStack"/>
+            <result name="input">admin_managepapers.jsp</result>
+   			<result name="success">admin_managepapers.jsp</result>
+   			<result name="error">admin_managepapers.jsp</result>
+		 </action> 
  	</package>
 
 </struts>
