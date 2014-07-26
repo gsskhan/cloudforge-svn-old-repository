@@ -53,13 +53,24 @@
 }
 
 .view-paper{
-	text-align: left;
+	text-align: left; 
+	width: 90%";
+	border-spacing: 1px;
+	border-collapse: collapse;
 }
 
-.view-paper a{
-	color: #2E6E9E;
-	font-weight: bold;
-	margin-left: 2px;
+.view-paper td {
+	border: 1px solid #2E6E9E;
+}
+
+.view-wf-table{
+	font-size: 10px;
+	width: 100%;
+	border-spacing: 1px;
+}
+
+.view-wf-table td{
+	border: 1px solid #2E6E9E;	
 }
 
 .workflow-history{

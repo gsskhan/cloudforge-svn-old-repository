@@ -44,10 +44,8 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	// fields to get pending workflows
 	private List<PendingActionWorkflow> pendingActionWorkflowsList;
 	
-	// fields to find a paper
-	private long searchpapernumber;
-	private InputStream fileInputStream;
-	
+	// fields to get a paper data
+	private InputStream fileInputStream;	
 
 	@Autowired
 	private PaperService paperService;
@@ -102,7 +100,8 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	
 	public String findPaper(){
 		try {
-			this.clearErrorsAndMessages();		
+			this.clearErrorsAndMessages();
+			long searchpapernumber = (long) request.getAttribute("pnum");
 			Map<String, Object> result = paperService.getPaperContents(searchpapernumber);
 			if (result != null) {
 				// set the filename which will be downloaded
@@ -112,13 +111,13 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 				this.addActionError("No paper found with number. ["+searchpapernumber+"]. Please retry with valid info.");
 				log.warn("No paper found with number. ["+searchpapernumber+","+"].");
 				return ERROR;
-			}			
+			}
+			log.info("found paper with number. ["+searchpapernumber+"].");
 		} catch (Exception e) {
-			this.addActionError("Unable to find paper with number. ["+searchpapernumber+"].");
-			log.error("Error in finding paper with number. ["+searchpapernumber+"].", e);
+			this.addActionError("Unable to download paper.");
+			log.error("Error in downloading paper ", e);
 			return ERROR;
 		}
-		log.info("found paper with number. ["+searchpapernumber+"].");
 		return SUCCESS;
 	}
 	
@@ -188,12 +187,6 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	public void setPendingActionWorkflowsList(List<PendingActionWorkflow> pendingActionWorkflowsList) {
 		this.pendingActionWorkflowsList = pendingActionWorkflowsList;
-	}
-	public long getSearchpapernumber() {
-		return searchpapernumber;
-	}
-	public void setSearchpapernumber(long searchpapernumber) {
-		this.searchpapernumber = searchpapernumber;
 	}
 	public InputStream getFileInputStream() {
 		return fileInputStream;
