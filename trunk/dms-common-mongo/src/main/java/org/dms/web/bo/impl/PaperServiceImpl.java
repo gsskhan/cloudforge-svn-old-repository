@@ -113,6 +113,15 @@ public class PaperServiceImpl implements PaperService {
 		paperDetailsMap.put("paperworkflowlist", wfList);
 		return paperDetailsMap;
 	}
+
+	@Override
+	public List<String> getActionTextNamesList() {
+		List<String> tmpList = new ArrayList<String>();
+		tmpList.add(SystemConstants.WF_ACTION_AUTHORIZE.getValue());
+		tmpList.add(SystemConstants.WF_ACTION_APPROVE.getValue());
+		tmpList.add(SystemConstants.WF_ACTION_REJECT.getValue());
+		return tmpList;
+	}
 	
 	
 
