@@ -146,7 +146,13 @@
             <result name="input">admin_managepapers.jsp</result>
    			<result name="success">admin_managepapers.jsp</result>
    			<result name="error">admin_managepapers.jsp</result>
-		 </action> 
+		 </action>
+		 <action name="findWorkflowActionTextList" class="org.dms.web.action.ManagePapersAction" method="getActionsTextList">
+		 	<interceptor-ref name="basicStack"></interceptor-ref>
+		 	<result type="json" >
+		 		<param name="excludeProperties">paperService</param>
+		 	</result>
+		 </action>
  	</package>
 
 </struts>

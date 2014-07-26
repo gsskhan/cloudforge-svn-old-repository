@@ -46,6 +46,9 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	
 	// fields to get a paper data
 	private InputStream fileInputStream;	
+	
+	// fields to get list of actions for a workflow
+	private List<String> actiontextList;
 
 	@Autowired
 	private PaperService paperService;
@@ -120,6 +123,12 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 		return SUCCESS;
 	}
 	
+	public String getActionsTextList(){
+		actiontextList = paperService.getActionTextNamesList();
+		log.info("found Actions text LOV as "+actiontextList);
+		return SUCCESS;		
+	}
+	
 	private void clearfields(){
 		this.papertitle ="";
 		this.fileUpload = null;
@@ -192,5 +201,11 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	public void setFileInputStream(InputStream fileInputStream) {
 		this.fileInputStream = fileInputStream;
+	}
+	public List<String> getActiontextList() {
+		return actiontextList;
+	}
+	public void setActiontextList(List<String> actiontextList) {
+		this.actiontextList = actiontextList;
 	}
 }
