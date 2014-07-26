@@ -101,6 +101,18 @@ public class PaperServiceImpl implements PaperService {
 		}
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> getPaperDetails(long papernumber) {
+		Map<String, Object> paperDetailsMap = new HashMap<String, Object>();
+		PaperStores paper = paperStoresRepository.findOneByNumber(papernumber);
+		paperDetailsMap.put("paperstore", paper);
+		PaperStatus status = statusRepository.findOneByPaperStores(paper);
+		paperDetailsMap.put("paperstatus", status);
+		List<PaperWorkflow> wfList = workflowRepository.findByPaperStores(paper);
+		paperDetailsMap.put("paperworkflowlist", wfList);
+		return paperDetailsMap;
+	}
 	
 	
 

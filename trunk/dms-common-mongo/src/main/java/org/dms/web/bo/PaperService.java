@@ -14,4 +14,6 @@ public interface PaperService {
 
 	Map<String, Object> getPaperContents(long searchpapernumber)  throws DmsException;
 
+	Map<String, Object> getPaperDetails(long papernumber);
+
 }
