@@ -12,7 +12,7 @@ public interface PaperService {
 	
 	List<String> getAuthorizerListWhenCreatorIs(String creatorName) throws DmsException;
 
-	Map<String, Object> getPaperContents(long searchpapernumber)  throws DmsException;
+	Map<String, Object> getPaperContents(String paperid)  throws DmsException;
 
 	Map<String, Object> getPaperDetails(long papernumber);
 

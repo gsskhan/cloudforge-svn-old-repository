@@ -91,8 +91,8 @@ public class PaperServiceImpl implements PaperService {
 	}
 
 	@Override
-	public Map<String, Object> getPaperContents(long searchpapernumber) throws DmsException {
-		PaperStores paper = paperStoresRepository.findOneByNumber(searchpapernumber);
+	public Map<String, Object> getPaperContents(String paperid) throws DmsException {
+		PaperStores paper = paperStoresRepository.findOne(paperid);
 		Map<String, Object> map = null;
 		if(paper != null) {
 			map = new HashMap<String, Object>();
