@@ -117,7 +117,7 @@
 		 		<param name="excludeProperties">paperService</param>
 		 	</result>
 		 </action>
-		 <action name="findPaperAction" class="org.dms.web.action.ManagePapersAction" method="findPaper">
+		 <action name="downloadPaper" class="org.dms.web.action.ManagePapersAction" method="findPaper">
 		 	<interceptor-ref name="basicStack"></interceptor-ref>
 		 	<result name="success" type="stream">
 		 		<param name="contentType">application/octet-stream</param>
@@ -125,6 +125,7 @@
 		 		<param name="contentDisposition">attachment;filename="${fileUploadFileName}"</param>
 		 		<param name="bufferSize">99999999</param>
 		 	</result>
+		 	<result name="input">admin_managepapers.jsp</result>
 		 	<result name="error">admin_managepapers.jsp</result>
 		 </action>
 		 <action name="addNewPaper" class="org.dms.web.action.ManagePapersAction" method="addNewPaper">

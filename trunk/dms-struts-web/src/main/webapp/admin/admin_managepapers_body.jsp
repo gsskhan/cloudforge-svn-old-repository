@@ -99,8 +99,8 @@
 					<tr><td>Paper Title</td><td><s:property value="#request.paperstore.title" /></td><tr>
 					<tr><td>Uploaded Filename</td><td><s:property value="#request.paperstore.originalFilename" /></td><tr>
 					<tr><td>Paper</td><td>
-						<s:url id="paperurl" value="findPaperAction" >
-							<s:param name="pnum"><s:property value="#request.paperstore.number"/></s:param>
+						<s:url id="paperurl" action="downloadPaper" >
+							<s:param name="paperid"><s:property value="#request.paperstore.id"/></s:param>
 						</s:url><s:a href="%{paperurl}">Download</s:a>
 					</td><tr>
 					<tr><td>Creator</td><td><s:property value="#request.paperstore.createdByUser.username" /></td><tr>

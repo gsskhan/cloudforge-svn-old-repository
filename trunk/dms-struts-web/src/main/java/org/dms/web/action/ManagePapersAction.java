@@ -101,18 +101,17 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	public String findPaper(){
 		try {
 			this.clearErrorsAndMessages();
-			long searchpapernumber = (long) request.getAttribute("pnum");
-			Map<String, Object> result = paperService.getPaperContents(searchpapernumber);
+			String searchpaperid = request.getParameter("paperid");
+			Map<String, Object> result = paperService.getPaperContents(searchpaperid);
 			if (result != null) {
-				// set the filename which will be downloaded
-				fileUploadFileName = "Paper("+searchpapernumber+")_"+ result.get("filename");
+				fileUploadFileName =  (String) result.get("filename");
 				fileInputStream = new ByteArrayInputStream((byte[]) result.get("data"));
 			} else {
-				this.addActionError("No paper found with number. ["+searchpapernumber+"]. Please retry with valid info.");
-				log.warn("No paper found with number. ["+searchpapernumber+","+"].");
+				this.addActionError("No paper found. Please retry with valid info.");
+				log.warn("No paper found with id. ["+searchpaperid+","+"].");
 				return ERROR;
 			}
-			log.info("found paper with number. ["+searchpapernumber+"].");
+			log.info("found paper with id. ["+searchpaperid+"].");
 		} catch (Exception e) {
 			this.addActionError("Unable to download paper.");
 			log.error("Error in downloading paper ", e);
