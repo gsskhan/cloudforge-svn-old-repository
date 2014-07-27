@@ -145,6 +145,19 @@ public class PaperServiceImpl implements PaperService {
 		}
 		return tmpList;
 	}
+
+	@Override
+	public Map<String, Object> getWorkflowLaunchMap(String workflowId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (StringUtils.isNotEmpty(workflowId)) {
+			PaperWorkflow workflow =workflowRepository.findOne(workflowId);
+			PaperStores paper = workflow.getPaperStores();
+			map.put("workflowid", workflowId);
+			map.put("papernumber", paper.getNumber());
+			map.put("papertitle", paper.getTitle());			
+		}
+		return map;
+	}
 	
 	
 
