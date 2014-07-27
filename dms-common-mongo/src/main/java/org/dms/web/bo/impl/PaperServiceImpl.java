@@ -122,6 +122,29 @@ public class PaperServiceImpl implements PaperService {
 		tmpList.add(SystemConstants.WF_ACTION_REJECT.getValue());
 		return tmpList;
 	}
+
+	@Override
+	public List<String> getUsernamelistWhenworkflowIs(String workflowId) {
+		List<String> tmpList = new ArrayList<String>();
+		if (StringUtils.isNotEmpty(workflowId)) {
+			// Find all usernames who don't have roles as Student.
+			for (Users user : usersRepository.findByRoleNot(SystemConstants.ROLE_STUDENT.getValue())) {
+				tmpList.add(user.getUsername());
+			}
+			// Find all usernames previously assigned and remove from final list
+			PaperWorkflow workflow = workflowRepository.findOne(workflowId);
+			PaperStores paper =workflow.getPaperStores();
+			for (PaperWorkflow wf : workflowRepository.findByPaperStores(paper)) {
+				if (wf.getAssignedToUser() != null && StringUtils.isNotEmpty(wf.getAssignedToUser().getUsername())) {
+					tmpList.remove(wf.getAssignedToUser().getUsername());
+				}			
+				if (wf.getCompletedByUser()!=null && StringUtils.isNotEmpty(wf.getCompletedByUser().getUsername())) {
+					tmpList.remove(wf.getCompletedByUser().getUsername());
+				}			
+			}
+		}
+		return tmpList;
+	}
 	
 	
 
