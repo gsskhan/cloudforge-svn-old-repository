@@ -63,7 +63,7 @@ public class PaperServiceImpl implements PaperService {
 		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, uploaderName+": New paper '"+paperTitle+"' uploaded"));		
 		log.info("saved new record for paper status at "+ paperStatus.getId());
 		PaperWorkflow workflow = workflowRepository.save(new PaperWorkflow(paperstores, creator, currentDatetime
-				, creator, true, currentDatetime, SystemConstants.PAPER_STATUS_CREATED.getValue()+" - " +paperTitle));
+				, creator, true, currentDatetime, SystemConstants.PAPER_STATUS_CREATED.getValue()));
 		log.info("saved new workflow record for paper creation completion at "+ workflow.getId());
 		
 		/* Create a new workflow for authorization pending */

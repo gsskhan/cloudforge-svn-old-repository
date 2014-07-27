@@ -54,29 +54,74 @@ public class WorkflowServiceImpl implements WorkflowService{
 		PaperWorkflow workflow =workflowRepository.findOne(workflowfid);
 		PaperStores paper = workflow.getPaperStores();
 		Users assignedUser = usersRepository.findOneByUsername(assignedToUsername);
-		Users currentUser = usersRepository.findOneByUsername(currentUsername);
-		if (assignedUser == null) {
-			throw new DmsException("No user records found for name "+assignedToUsername+". Please try again.");
-		}
+		Users currentUser = usersRepository.findOneByUsername(currentUsername);		
 		if (currentUser == null) {
 			throw new DmsException("No user records found for name "+currentUsername+". Please try again.");
 		}
 		// If action = AUTHORIZE, complete the work flow and assign a new workflow for Approval.
 		if (action.equalsIgnoreCase(SystemConstants.WF_ACTION_AUTHORIZE.getValue())) {
+			if (assignedUser == null) {
+				throw new DmsException("No user records found for name "+assignedToUsername+". Please try again.");
+			}
 			workflow.setCompletedByUserId(currentUser);
 			workflow.setCompletionTime(currenttime);
 			workflow.setComments(SystemConstants.PAPER_STATUS_AUTH.getValue());
 			workflow.setCompleted(true);			
-			PaperStatus paperStatus = paperStatusRepository.findOneByPaperStores(paper);			
+			PaperStatus paperStatus = paperStatusRepository.findOneByPaperStores(paper);
+			if (paperStatus.isAuthorized() == true) {
+				throw new DmsException("Paper workflow already has a record for authorization. Either approve or reject.");
+			}
+			if (paperStatus.isRejected() == true) {
+				throw new DmsException("Paper is already rejected. No further action can be taken.");
+			}
 			paperStatus.setAuthorizationTime(currenttime);
 			paperStatus.setAuthorizedBy(currentUser);
 			paperStatus.setAuthorized(true);
-			paperStatus.setComments(paperStatus.getComments()+"\n"+currentUsername+": "+comments);
+			paperStatus.setComments(paperStatus.getComments()+" \n"+currentUsername+": "+comments);
 			workflowRepository.save(workflow);
 			workflowRepository.save(new PaperWorkflow(paper, assignedUser, currenttime, null, false, null, SystemConstants.PAPER_STATUS__PEND_APPROVAL.getValue()));
 			paperStatusRepository.save(paperStatus);
 			return "Workflow authorized, Pending for approval by "+ assignedToUsername;
 		}
-		return null;
+		// If action = APPROVE, complete the work flow
+		if (action.equalsIgnoreCase(SystemConstants.WF_ACTION_APPROVE.getValue())) {
+			workflow.setCompletedByUserId(currentUser);
+			workflow.setCompletionTime(currenttime);
+			workflow.setComments(SystemConstants.PAPER_STATUS_APPROVED.getValue());
+			workflow.setCompleted(true);			
+			PaperStatus paperStatus = paperStatusRepository.findOneByPaperStores(paper);
+			if (paperStatus.isAuthorized() == false) {
+				throw new DmsException("Paper should be authorized before approving.");
+			}
+			if (paperStatus.isRejected() == true) {
+				throw new DmsException("Paper is already rejected. No further action can be taken.");
+			}
+			paperStatus.setApprovalTime(currenttime);
+			paperStatus.setApprovedBy(currentUser);
+			paperStatus.setApproved(true);
+			paperStatus.setComments(paperStatus.getComments()+" \n"+currentUsername+": "+comments);
+			workflowRepository.save(workflow);
+			paperStatusRepository.save(paperStatus);
+			return "Workflow approved by "+ currentUsername;
+		}
+		// If action = REJECT, complete the work flow
+		if (action.equalsIgnoreCase(SystemConstants.WF_ACTION_REJECT.getValue())) {
+			workflow.setCompletedByUserId(currentUser);
+			workflow.setCompletionTime(currenttime);
+			workflow.setComments(SystemConstants.PAPER_STATUS_REJECTED.getValue());
+			workflow.setCompleted(true);			
+			PaperStatus paperStatus = paperStatusRepository.findOneByPaperStores(paper);
+			if (paperStatus.isApproved() == true) {
+				throw new DmsException("Paper is already approved, cannot reject it now.");
+			}
+			paperStatus.setRejectionTime(currenttime);
+			paperStatus.setRejectedBy(currentUser);
+			paperStatus.setRejected(true);
+			paperStatus.setComments(paperStatus.getComments()+" \n"+currentUsername+": "+comments);
+			workflowRepository.save(workflow);
+			paperStatusRepository.save(paperStatus);
+			return "Workflow rejected by "+ currentUsername;
+		}
+		return "Unable to process, I dont know.";
 	}
 }
