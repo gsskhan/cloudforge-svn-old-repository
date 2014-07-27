@@ -53,10 +53,40 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	// fields to get list of users who could work on workflow next
 	List<String> usernamesListToAssign;
 
+	// fields to find a paper and display contents
+	private long searchpapernumber;
+		
 	@Autowired
 	private PaperService paperService;
 	@Autowired
 	private WorkflowService workflowService;
+	
+	public String findPaperDetailsAll(){		
+		try {
+			this.clearErrorsAndMessages();
+			Map<String, Object> map = paperService.getPaperDetails(searchpapernumber);
+			request.setAttribute("paperstore", map.get("paperstore"));
+			log.info("found paper stores - " + map.get("paperstore"));
+			request.setAttribute("paperstatus", map.get("paperstatus"));
+			log.info("found paper status - " + map.get("paperstatus"));
+			request.setAttribute("wflist", map.get("paperworkflowlist"));
+			log.info("found paper workflows - " + map.get("paperworkflowlist"));
+			if (map.get("paperstore") == null || map.get("paperstatus") == null || map.get("paperworkflowlist") == null) {
+				this.addActionError("No paper details found with number - " + searchpapernumber + ".");
+				return ERROR;
+			}
+			log.info("successfully set the paper details to request attribute.");
+			this.addActionMessage("Found paper number " + searchpapernumber
+					+ ". Please refer below for details.");
+		} catch (Exception e) {
+			log.error("Error in finding paper with number - "
+					+ searchpapernumber, e);
+			this.addActionError("No paper details found with number - "
+					+ searchpapernumber + ". Error - " + e.getMessage());
+			return ERROR;
+		}
+		return SUCCESS;
+	}
 
 	public String findAuthorizersList(){
 		authorizersNameList = new ArrayList<String>();
@@ -127,15 +157,30 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	
 	public String getActionsTextList(){
-		actiontextList = paperService.getActionTextNamesList();
-		log.info("found Actions text LOV as "+actiontextList);
+		try {
+			this.clearErrorsAndMessages();
+			actiontextList = paperService.getActionTextNamesList();
+			log.info("found Actions text LOV as "+actiontextList);			
+		} catch (Exception e) {
+			this.addActionError("Problem creating list of actions text.");
+			log.error("Error in finding list of actions", e);
+		}		
 		return SUCCESS;		
 	}
 	
 	public String LaunchWorkflow(){
-		String launchWorkflowId = request.getParameter("wfid");
-		request.setAttribute("wfLaunchId", launchWorkflowId);
-		log.info("on launch set workflow id to HttpServletRequest - "+ launchWorkflowId);
+		try {
+			this.clearErrorsAndMessages();
+			String launchWorkflowId = request.getParameter("wfid");
+			Map<String,Object> result =paperService.getWorkflowLaunchMap(launchWorkflowId);
+			request.setAttribute("wfLaunchId", result.get("workflowid"));
+			request.setAttribute("wfLaunchpapernumber", result.get("papernumber"));
+			request.setAttribute("wfLaunchpapertitle", result.get("papertitle"));
+			log.info("found and set to http servlet request.");
+		} catch (Exception e) {
+			this.addActionError("Problem launching workflow for action.");
+			log.error("Error in launching workflow.", e);
+		}		
 		return SUCCESS;
 	}
 	
@@ -237,5 +282,11 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	public void setUsernamesListToAssign(List<String> usernamesListToAssign) {
 		this.usernamesListToAssign = usernamesListToAssign;
+	}
+	public long getSearchpapernumber() {
+		return searchpapernumber;
+	}
+	public void setSearchpapernumber(long searchpapernumber) {
+		this.searchpapernumber = searchpapernumber;
 	}
 }

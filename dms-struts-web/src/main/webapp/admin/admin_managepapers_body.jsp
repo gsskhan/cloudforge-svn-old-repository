@@ -151,11 +151,15 @@
 		<hr />
 			<div align="left" style="margin-left: 2px;">
 			<s:form action="processWorkflow">
-				<s:textfield label="Workflow Launch Id" labelposition="left" readonly="true">
+				<s:textfield name="launchworkflowId" label="Launch Id (Internal Use Only)" labelposition="left" readonly="true">
 					<s:param name="value"><s:property value="#request.wfLaunchId"/></s:param>
 				</s:textfield>
-				<sj:textfield name="paperTitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" readonly="true" />
-				<sj:textfield name="paperNumber" label="Paper Number" labelposition="left" requiredLabel="true" required="true" readonly="true"/>
+				<s:textfield name="paperTitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" readonly="true" >
+					<s:param name="value"><s:property value="#request.wfLaunchpapertitle"/></s:param>
+				</s:textfield>
+				<s:textfield name="paperNumber" label="Paper Number" labelposition="left" requiredLabel="true" required="true" readonly="true" >
+					<s:param name="value"><s:property value="#request.wfLaunchpapernumber"/></s:param>
+				</s:textfield>
 				<s:div>
 					<s:url var="actionurl" action="findWorkflowActionTextList" />
 					<sj:select href="%{actionurl}" name="actionText" list="actiontextList" headerKey="NA" headerValue="- SELECT -"
