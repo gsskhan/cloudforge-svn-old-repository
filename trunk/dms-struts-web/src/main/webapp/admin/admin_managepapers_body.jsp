@@ -146,30 +146,32 @@
 			</div>
 			<div style="clear: both;"></div>
 		</s:if>
-		<s:else>
+		<s:elseif test="#request.wfLaunchId != null">
 		<h4 align="center">Please launch pending workflows and complete</h4>
 		<hr />
 			<div align="left" style="margin-left: 2px;">
 			<s:form action="processWorkflow">
-				<sj:textfield name="papertitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" readonly="true" />
-				<sj:textfield name="papernumber" label="Paper Number" labelposition="left" requiredLabel="true" required="true" readonly="true"/>
+				<s:textfield label="Workflow Launch Id" labelposition="left" readonly="true">
+					<s:param name="value"><s:property value="#request.wfLaunchId"/></s:param>
+				</s:textfield>
+				<sj:textfield name="paperTitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" readonly="true" />
+				<sj:textfield name="paperNumber" label="Paper Number" labelposition="left" requiredLabel="true" required="true" readonly="true"/>
 				<s:div>
 					<s:url var="actionurl" action="findWorkflowActionTextList" />
-					<sj:select href="%{actionurl}" name="actiontext" list="actiontextList"
-					required="true" labelposition="left" label="Action" />
-					<s:url var="ajaxurl" action="getAuthorizerNamesList">
-						<s:param name="creatorname">
-							<s:property value="#session.uname" />
+					<sj:select href="%{actionurl}" name="actionText" list="actiontextList" headerKey="NA" headerValue="- SELECT -"
+						required="true" requiredLabel="true" labelposition="left" label="Action" />
+					<s:url var="userslisturl" action="findUsersListToAssign" >
+						<s:param name="workflowfid">
+							<s:property value="#request.wfLaunchId" />
 						</s:param>
 					</s:url>
-					<sj:select href="%{ajaxurl}" name="authorizerName"
-						list="authorizersNameList" required="true" labelposition="left"
-						label="Assign To" />
+					<sj:select href="%{userslisturl}" name="assignedToUsername" list="usernamesListToAssign" headerKey="NA" headerValue="- SELECT -"
+						required="true" requiredLabel="true" labelposition="left" label="Assign To" />
 				</s:div>
 				<sj:textarea name="remarks" cols="50" rows="3" label="Remarks"></sj:textarea>				
 				<sj:submit value="Process" button="true" cssStyle="width:100px;" />		
 			</s:form>
 			</div>
-		</s:else>
+		</s:elseif>
 	</div>
 </div>
