@@ -19,5 +19,7 @@ public interface PaperService {
 	List<String> getActionTextNamesList();
 	
 	List<String> getUsernamelistWhenworkflowIs(String workflowId);
+	
+	Map<String, Object> getWorkflowLaunchMap(String workflowId);
 
 }
