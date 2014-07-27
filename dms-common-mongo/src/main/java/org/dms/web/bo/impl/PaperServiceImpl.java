@@ -60,7 +60,7 @@ public class PaperServiceImpl implements PaperService {
 		PaperStores paperstores = paperStoresRepository.save(new PaperStores(sequenceDao.getNextSequenceId(SystemConstants.PAPER_STORES_SEQUENCE.getValue())
 				, paperTitle, uploadedData, uploadedFilename, creator, currentDatetime));
 		log.info("saved new record to paper stores at "+ paperstores.getId());
-		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, "New paper '"+paperTitle+"' uploaded"));		
+		PaperStatus paperStatus = statusRepository.save(new PaperStatus(paperstores, false, uploaderName+": New paper '"+paperTitle+"' uploaded"));		
 		log.info("saved new record for paper status at "+ paperStatus.getId());
 		PaperWorkflow workflow = workflowRepository.save(new PaperWorkflow(paperstores, creator, currentDatetime
 				, creator, true, currentDatetime, SystemConstants.PAPER_STATUS_CREATED.getValue()+" - " +paperTitle));
