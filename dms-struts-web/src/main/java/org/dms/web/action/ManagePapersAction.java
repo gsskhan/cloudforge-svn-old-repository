@@ -49,6 +49,9 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	
 	// fields to get list of actions for a workflow
 	private List<String> actiontextList;
+	
+	// fields to get list of users who could work on workflow next
+	List<String> usernamesListToAssign;
 
 	@Autowired
 	private PaperService paperService;
@@ -129,6 +132,27 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 		return SUCCESS;		
 	}
 	
+	public String LaunchWorkflow(){
+		String launchWorkflowId = request.getParameter("wfid");
+		request.setAttribute("wfLaunchId", launchWorkflowId);
+		log.info("on launch set workflow id to HttpServletRequest - "+ launchWorkflowId);
+		return SUCCESS;
+	}
+	
+	public String getUsernamesListForAssignment(){
+		try {
+			this.clearErrorsAndMessages();
+			String wfId = request.getParameter("workflowfid");
+			log.info("finding user names list for assignment to workflow "+ wfId);
+			usernamesListToAssign =paperService.getUsernamelistWhenworkflowIs(wfId);
+			log.info("found usernames LOVs to assign - "+  usernamesListToAssign);			
+		} catch (Exception e) {
+			this.addActionError("problem in finding user names for assignment to workflow.");
+			log.error("error in getting names list for assignment to workflow.", e);
+		}		
+		return SUCCESS;
+	}
+	
 	private void clearfields(){
 		this.papertitle ="";
 		this.fileUpload = null;
@@ -207,5 +231,11 @@ public class ManagePapersAction extends ActionSupport implements ServletRequestA
 	}
 	public void setActiontextList(List<String> actiontextList) {
 		this.actiontextList = actiontextList;
+	}
+	public List<String> getUsernamesListToAssign() {
+		return usernamesListToAssign;
+	}
+	public void setUsernamesListToAssign(List<String> usernamesListToAssign) {
+		this.usernamesListToAssign = usernamesListToAssign;
 	}
 }
