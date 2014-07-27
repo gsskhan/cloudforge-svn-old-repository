@@ -17,6 +17,6 @@
     
     <bean id="managePapersAction" class="org.dms.web.action.ManagePapersAction" />
     
-    <bean id="searchPaperAction" class="org.dms.web.action.SearchPaperAction" />
+    <bean id="managePaperWorkflowAction" class="org.dms.web.action.ManagePaperWorkflowAction" />
     
 </beans>
