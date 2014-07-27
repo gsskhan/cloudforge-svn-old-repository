@@ -19,4 +19,6 @@ public interface UsersRepository extends MongoRepository<Users, Serializable>{
 	Users findOneById(String id);
 	
 	List<Users> findByUsernameNotAndRoleNot(String username,String role);
+	
+	List<Users> findByRoleNot(String role);
 }
