@@ -172,7 +172,12 @@
 					<sj:select href="%{userslisturl}" name="assignedToUsername" list="usernamesListToAssign" headerKey="NA" headerValue="- SELECT -"
 						required="true" requiredLabel="true" labelposition="left" label="Assign To" />
 				</s:div>
-				<sj:textarea name="remarks" cols="50" rows="3" label="Remarks"></sj:textarea>				
+				<sj:textarea name="remarks" cols="50" rows="3" label="Remarks"></sj:textarea>
+				<s:textfield name="currentusername" label="Current Username" labelposition="left" readonly="true" required="true">
+					<s:param name="value">
+						<s:property value="#session.uname" />
+					</s:param>
+				</s:textfield>				
 				<sj:submit value="Process" button="true" cssStyle="width:100px;" />		
 			</s:form>
 			</div>

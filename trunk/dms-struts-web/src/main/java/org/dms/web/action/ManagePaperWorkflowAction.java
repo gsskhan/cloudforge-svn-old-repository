@@ -1,6 +1,8 @@
 package org.dms.web.action;
 
 import org.apache.log4j.Logger;
+import org.dms.web.bo.WorkflowService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -14,17 +16,23 @@ public class ManagePaperWorkflowAction extends ActionSupport {
 	private String paperTitle;
 	private String actionText;
 	private String assignedToUsername;
+	private String currentusername;
 	private String remarks;
+	
+	@Autowired
+	private WorkflowService workflowService;
 	
 	public String processWorkflow(){
 		try {
 			this.clearErrorsAndMessages();
 			log.info("processing workflow [workflow-"+launchworkflowId+",Number-"+paperNumber+",Title-"+paperTitle
 					+",Action-"+actionText+",AssignedTo-"+assignedToUsername+",Remarks-"+remarks+"].");
-			
+			String msg = workflowService.completeWorkflow(launchworkflowId, paperNumber, paperTitle
+					, actionText, assignedToUsername, currentusername, remarks);
+			this.addActionMessage(msg);			
 		} catch (Exception e) {
-			this.addActionError("problem processing workflow. "+e.getMessage());
-			log.error("error in processing workflow", e);
+			this.addActionError("Problem processing workflow. "+e.getMessage());
+			log.error("Error in processing workflow", e);
 		}		
 		return SUCCESS;
 	}
@@ -59,6 +67,12 @@ public class ManagePaperWorkflowAction extends ActionSupport {
 	}
 	public void setAssignedToUsername(String assignedToUsername) {
 		this.assignedToUsername = assignedToUsername;
+	}
+	public String getCurrentusername() {
+		return currentusername;
+	}
+	public void setCurrentusername(String currentusername) {
+		this.currentusername = currentusername;
 	}
 	public String getRemarks() {
 		return remarks;
