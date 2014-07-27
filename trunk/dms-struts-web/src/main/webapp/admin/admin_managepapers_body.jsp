@@ -113,7 +113,7 @@
 					<tr><td>Rejected</td><td><s:property value="#request.paperstatus.rejected" /></td><tr>
 					<tr><td>Rejector</td><td><s:property value="#request.paperstatus.rejectedBy.username" /></td><tr>
 					<tr><td>Rejection Time</td><td><s:date name="#request.paperstatus.rejectionTime" /></td><tr>
-					<tr><td>Remarks</td><td><s:textarea theme="simple" readonly="true" cols="30" rows="3">
+					<tr><td>Remarks</td><td><s:textarea theme="simple" readonly="true" cols="30" rows="5">
 						<s:param name="value"><s:property value="#request.paperstatus.comments" /></s:param>
 					</s:textarea></td><tr>				 
 				  </tbody>
