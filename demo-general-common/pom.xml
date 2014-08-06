@@ -13,6 +13,13 @@
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
 		</dependency>
+		<!-- Java assist dependency -->
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.18.2-GA</version>
+		</dependency>
+		<!-- Log4j dependency -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
