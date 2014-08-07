@@ -91,6 +91,16 @@ public class ConstantsServiceImpl implements ConstantsService {
 		return tmpList;
 	}
 
+	@Override
+	public List<String> findAllVariableNames() {
+		List<String> tmpList = new ArrayList<String>();
+		try {
+			tmpList = genericDao.getList("select distinct variable from Constants", null, 10000);
+		} catch (Exception e) {
+			log.error("Problem in getting all varaible names LOVs.",e);
+		}
+		return tmpList;
+	}
 
 	@Override
 	public String removeConstant(int constantId){		
