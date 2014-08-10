@@ -11,6 +11,7 @@
 		<spring.batch.version>3.0.1.RELEASE</spring.batch.version>
 		<spring.integration>4.0.3.RELEASE</spring.integration>
 		<org.hibernate.version>4.2.8.Final</org.hibernate.version>
+		<activemq.version>5.10.0</activemq.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
@@ -108,6 +109,12 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
+		</dependency>
+		<!-- ActiveMQ dependency -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>${activemq.version}</version>
 		</dependency>
 		<!-- Log4j dependency -->
 		<dependency>
