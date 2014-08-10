@@ -13,14 +13,14 @@ public class CommonStepExecutionListner implements StepExecutionListener{
 	@Override
 	public ExitStatus afterStep(StepExecution se) {
 		ExitStatus status = se.getExitStatus();
-		log.info("Finished step '" + se.getStepName() + "' with ExitCode - "+ status.getExitCode()+ ".");
+		log.info("Finished step [" + se.getStepName() + "] with ExitCode ["+ status.getExitCode()+ "]");
 		return status;
 	}
 
 	@Override
 	public void beforeStep(StepExecution se) {
-		log.info("Starting step - '" + se.getStepName()+"', with job execution id = " 
-				+ se.getJobExecutionId() +" and id = " + se.getId()+ "." );
+		log.info("Starting step [" + se.getStepName()+"] with job execution id [" 
+				+ se.getJobExecutionId() +"] and id [" + se.getId()+ "]" );
 	}
 
 }
