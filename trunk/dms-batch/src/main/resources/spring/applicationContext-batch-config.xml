@@ -11,7 +11,7 @@
 <import resource="classpath:spring/applicationContext-aop.xml"/>
 <import resource="classpath:spring/applicationContext-mongo.xml"/>
 
-<!-- To create batch tables on mysql server
+<!-- To create batch tables on mysql server 
 <jdbc:initialize-database data-source="dataSource">
 	<jdbc:script location="org/springframework/batch/core/schema-drop-mysql.sql"/>
 	<jdbc:script location="org/springframework/batch/core/schema-mysql.sql"/>

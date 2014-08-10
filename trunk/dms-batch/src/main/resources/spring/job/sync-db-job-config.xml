@@ -6,17 +6,18 @@
 		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
 
 
-<batch:job id="syncDbJobId" restartable="true">
+<batch:job id="syncDbJobId" restartable="true" >
 	
 	<!-- Read mysql db and create data dump file for backup -->
-	<batch:step id="createMySqlDataDumpFile">
-		<batch:tasklet ref="test">
+	<batch:step id="printBatchDetailsForSupport" >
+		<batch:tasklet ref="printSyncDbJobDetails" transaction-manager="dbTxManager">
 			<batch:listeners>
 				<batch:listener ref="commonStepExecutionListner" />
 			</batch:listeners>
 		</batch:tasklet>	
-	</batch:step>
-	
+	</batch:step>	
 </batch:job>
+
+<bean id="printSyncDbJobDetails" class="org.dms.batch.tasklets.PrintSyncDbJobDetails"/>
 
 </beans>
