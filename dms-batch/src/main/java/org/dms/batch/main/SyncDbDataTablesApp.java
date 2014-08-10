@@ -27,9 +27,10 @@ public class SyncDbDataTablesApp {
 			JobParameters jobParameters = new JobParametersBuilder()
 													.addLong("executionStartTime", System.currentTimeMillis())
 													.toJobParameters();
+			log.info("###################################################");
 			JobExecution jobExecution = jobLauncher.run(job, jobParameters);
 			log.info("Final batch status - "+ jobExecution.getStatus());
-			
+			log.info("###################################################");
 			ctx.destroy();
 			log.info("sync completed successfully ...");		
 		} catch (Exception e) {
