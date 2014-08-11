@@ -1,14 +1,7 @@
 package org.dms.batch.tasklets;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hdfs.DFSClient;
+import org.apache.hadoop.fs.*;
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -20,7 +13,6 @@ public class MoveDumpToHdfs implements Tasklet{
 	private Logger log = Logger.getLogger(this.getClass());
 	
 	private String hdfsUrl ="hdfs://localhost:9000";
-	private String destinationFilename = "/user/gsskhan/input/tab_system_users.txt";
 	private String sourceFilename = "/tmp/tab_system_users.txt";
 	
 	@Override
@@ -32,50 +24,23 @@ public class MoveDumpToHdfs implements Tasklet{
 	private void copyFromLocalToHdfs() {		
 		try {
 			log.info("started: move database dump files to HDFS.");
-			/*FileSystem hdfs = FileSystem.get(new Configuration());
+			Configuration conf = new Configuration();
+			conf.set("fs.defaultFS", this.hdfsUrl);
+			FileSystem hdfs = FileSystem.get(conf);
 			Path hdfsHomeDir = hdfs.getHomeDirectory();
 			Path workingDir = hdfs.getWorkingDirectory();
-			log.info("found HDFS home directory as "+ hdfsHomeDir);
-			log.info("found HDFS working directory as "+ workingDir);
-			Path newFolderPath= new Path("/DmsDataFolder");
+			log.info("found HDFS home "+ hdfsHomeDir+", working directory "+workingDir);
+			Path newFolderPath= new Path("/dms");
 			newFolderPath = Path.mergePaths(workingDir, newFolderPath);
 			if(hdfs.exists(newFolderPath)) {
 			      hdfs.delete(newFolderPath, true); //Delete existing Directory
 			}
-			hdfs.mkdirs(newFolderPath);     //Create new Directory
-			Path localFilePath = new Path("/tmp/tab_system_users.txt");
+			hdfs.mkdirs(newFolderPath); //Create new Directory
+			log.info("created hdfs path "+ newFolderPath);
+			Path localFilePath = new Path(sourceFilename);
 			Path hdfsFilePath=new Path(newFolderPath+"/tab_system_users.txt");
-			hdfs.copyFromLocalFile(localFilePath, hdfsFilePath);*/
-			
-			Configuration conf = new Configuration();
-			conf.set("fs.defaultFS", this.hdfsUrl);
-			DFSClient client = new DFSClient(new URI(this.hdfsUrl), conf);
-			OutputStream out = null;
-	        InputStream in = null;
-	        try {
-	            if (client.exists(destinationFilename)) {
-	                System.out.println("File already exists in hdfs: " + destinationFilename);
-	                //return;
-	            }
-	            out = new BufferedOutputStream(client.create(destinationFilename, true));
-	            in = new BufferedInputStream(new FileInputStream(sourceFilename));
-	            byte[] buffer = new byte[1024];
-	 
-	            int len = 0;
-	            while ((len = in.read(buffer)) > 0) {
-	                out.write(buffer, 0, len);
-	            }
-	        } finally {
-	            if (client != null) {
-	                client.close();
-	            }
-	            if (in != null) {
-	                in.close();
-	            }
-	            if (out != null) {
-	                out.close();
-	            }
-	        }
+			hdfs.copyFromLocalFile(localFilePath, hdfsFilePath);
+			log.info("moved file to hdfs path "+ hdfsFilePath);
 			log.info("finished: moving database dump files to HDFS.");
 		} catch (Exception e) {
 			log.error("error: moving database dump files to HDFS.",e);
