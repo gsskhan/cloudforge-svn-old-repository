@@ -31,7 +31,10 @@
 </bean>
 
 <!--Common declared listners -->
-<bean id="commonStepExecutionListner" class="org.dms.batch.listners.CommonStepExecutionListner"/>
+<bean id="commonStepExecutionListner" class="org.dms.batch.listners.CommonStepExecutionListner" />
+<bean id="commonItemWriterListner" class="org.dms.batch.listners.CommonItemWriterListner" />
+<bean id="commonChunkListner" class="org.dms.batch.listners.CommonChunkListner" />
+<bean id="commonItemReadListner" class="org.dms.batch.listners.CommonItemReadListner" />
 
 <!-- Batch configuration properties -->
 <context:property-placeholder location="classpath:conf/dms-batch.properties"/>
