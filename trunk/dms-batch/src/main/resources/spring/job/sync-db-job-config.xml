@@ -29,9 +29,19 @@
 			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>	
-	<batch:step id="mysqlPaperStoreTableBackupStep" >
+	<batch:step id="mysqlPaperStoreTableBackupStep" next="moveFilesToHdfsStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperStoreTable" writer="writePaperStoreDatatableFile" commit-interval="100" />
+			<batch:listeners>
+				<batch:listener ref="commonStepExecutionListner" />
+				<batch:listener ref="commonItemWriterListner"/>
+				<batch:listener ref="commonItemReadListner"/>
+			</batch:listeners>
+		</batch:tasklet>	
+	</batch:step>	
+	<!-- copy all the dump files to HDFS -->
+	<batch:step id="moveFilesToHdfsStep" >
+		<batch:tasklet ref="moveDumpToHdfs" transaction-manager="dbTxManager">
 			<batch:listeners>
 				<batch:listener ref="commonStepExecutionListner" />
 				<batch:listener ref="commonItemWriterListner"/>
@@ -98,5 +108,7 @@
 		</bean>	
 	</property>
 </bean>
+
+<bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs"/>
 
 </beans>
