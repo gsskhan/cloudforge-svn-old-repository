@@ -6,6 +6,7 @@ import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
 import org.dms.web.bo.ConstantsService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class ConstantsServiceImplTest {
 	private ConstantsService constantsService;	
 	
 	@Test
+	@Ignore
 	public void testFindAllVariableNames(){
 		log.info("started test method");
 		List<String> list = constantsService.findAllVariableNames();
