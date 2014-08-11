@@ -83,7 +83,7 @@
 
 <bean id="readPaperStoreTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
 	<property name="sessionFactory" ref="sessionFactory" />
-	<property name="queryString" value="select paperStoreId, paperNumber, paperVersion, paperTitle, paperData, createdByUserId, creationTime from PaperStore" />
+	<property name="queryString" value="select paperStoreId, paperNumber, paperTitle, paperData, createdByUserId, creationTime from PaperStore" />
 </bean>
 <bean id="writePaperStoreDatatableFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
 	<property name="resource" value="file:${mysql.tables.dump.path}/${mysql.paper.store.table.filename}" />
@@ -93,7 +93,7 @@
 		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
 			<property name="delimiter" value="~" />
 			<property name="fieldExtractor">
-				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor" />
+				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor"/>
 			</property>
 		</bean>	
 	</property>
