@@ -36,7 +36,7 @@ public class PaperStoreDaoTest {
 		log.info("adding one dummy paper to paper store table ...");
 		long paperNumber = genericDao.getEntity("select count(paperNumber) from PaperStore", null);
 		paperNumber++;
-		PaperStore newPaper = new PaperStore(paperNumber, 1
+		PaperStore newPaper = new PaperStore(paperNumber
 				, "dummy test paper", "just test data".getBytes()
 				, 1 , new Timestamp(new Date().getTime())
 				, null , null , null);

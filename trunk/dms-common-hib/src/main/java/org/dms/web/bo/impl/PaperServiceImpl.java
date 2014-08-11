@@ -51,7 +51,7 @@ public class PaperServiceImpl implements PaperService {
 			throw new DmsRuntimeException("No record of user having name as "+authorizer+" found in database.");
 		}
 		/* create new paper record, status info and workflow for this newly created paper. */
-		PaperStore paper = new PaperStore(randumNumber.getRandomLong(), 0, paperTitle , uploadedData, creator.getUserId(), currentTime, null, null, null);
+		PaperStore paper = new PaperStore(randumNumber.getRandomLong(), paperTitle , uploadedData, creator.getUserId(), currentTime, null, null, null);
 		log.info("To be saved paper contents = "+ paper);
 		genericDao.saveEntity(paper);
 		log.info("saved new paper, id = "+ paper.getPaperStoreId());
@@ -65,7 +65,7 @@ public class PaperServiceImpl implements PaperService {
 		PaperWorkflow authoWorkflow = new PaperWorkflow(paper, authorizer.getUserId(), currentTime, false, 0, null, SystemConstants.PAPER_STATUS_PEND_AUTH.getValue());
 		genericDao.saveEntity(authoWorkflow);
 		log.info("saved paper aothorization pending workflow , id = "+ authoWorkflow.getWorkflowId());
-		return "New paper {number "+paper.getPaperNumber()+"/version "+paper.getPaperVersion()+"} stored into database.";
+		return "New paper {number - "+paper.getPaperNumber()+"} stored into database.";
 	}
 
 	/**

@@ -24,9 +24,6 @@ public class PaperStore implements Serializable{
 	@Column(name="PAPER_NUMBER", nullable= false)
 	private long paperNumber;
 	
-	@Column(name="PAPER_VERSION", nullable= false)
-	private int paperVersion;
-	
 	@Column(name="PAPER_TITLE", nullable= false, length=500)
 	private String paperTitle;
 	
@@ -53,13 +50,12 @@ public class PaperStore implements Serializable{
 		super();
 	}
 
-	public PaperStore(long paperNumber, int paperVersion, String paperTitle,
+	public PaperStore(long paperNumber, String paperTitle,
 			byte[] paperData, long createdByUserId, Timestamp creationTime,
 			Set<PaperStatusInfo> paperStatusInfos,
 			Set<PaperWorkflow> paperWorkflows, Examination examination) {
 		super();
 		this.paperNumber = paperNumber;
-		this.paperVersion = paperVersion;
 		this.paperTitle = paperTitle;
 		this.paperData = paperData;
 		this.createdByUserId = createdByUserId;
@@ -83,14 +79,6 @@ public class PaperStore implements Serializable{
 
 	public void setPaperNumber(long paperNumber) {
 		this.paperNumber = paperNumber;
-	}
-
-	public int getPaperVersion() {
-		return paperVersion;
-	}
-
-	public void setPaperVersion(int paperVersion) {
-		this.paperVersion = paperVersion;
 	}
 
 	public String getPaperTitle() {
@@ -151,8 +139,7 @@ public class PaperStore implements Serializable{
 
 	@Override
 	public String toString() {
-		return "PaperStore [paperStoreId=" + paperStoreId + ", paperNumber="
-				+ paperNumber + ", paperVersion=" + paperVersion
+		return "PaperStore [paperStoreId=" + paperStoreId + ", paperNumber="+ paperNumber 
 				+ ", paperTitle=" + paperTitle //+ ", paperData="	+ Arrays.toString(paperData)
 				+ ", createdByUserId=" + createdByUserId + ", creationTime=" + creationTime
 				+ ", paperStatusInfos=" + paperStatusInfos
