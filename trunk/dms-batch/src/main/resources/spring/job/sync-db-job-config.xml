@@ -8,27 +8,39 @@
 
 <batch:job id="syncDbJobId" restartable="true" >
 	
-	<!-- Read mysql system_users table and create data dump file for backup -->
-	<batch:step id="mysqlUsersTableBackupStep" >
+	<!-- Read mysql tables and create data dump file for backup -->
+	<batch:step id="mysqlUsersTableBackupStep" next="mysqlConstantsTableBackupStep">	
 		<batch:tasklet transaction-manager="dbTxManager">
-			<batch:chunk reader="readUsersTable" writer="writeUsersDatatableFile" commit-interval="10">
-				
-			</batch:chunk>
+			<batch:chunk reader="readUsersTable" writer="writeUsersDatatableFile" commit-interval="100" />
 			<batch:listeners>
 				<batch:listener ref="commonStepExecutionListner" />
+				<batch:listener ref="commonItemWriterListner"/>
+				<batch:listener ref="commonItemReadListner"/>				
+			</batch:listeners>
+		</batch:tasklet>	
+	</batch:step>
+	<batch:step id="mysqlConstantsTableBackupStep" >
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readConstantsTable" writer="writeConstantsDatatableFile" commit-interval="100" />
+			<batch:listeners>
+				<batch:listener ref="commonStepExecutionListner" />
+				<batch:listener ref="commonItemWriterListner"/>
+				<batch:listener ref="commonItemReadListner"/>
 			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>	
 </batch:job>
 
-<bean id="printSyncDbJobDetails" class="org.dms.batch.tasklets.PrintSyncDbJobDetails"/>
-
 <bean id="readUsersTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
 	<property name="sessionFactory" ref="sessionFactory" />
 	<property name="queryString" value="from User" />
 </bean>
+<bean id="readConstantsTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
+	<property name="sessionFactory" ref="sessionFactory" />
+	<property name="queryString" value="from Constants" />
+</bean>
 <bean id="writeUsersDatatableFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
-	<property name="resource" value="file:${mysql.tables.dump.path}/system_users_mysql.txt" />
+	<property name="resource" value="file:${mysql.tables.dump.path}/tab_system_users.txt" />
 	<property name="lineSeparator" value="|" />
 	<property name="shouldDeleteIfExists" value="true" />
 	<property name="appendAllowed" value="true" />
@@ -38,6 +50,22 @@
 			<property name="fieldExtractor">
 				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
 					<property name="names" value="userId,username,password,address,email,role" />
+				</bean>
+			</property>
+		</bean>	
+	</property>
+</bean>
+<bean id="writeConstantsDatatableFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mysql.tables.dump.path}/tab_constants.txt" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="appendAllowed" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+					<property name="names" value="constantId,variable,variableId,value,parentVariableId" />
 				</bean>
 			</property>
 		</bean>	
