@@ -23,7 +23,7 @@ public class SyncDbDataTablesApp {
 													,"spring/job/sync-db-job-config.xml");
 			
 			JobLauncher jobLauncher = ctx.getBean(JobLauncher.class);
-			Job job = (Job) ctx.getBean("syncDbJobId");
+			Job job = (Job) ctx.getBean("syncDbJob");
 			JobParameters jobParameters = new JobParametersBuilder()
 													.addLong("executionStartTime", System.currentTimeMillis())
 													.toJobParameters();

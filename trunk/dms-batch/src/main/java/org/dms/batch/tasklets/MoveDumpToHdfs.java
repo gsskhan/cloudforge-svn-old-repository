@@ -21,15 +21,16 @@ public class MoveDumpToHdfs implements Tasklet{
 	private String mysqlPaperStoreFilename;
 	private String mysqlPaperStatusInfoFilename;
 	private String mysqlPaperWorkflowFilename;
-	
+	private String mongoDumpPath;
+	private String mongoUsersFilename;
+
 	@Override
 	public RepeatStatus execute(StepContribution sc, ChunkContext cc) throws Exception {
 		this.copyFromLocalToHdfs();
 		return RepeatStatus.FINISHED;
 	}
 
-	private void copyFromLocalToHdfs() {		
-		try {
+	private void copyFromLocalToHdfs() throws Exception {		
 			log.info("started: move database dump files to HDFS.");
 			Configuration conf = new Configuration();
 			conf.set("fs.defaultFS", this.hdfsUrl);
@@ -51,10 +52,9 @@ public class MoveDumpToHdfs implements Tasklet{
 			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperStatusInfoFilename, newFolderPath+"/"+mysqlPaperStatusInfoFilename);
 			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperWorkflowFilename, newFolderPath+"/"+mysqlPaperWorkflowFilename);
 			
-			log.info("finished: moving database dump files to HDFS.");
-		} catch (Exception e) {
-			log.error("error: moving database dump files to HDFS.",e);
-		}		
+			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoUsersFilename, newFolderPath+"/"+mongoUsersFilename);
+			
+			log.info("finished: moving database dump files to HDFS.");	
 	}
 	
 	private void localFileMoveToHdfs(FileSystem hdfs, String localFilePath, String hdfsFilePath ) throws IOException{
@@ -119,6 +119,20 @@ public class MoveDumpToHdfs implements Tasklet{
 	public void setMysqlPaperWorkflowFilename(String mysqlPaperWorkflowFilename) {
 		this.mysqlPaperWorkflowFilename = mysqlPaperWorkflowFilename;
 	}
-	
+	public String getMongoDumpPath() {
+		return mongoDumpPath;
+	}
+
+	public void setMongoDumpPath(String mongoDumpPath) {
+		this.mongoDumpPath = mongoDumpPath;
+	}
+
+	public String getMongoUsersFilename() {
+		return mongoUsersFilename;
+	}
+
+	public void setMongoUsersFilename(String mongoUsersFilename) {
+		this.mongoUsersFilename = mongoUsersFilename;
+	}
 
 }
