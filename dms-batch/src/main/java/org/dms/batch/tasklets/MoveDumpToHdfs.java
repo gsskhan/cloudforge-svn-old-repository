@@ -1,5 +1,7 @@
 package org.dms.batch.tasklets;
 
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.log4j.Logger;
@@ -12,8 +14,13 @@ public class MoveDumpToHdfs implements Tasklet{
 	
 	private Logger log = Logger.getLogger(this.getClass());
 	
-	private String hdfsUrl ="hdfs://localhost:9000";
-	private String sourceFilename = "/tmp/tab_system_users.txt";
+	private String hdfsUrl;
+	private String mysqlDumpPath;
+	private String mysqlUsersFilename;
+	private String mysqlConstantsFilename;
+	private String mysqlPaperStoreFilename;
+	private String mysqlPaperStatusInfoFilename;
+	private String mysqlPaperWorkflowFilename;
 	
 	@Override
 	public RepeatStatus execute(StepContribution sc, ChunkContext cc) throws Exception {
@@ -29,7 +36,7 @@ public class MoveDumpToHdfs implements Tasklet{
 			FileSystem hdfs = FileSystem.get(conf);
 			Path hdfsHomeDir = hdfs.getHomeDirectory();
 			Path workingDir = hdfs.getWorkingDirectory();
-			log.info("found HDFS home "+ hdfsHomeDir+", working directory "+workingDir);
+			log.info("HDFS home "+ hdfsHomeDir+", working directory "+workingDir);
 			Path newFolderPath= new Path("/dms");
 			newFolderPath = Path.mergePaths(workingDir, newFolderPath);
 			if(hdfs.exists(newFolderPath)) {
@@ -37,14 +44,81 @@ public class MoveDumpToHdfs implements Tasklet{
 			}
 			hdfs.mkdirs(newFolderPath); //Create new Directory
 			log.info("created hdfs path "+ newFolderPath);
-			Path localFilePath = new Path(sourceFilename);
-			Path hdfsFilePath=new Path(newFolderPath+"/tab_system_users.txt");
-			hdfs.copyFromLocalFile(localFilePath, hdfsFilePath);
-			log.info("moved file to hdfs path "+ hdfsFilePath);
+
+			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlUsersFilename, newFolderPath+"/"+mysqlUsersFilename);
+			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlConstantsFilename, newFolderPath+"/"+mysqlConstantsFilename);
+			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperStoreFilename, newFolderPath+"/"+mysqlPaperStoreFilename);
+			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperStatusInfoFilename, newFolderPath+"/"+mysqlPaperStatusInfoFilename);
+			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperWorkflowFilename, newFolderPath+"/"+mysqlPaperWorkflowFilename);
+			
 			log.info("finished: moving database dump files to HDFS.");
 		} catch (Exception e) {
 			log.error("error: moving database dump files to HDFS.",e);
 		}		
 	}
+	
+	private void localFileMoveToHdfs(FileSystem hdfs, String localFilePath, String hdfsFilePath ) throws IOException{
+		Path localPath = new Path(localFilePath);
+		Path hdfsPath=new Path(hdfsFilePath);
+		hdfs.copyFromLocalFile(localPath, hdfsPath);
+		log.info("moved file from local "+localPath+" to hdfs path "+ hdfsPath);
+	}
+
+	public String getMysqlDumpPath() {
+		return mysqlDumpPath;
+	}
+
+	public void setMysqlDumpPath(String mysqlDumpPath) {
+		this.mysqlDumpPath = mysqlDumpPath;
+	}
+
+	public String getHdfsUrl() {
+		return hdfsUrl;
+	}
+
+	public void setHdfsUrl(String hdfsUrl) {
+		this.hdfsUrl = hdfsUrl;
+	}
+
+	public String getMysqlUsersFilename() {
+		return mysqlUsersFilename;
+	}
+
+	public void setMysqlUsersFilename(String mysqlUsersFilename) {
+		this.mysqlUsersFilename = mysqlUsersFilename;
+	}
+
+	public String getMysqlConstantsFilename() {
+		return mysqlConstantsFilename;
+	}
+
+	public void setMysqlConstantsFilename(String mysqlConstantsFilename) {
+		this.mysqlConstantsFilename = mysqlConstantsFilename;
+	}
+
+	public String getMysqlPaperStoreFilename() {
+		return mysqlPaperStoreFilename;
+	}
+
+	public void setMysqlPaperStoreFilename(String mysqlPaperStoreFilename) {
+		this.mysqlPaperStoreFilename = mysqlPaperStoreFilename;
+	}
+
+	public String getMysqlPaperStatusInfoFilename() {
+		return mysqlPaperStatusInfoFilename;
+	}
+
+	public void setMysqlPaperStatusInfoFilename(String mysqlPaperStatusInfoFilename) {
+		this.mysqlPaperStatusInfoFilename = mysqlPaperStatusInfoFilename;
+	}
+
+	public String getMysqlPaperWorkflowFilename() {
+		return mysqlPaperWorkflowFilename;
+	}
+
+	public void setMysqlPaperWorkflowFilename(String mysqlPaperWorkflowFilename) {
+		this.mysqlPaperWorkflowFilename = mysqlPaperWorkflowFilename;
+	}
+	
 
 }

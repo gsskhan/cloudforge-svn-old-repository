@@ -29,9 +29,29 @@
 			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>	
-	<batch:step id="mysqlPaperStoreTableBackupStep" next="moveFilesToHdfsStep">
+	<batch:step id="mysqlPaperStoreTableBackupStep" next="mysqlPaperStatusInfoTableBackupStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperStoreTable" writer="writePaperStoreDatatableFile" commit-interval="100" />
+			<batch:listeners>
+				<batch:listener ref="commonStepExecutionListner" />
+				<batch:listener ref="commonItemWriterListner"/>
+				<batch:listener ref="commonItemReadListner"/>
+			</batch:listeners>
+		</batch:tasklet>	
+	</batch:step>
+	<batch:step id="mysqlPaperStatusInfoTableBackupStep" next="mysqlPaperWorkflowTableBackupStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readPaperStatusInfoTable" writer="writePaperStatusInfoDatatableFile" commit-interval="100" />
+			<batch:listeners>
+				<batch:listener ref="commonStepExecutionListner" />
+				<batch:listener ref="commonItemWriterListner"/>
+				<batch:listener ref="commonItemReadListner"/>
+			</batch:listeners>
+		</batch:tasklet>	
+	</batch:step>
+	<batch:step id="mysqlPaperWorkflowTableBackupStep" next="moveFilesToHdfsStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readPaperWorkflowTable" writer="writePaperWorkflowDatatableFile" commit-interval="100" />
 			<batch:listeners>
 				<batch:listener ref="commonStepExecutionListner" />
 				<batch:listener ref="commonItemWriterListner"/>
@@ -109,6 +129,52 @@
 	</property>
 </bean>
 
-<bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs"/>
+<bean id="readPaperStatusInfoTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
+	<property name="sessionFactory" ref="sessionFactory" />
+	<property name="queryString" value="select paperStatusId, paperStoreRef.paperStoreId, authorized, authorizedBy, authorizationTime 
+										, approved, approvedBy, approvalTime, rejected, rejectedBy, rejectionTime, comments from PaperStatusInfo" />
+</bean>
+<bean id="writePaperStatusInfoDatatableFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mysql.tables.dump.path}/${mysql.paper.status.info.table.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor"/>
+			</property>
+		</bean>	
+	</property>
+</bean>
+
+<bean id="readPaperWorkflowTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
+	<property name="sessionFactory" ref="sessionFactory" />
+	<property name="queryString" value="select workflowId, paperStoreRef.paperStoreId, assignedToUserId, assignedOnTime
+											, completed, completedByUserId, completionTime, comments from PaperWorkflow" />
+</bean>
+<bean id="writePaperWorkflowDatatableFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mysql.tables.dump.path}/${mysql.paper.workflow.table.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor"/>
+			</property>
+		</bean>	
+	</property>
+</bean>
+
+<bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs">
+	<property name="hdfsUrl" value="${hdfs.url}" />
+	<property name="mysqlDumpPath" value="${mysql.tables.dump.path}" />
+	<property name="mysqlUsersFilename" value="${mysql.system.users.table.filename}" />
+	<property name="mysqlConstantsFilename" value="${mysql.constants.table.filename}" />
+	<property name="mysqlPaperStoreFilename" value="${mysql.paper.store.table.filename}" />
+	<property name="mysqlPaperStatusInfoFilename" value="${mysql.paper.status.info.table.filename}" />
+	<property name="mysqlPaperWorkflowFilename" value="${mysql.paper.workflow.table.filename}" />
+</bean>
 
 </beans>
