@@ -2,11 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
 
 
-<batch:job id="syncDbJobId" restartable="true" >
+<batch:job id="syncDbJob" restartable="true" >
 	
 	<!-- Read mysql tables and create data dump file for backup -->
 	<batch:step id="mysqlUsersTableBackupStep" next="mysqlConstantsTableBackupStep">	
@@ -49,7 +51,7 @@
 			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>
-	<batch:step id="mysqlPaperWorkflowTableBackupStep" next="moveFilesToHdfsStep">
+	<batch:step id="mysqlPaperWorkflowTableBackupStep" next="mongoUsersDocBackupStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperWorkflowTable" writer="writePaperWorkflowDatatableFile" commit-interval="100" />
 			<batch:listeners>
@@ -58,7 +60,18 @@
 				<batch:listener ref="commonItemReadListner"/>
 			</batch:listeners>
 		</batch:tasklet>	
-	</batch:step>	
+	</batch:step>
+	<!-- Read mongodb tables and create data dump file for backup -->
+	<batch:step id="mongoUsersDocBackupStep" next="moveFilesToHdfsStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readUsersDoc" writer="writeUsersDocFile" commit-interval="10" />
+			<batch:listeners>
+				<batch:listener ref="commonStepExecutionListner" />
+				<batch:listener ref="commonItemWriterListner"/>
+				<batch:listener ref="commonItemReadListner"/>
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
 	<!-- copy all the dump files to HDFS -->
 	<batch:step id="moveFilesToHdfsStep" >
 		<batch:tasklet ref="moveDumpToHdfs" transaction-manager="dbTxManager">
@@ -167,6 +180,32 @@
 	</property>
 </bean>
 
+<bean id="readUsersDoc" class="org.springframework.batch.item.data.MongoItemReader">
+	<property name="template" ref="mongoTemplate" />
+	<property name="targetType" value="org.dms.web.document.Users" />
+	<property name="query" value="{}"></property>
+	<property name="sort">
+		<util:map id="sort">
+			<entry key="id" value="" />
+		</util:map>
+	</property>
+</bean>
+<bean id="writeUsersDocFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mongo.doc.dump.path}/${mongo.users.doc.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+					<property name="names" value="id,username,password,address,email,role" />
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
 <bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs">
 	<property name="hdfsUrl" value="${hdfs.url}" />
 	<property name="mysqlDumpPath" value="${mysql.tables.dump.path}" />
@@ -175,6 +214,8 @@
 	<property name="mysqlPaperStoreFilename" value="${mysql.paper.store.table.filename}" />
 	<property name="mysqlPaperStatusInfoFilename" value="${mysql.paper.status.info.table.filename}" />
 	<property name="mysqlPaperWorkflowFilename" value="${mysql.paper.workflow.table.filename}" />
+	<property name="mongoDumpPath" value="${mongo.doc.dump.path}" />
+	<property name="mongoUsersFilename" value="${mongo.users.doc.filename}" />
 </bean>
 
 </beans>
