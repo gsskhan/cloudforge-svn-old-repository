@@ -56,7 +56,7 @@
 	</batch:step>
 	<batch:step id="mongoPaperStoresBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
-			<batch:chunk reader="readPaperStoresDoc" writer="writePaperStoresDocsFile" commit-interval="100" />
+			<batch:chunk reader="readPaperStoresDoc" processor="encodePaperStoresDoc" writer="writePaperStoresDocsFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
 	<!-- copy all the dump files to HDFS -->
@@ -225,6 +225,7 @@
 		</util:map>
 	</property>
 </bean>
+<bean id="encodePaperStoresDoc" class="org.dms.batch.processor.EncodePaperStoresDoc" />
 <bean id="writePaperStoresDocsFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
 	<property name="resource" value="file:${mongo.doc.dump.path}/${mongo.paper.store.doc.filename}" />
 	<property name="lineSeparator" value="|" />
@@ -233,9 +234,7 @@
 		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
 			<property name="delimiter" value="~" />
 			<property name="fieldExtractor">
-				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
-					<property name="names" value="id,number,title,data,originalFilename,createdByUser.id,creationTime" />
-				</bean>
+				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor"/>
 			</property>
 		</bean>
 	</property>
