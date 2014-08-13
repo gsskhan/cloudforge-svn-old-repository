@@ -33,7 +33,7 @@
 	</batch:step>	
 	<batch:step id="mysqlPaperStoreTableBackupStep" next="mysqlPaperStatusInfoTableBackupStep">
 		<batch:tasklet transaction-manager="dbTxManager">
-			<batch:chunk reader="readPaperStoreTable" writer="writePaperStoreDatatableFile" commit-interval="100" />
+			<batch:chunk reader="readPaperStoreTable" processor="encodePaperStoresTable" writer="writePaperStoreDatatableFile" commit-interval="100" />
 			<batch:listeners>
 				<batch:listener ref="commonStepExecutionListner" />
 				<batch:listener ref="commonItemWriterListner"/>
@@ -128,6 +128,7 @@
 	<property name="sessionFactory" ref="sessionFactory" />
 	<property name="queryString" value="select paperStoreId, paperNumber, paperTitle, paperData, createdByUserId, creationTime from PaperStore" />
 </bean>
+<bean id="encodePaperStoresTable" class="org.dms.batch.processor.EncodePaperStoresTable"/>
 <bean id="writePaperStoreDatatableFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
 	<property name="resource" value="file:${mysql.tables.dump.path}/${mysql.paper.store.table.filename}" />
 	<property name="lineSeparator" value="|" />
