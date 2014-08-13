@@ -23,6 +23,10 @@ public class MoveDumpToHdfs implements Tasklet{
 	private String mysqlPaperWorkflowFilename;
 	private String mongoDumpPath;
 	private String mongoUsersFilename;
+	private String mongoConstantsFilename;
+	private String mongoPaperStoreFilename;
+	private String mongoPaperStatusInfoFilename;
+	private String mongoPaperWorkflowFilename;
 
 	@Override
 	public RepeatStatus execute(StepContribution sc, ChunkContext cc) throws Exception {
@@ -53,6 +57,10 @@ public class MoveDumpToHdfs implements Tasklet{
 			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperWorkflowFilename, newFolderPath+"/"+mysqlPaperWorkflowFilename);
 			
 			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoUsersFilename, newFolderPath+"/"+mongoUsersFilename);
+			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoConstantsFilename, newFolderPath+"/"+mongoConstantsFilename);
+			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoPaperStoreFilename, newFolderPath+"/"+mongoPaperStoreFilename);
+			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoPaperStatusInfoFilename, newFolderPath+"/"+mongoPaperStatusInfoFilename);
+			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoPaperWorkflowFilename, newFolderPath+"/"+mongoPaperWorkflowFilename);
 			
 			log.info("finished: moving database dump files to HDFS.");	
 	}
@@ -133,6 +141,38 @@ public class MoveDumpToHdfs implements Tasklet{
 
 	public void setMongoUsersFilename(String mongoUsersFilename) {
 		this.mongoUsersFilename = mongoUsersFilename;
+	}
+
+	public String getMongoConstantsFilename() {
+		return mongoConstantsFilename;
+	}
+
+	public void setMongoConstantsFilename(String mongoConstantsFilename) {
+		this.mongoConstantsFilename = mongoConstantsFilename;
+	}
+
+	public String getMongoPaperStoreFilename() {
+		return mongoPaperStoreFilename;
+	}
+
+	public void setMongoPaperStoreFilename(String mongoPaperStoreFilename) {
+		this.mongoPaperStoreFilename = mongoPaperStoreFilename;
+	}
+
+	public String getMongoPaperStatusInfoFilename() {
+		return mongoPaperStatusInfoFilename;
+	}
+
+	public void setMongoPaperStatusInfoFilename(String mongoPaperStatusInfoFilename) {
+		this.mongoPaperStatusInfoFilename = mongoPaperStatusInfoFilename;
+	}
+
+	public String getMongoPaperWorkflowFilename() {
+		return mongoPaperWorkflowFilename;
+	}
+
+	public void setMongoPaperWorkflowFilename(String mongoPaperWorkflowFilename) {
+		this.mongoPaperWorkflowFilename = mongoPaperWorkflowFilename;
 	}
 
 }

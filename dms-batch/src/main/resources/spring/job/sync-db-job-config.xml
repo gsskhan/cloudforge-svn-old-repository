@@ -7,7 +7,8 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
 
-<!-- abstract step -->
+<!-- BATCH CONFIGURATIONS-->
+
 <batch:step id="commonStep" abstract="true">
 	<batch:listeners>
 		<batch:listener ref="commonStepExecutionListner" />
@@ -16,7 +17,6 @@
 	</batch:listeners>
 </batch:step>
 <batch:job id="syncDbJob" restartable="true" >
-
 	<!-- Read mysql tables and create data dump file for backup -->
 	<batch:step id="mysqlUsersTableBackupStep" next="mysqlConstantsTableBackupStep" parent="commonStep" >	
 		<batch:tasklet transaction-manager="dbTxManager">
@@ -54,9 +54,19 @@
 			<batch:chunk reader="readConstantsDoc" writer="writeConstantsDocFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
-	<batch:step id="mongoPaperStoresBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
+	<batch:step id="mongoPaperStoresBackupStep" next="mongoPaperStatusBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperStoresDoc" processor="encodePaperStoresDoc" writer="writePaperStoresDocsFile" commit-interval="100" />
+		</batch:tasklet>
+	</batch:step>
+	<batch:step id="mongoPaperStatusBackupStep" next="mongoPaperWorkflowBackupStep" parent="commonStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readPaperStatusDoc" processor="removeNullsPaperStatus" writer="writePaperStatusDocsFile" commit-interval="100" />
+		</batch:tasklet>
+	</batch:step>
+	<batch:step id="mongoPaperWorkflowBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readPaperWorkflowDoc" processor="removeNullsPaperWorkflow" writer="writePaperWorkflowDocsFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
 	<!-- copy all the dump files to HDFS -->
@@ -65,6 +75,8 @@
 		</batch:tasklet>	
 	</batch:step>	
 </batch:job>
+
+<!-- OTHER BEAN DECLARATIONS -->
 
 <bean id="readUsersTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
 	<property name="sessionFactory" ref="sessionFactory" />
@@ -240,6 +252,56 @@
 	</property>
 </bean>
 
+<bean id="readPaperStatusDoc" class="org.springframework.batch.item.data.MongoItemReader">
+	<property name="template" ref="mongoTemplate" />
+	<property name="targetType" value="org.dms.web.document.PaperStatus" />
+	<property name="query" value="{}"></property>
+	<property name="sort">
+		<util:map id="sort">
+			<entry key="id" value="" />
+		</util:map>
+	</property>
+</bean>
+<bean id="removeNullsPaperStatus" class="org.dms.batch.processor.RemoveNullsPaperStatus" />
+<bean id="writePaperStatusDocsFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mongo.doc.dump.path}/${mongo.paper.status.doc.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor"/>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+<bean id="readPaperWorkflowDoc" class="org.springframework.batch.item.data.MongoItemReader">
+	<property name="template" ref="mongoTemplate" />
+	<property name="targetType" value="org.dms.web.document.PaperWorkflow" />
+	<property name="query" value="{}"></property>
+	<property name="sort">
+		<util:map id="sort">
+			<entry key="id" value="" />
+		</util:map>
+	</property>
+</bean>
+<bean id="removeNullsPaperWorkflow" class="org.dms.batch.processor.RemoveNullsPaperWorkflow" />
+<bean id="writePaperWorkflowDocsFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mongo.doc.dump.path}/${mongo.paper.workflow.doc.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor"/>
+			</property>
+		</bean>
+	</property>
+</bean>
+
 <bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs">
 	<property name="hdfsUrl" value="${hdfs.url}" />
 	<property name="mysqlDumpPath" value="${mysql.tables.dump.path}" />
@@ -250,6 +312,10 @@
 	<property name="mysqlPaperWorkflowFilename" value="${mysql.paper.workflow.table.filename}" />
 	<property name="mongoDumpPath" value="${mongo.doc.dump.path}" />
 	<property name="mongoUsersFilename" value="${mongo.users.doc.filename}" />
+	<property name="mongoConstantsFilename" value="${mongo.constants.doc.filename}" />
+	<property name="mongoPaperStoreFilename" value="${mongo.paper.store.doc.filename}" />
+	<property name="mongoPaperStatusInfoFilename" value="${mongo.paper.status.doc.filename}" />
+	<property name="mongoPaperWorkflowFilename" value="${mongo.paper.workflow.doc.filename}" />
 </bean>
 
 </beans>
