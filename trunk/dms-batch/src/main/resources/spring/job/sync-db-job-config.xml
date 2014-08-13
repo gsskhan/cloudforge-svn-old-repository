@@ -7,79 +7,56 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
 
-
+<!-- abstract step -->
+<batch:step id="commonStep" abstract="true">
+	<batch:listeners>
+		<batch:listener ref="commonStepExecutionListner" />
+		<batch:listener ref="commonItemWriterListner"/>
+		<batch:listener ref="commonItemReadListner"/>				
+	</batch:listeners>
+</batch:step>
 <batch:job id="syncDbJob" restartable="true" >
-	
+
 	<!-- Read mysql tables and create data dump file for backup -->
-	<batch:step id="mysqlUsersTableBackupStep" next="mysqlConstantsTableBackupStep">	
+	<batch:step id="mysqlUsersTableBackupStep" next="mysqlConstantsTableBackupStep" parent="commonStep" >	
 		<batch:tasklet transaction-manager="dbTxManager">
-			<batch:chunk reader="readUsersTable" writer="writeUsersDatatableFile" commit-interval="100" />
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>				
-			</batch:listeners>
+			<batch:chunk reader="readUsersTable" writer="writeUsersDatatableFile" commit-interval="100" />			
 		</batch:tasklet>	
 	</batch:step>
-	<batch:step id="mysqlConstantsTableBackupStep" next="mysqlPaperStoreTableBackupStep">
+	<batch:step id="mysqlConstantsTableBackupStep" next="mysqlPaperStoreTableBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readConstantsTable" writer="writeConstantsDatatableFile" commit-interval="100" />
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>
-			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>	
-	<batch:step id="mysqlPaperStoreTableBackupStep" next="mysqlPaperStatusInfoTableBackupStep">
+	<batch:step id="mysqlPaperStoreTableBackupStep" next="mysqlPaperStatusInfoTableBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperStoreTable" processor="encodePaperStoresTable" writer="writePaperStoreDatatableFile" commit-interval="100" />
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>
-			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>
-	<batch:step id="mysqlPaperStatusInfoTableBackupStep" next="mysqlPaperWorkflowTableBackupStep">
+	<batch:step id="mysqlPaperStatusInfoTableBackupStep" next="mysqlPaperWorkflowTableBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperStatusInfoTable" writer="writePaperStatusInfoDatatableFile" commit-interval="100" />
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>
-			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>
-	<batch:step id="mysqlPaperWorkflowTableBackupStep" next="mongoUsersDocBackupStep">
+	<batch:step id="mysqlPaperWorkflowTableBackupStep" next="mongoUsersDocBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperWorkflowTable" writer="writePaperWorkflowDatatableFile" commit-interval="100" />
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>
-			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>
 	<!-- Read mongodb tables and create data dump file for backup -->
-	<batch:step id="mongoUsersDocBackupStep" next="moveFilesToHdfsStep">
+	<batch:step id="mongoUsersDocBackupStep" next="mongoConstantsDocBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readUsersDoc" writer="writeUsersDocFile" commit-interval="10" />
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>
-			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	<batch:step id="mongoConstantsDocBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readConstantsDoc" writer="writeConstantsDocFile" commit-interval="10" />
 		</batch:tasklet>
 	</batch:step>
 	<!-- copy all the dump files to HDFS -->
-	<batch:step id="moveFilesToHdfsStep" >
+	<batch:step id="moveFilesToHdfsStep" parent="commonStep">
 		<batch:tasklet ref="moveDumpToHdfs" transaction-manager="dbTxManager">
-			<batch:listeners>
-				<batch:listener ref="commonStepExecutionListner" />
-				<batch:listener ref="commonItemWriterListner"/>
-				<batch:listener ref="commonItemReadListner"/>
-			</batch:listeners>
 		</batch:tasklet>	
 	</batch:step>	
 </batch:job>
@@ -201,6 +178,32 @@
 			<property name="fieldExtractor">
 				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
 					<property name="names" value="id,username,password,address,email,role" />
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+<bean id="readConstantsDoc" class="org.springframework.batch.item.data.MongoItemReader">
+	<property name="template" ref="mongoTemplate" />
+	<property name="targetType" value="org.dms.web.document.Constants" />
+	<property name="query" value="{}"></property>
+	<property name="sort">
+		<util:map id="sort">
+			<entry key="id" value="" />
+		</util:map>
+	</property>
+</bean>
+<bean id="writeConstantsDocFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mongo.doc.dump.path}/${mongo.constants.doc.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+					<property name="names" value="id,variableName,variableId,variableValue,parentVariableId" />
 				</bean>
 			</property>
 		</bean>
