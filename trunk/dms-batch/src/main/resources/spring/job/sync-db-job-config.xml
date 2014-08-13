@@ -46,12 +46,17 @@
 	<!-- Read mongodb tables and create data dump file for backup -->
 	<batch:step id="mongoUsersDocBackupStep" next="mongoConstantsDocBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
-			<batch:chunk reader="readUsersDoc" writer="writeUsersDocFile" commit-interval="10" />
+			<batch:chunk reader="readUsersDoc" writer="writeUsersDocFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
-	<batch:step id="mongoConstantsDocBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
+	<batch:step id="mongoConstantsDocBackupStep" next="mongoPaperStoresBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
-			<batch:chunk reader="readConstantsDoc" writer="writeConstantsDocFile" commit-interval="10" />
+			<batch:chunk reader="readConstantsDoc" writer="writeConstantsDocFile" commit-interval="100" />
+		</batch:tasklet>
+	</batch:step>
+	<batch:step id="mongoPaperStoresBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
+		<batch:tasklet transaction-manager="dbTxManager">
+			<batch:chunk reader="readPaperStoresDoc" writer="writePaperStoresDocsFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
 	<!-- copy all the dump files to HDFS -->
@@ -204,6 +209,32 @@
 			<property name="fieldExtractor">
 				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
 					<property name="names" value="id,variableName,variableId,variableValue,parentVariableId" />
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+<bean id="readPaperStoresDoc" class="org.springframework.batch.item.data.MongoItemReader">
+	<property name="template" ref="mongoTemplate" />
+	<property name="targetType" value="org.dms.web.document.PaperStores" />
+	<property name="query" value="{}"></property>
+	<property name="sort">
+		<util:map id="sort">
+			<entry key="id" value="" />
+		</util:map>
+	</property>
+</bean>
+<bean id="writePaperStoresDocsFile" class="org.springframework.batch.item.file.FlatFileItemWriter">
+	<property name="resource" value="file:${mongo.doc.dump.path}/${mongo.paper.store.doc.filename}" />
+	<property name="lineSeparator" value="|" />
+	<property name="shouldDeleteIfExists" value="true" />
+	<property name="lineAggregator">
+		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<property name="delimiter" value="~" />
+			<property name="fieldExtractor">
+				<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+					<property name="names" value="id,number,title,data,originalFilename,createdByUser.id,creationTime" />
 				</bean>
 			</property>
 		</bean>
