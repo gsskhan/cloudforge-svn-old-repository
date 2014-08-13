@@ -19,6 +19,12 @@
 			<artifactId>javassist</artifactId>
 			<version>3.18.2-GA</version>
 		</dependency>
+		<!-- Apache common -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
 		<!-- Log4j dependency -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
