@@ -64,10 +64,14 @@
 			<batch:chunk reader="readPaperStatusDoc" processor="removeNullsPaperStatus" writer="writePaperStatusDocsFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
-	<batch:step id="mongoPaperWorkflowBackupStep" next="moveFilesToHdfsStep" parent="commonStep">
+	<batch:step id="mongoPaperWorkflowBackupStep" next="syncUsersStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readPaperWorkflowDoc" processor="removeNullsPaperWorkflow" writer="writePaperWorkflowDocsFile" commit-interval="100" />
 		</batch:tasklet>
+	</batch:step>
+	<!-- sync both db contents -->
+	<batch:step id="syncUsersStep" next="moveFilesToHdfsStep" parent="commonStep">
+		<batch:tasklet ref="syncUsers" transaction-manager="dbTxManager" />	
 	</batch:step>
 	<!-- copy all the dump files to HDFS -->
 	<batch:step id="moveFilesToHdfsStep" parent="commonStep">
@@ -300,6 +304,11 @@
 			</property>
 		</bean>
 	</property>
+</bean>
+
+<bean id="syncUsers" class="org.dms.batch.tasklets.SyncUsers">
+	<property name="usersRepository" ref="usersRepository" />
+	<property name="genericDao" ref="genericDao" />
 </bean>
 
 <bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs">
