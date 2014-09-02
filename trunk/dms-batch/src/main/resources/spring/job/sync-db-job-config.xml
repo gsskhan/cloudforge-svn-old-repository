@@ -17,8 +17,12 @@
 	</batch:listeners>
 </batch:step>
 <batch:job id="syncDbJob" restartable="true" >
-	<batch:step id="mysqlDumpStep" parent="commonStep">
+	<batch:step id="createMysqlDbDumpFilesStep" parent="commonStep" next="createMongoDbDumpFilesStep">
 		<batch:tasklet ref="mysqlDbDumpCommandRun" transaction-manager="dbTxManager">
+		</batch:tasklet>
+	</batch:step>
+	<batch:step id="createMongoDbDumpFilesStep" parent="commonStep">
+		<batch:tasklet ref="mongoDbDumpCommandRun" transaction-manager="dbTxManager">
 		</batch:tasklet>
 	</batch:step>
 </batch:job>
@@ -28,6 +32,12 @@
 <bean id="mysqlDbDumpCommandRun" class="org.dms.batch.tasklets.ExecuteSystemCommand">
 	<property name="windowsCommandFilePath" value="classpath:${mysql.dms.db.dump.script.windows}" />
 	<property name="unixCommandFilePath" value="classpath:${mysql.dms.db.dump.script.unix}" />
+	<property name="workingDirectory" value="${filesystem.working.directory}" />
+</bean>
+<bean id="mongoDbDumpCommandRun" class="org.dms.batch.tasklets.ExecuteSystemCommand">
+	<property name="windowsCommandFilePath" value="classpath:${mongo.dms.db.dump.script.windows}" />
+	<property name="unixCommandFilePath" value="classpath:${mongo.dms.db.dump.script.unix}" />
+	<property name="workingDirectory" value="${filesystem.working.directory}" />
 </bean>
 
 
