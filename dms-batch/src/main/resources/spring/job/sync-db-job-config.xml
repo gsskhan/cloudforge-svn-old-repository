@@ -17,7 +17,27 @@
 	</batch:listeners>
 </batch:step>
 <batch:job id="syncDbJob" restartable="true" >
-	<!-- Read mysql tables and create data dump file for backup -->
+	<batch:step id="mysqlDumpStep" parent="commonStep">
+		<batch:tasklet ref="mysqlDbDumpCommandRun" transaction-manager="dbTxManager">
+		</batch:tasklet>
+	</batch:step>
+</batch:job>
+
+
+<!-- OTHER BEAN DECLARATIONS -->
+<bean id="mysqlDbDumpCommandRun" class="org.dms.batch.tasklets.ExecuteSystemCommand">
+	<property name="windowsCommandFilePath" value="classpath:${mysql.dms.db.dump.script.windows}" />
+	<property name="unixCommandFilePath" value="classpath:${mysql.dms.db.dump.script.unix}" />
+</bean>
+
+
+<!-- Old lengthy code, rewritten new compact version above
+<batch:job id="syncDbJob" restartable="true" >
+	<batch:step id="mysqlDumpStep" next="mysqlUsersTableBackupStep" parent="commonStep">
+		<batch:tasklet ref="mysqlDump" transaction-manager="dbTxManager">
+		</batch:tasklet>
+	</batch:step>
+	Read mysql tables and create data dump file for backup
 	<batch:step id="mysqlUsersTableBackupStep" next="mysqlConstantsTableBackupStep" parent="commonStep" >	
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readUsersTable" writer="writeUsersDatatableFile" commit-interval="100" />			
@@ -43,7 +63,7 @@
 			<batch:chunk reader="readPaperWorkflowTable" writer="writePaperWorkflowDatatableFile" commit-interval="100" />
 		</batch:tasklet>	
 	</batch:step>
-	<!-- Read mongodb tables and create data dump file for backup -->
+	Read mongodb tables and create data dump file for backup
 	<batch:step id="mongoUsersDocBackupStep" next="mongoConstantsDocBackupStep" parent="commonStep">
 		<batch:tasklet transaction-manager="dbTxManager">
 			<batch:chunk reader="readUsersDoc" writer="writeUsersDocFile" commit-interval="100" />
@@ -69,18 +89,22 @@
 			<batch:chunk reader="readPaperWorkflowDoc" processor="removeNullsPaperWorkflow" writer="writePaperWorkflowDocsFile" commit-interval="100" />
 		</batch:tasklet>
 	</batch:step>
-	<!-- sync both db contents -->
+	sync both db contents
 	<batch:step id="syncUsersStep" next="moveFilesToHdfsStep" parent="commonStep">
 		<batch:tasklet ref="syncUsers" transaction-manager="dbTxManager" />	
 	</batch:step>
-	<!-- copy all the dump files to HDFS -->
+	copy all the dump files to HDFS
 	<batch:step id="moveFilesToHdfsStep" parent="commonStep">
 		<batch:tasklet ref="moveDumpToHdfs" transaction-manager="dbTxManager">
 		</batch:tasklet>	
 	</batch:step>	
 </batch:job>
 
-<!-- OTHER BEAN DECLARATIONS -->
+
+<bean id="mysqlDump" class="org.springframework.batch.core.step.tasklet.SystemCommandTasklet">
+	<property name="command" value="cmd /c i:/dump_dms_mysql.bat"/>
+	<property name="timeout" value="10000" />
+</bean>
 
 <bean id="readUsersTable" class="org.springframework.batch.item.database.HibernateCursorItemReader">
 	<property name="sessionFactory" ref="sessionFactory" />
@@ -325,6 +349,6 @@
 	<property name="mongoPaperStoreFilename" value="${mongo.paper.store.doc.filename}" />
 	<property name="mongoPaperStatusInfoFilename" value="${mongo.paper.status.doc.filename}" />
 	<property name="mongoPaperWorkflowFilename" value="${mongo.paper.workflow.doc.filename}" />
-</bean>
+</bean> -->
 
 </beans>
