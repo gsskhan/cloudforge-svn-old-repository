@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.dms.batch.core.OSValidator;
@@ -19,23 +20,35 @@ public class ExecuteSystemCommand implements Tasklet{
 	
 	private Resource windowsCommandFilePath;
 	private Resource unixCommandFilePath;
+	private String workingDirectory;
 
 	@Override
 	public RepeatStatus execute(StepContribution sc, ChunkContext cc) throws Exception {
+		log.info("operating system type: "+ OSValidator.OS);
 		if (OSValidator.isWindows()) {
 			File file = windowsCommandFilePath.getFile();
-			this.runCommand("cmd /c "+file.getCanonicalPath());
+				// Old way 
+				// this.runCommand("cmd /c "+file.getCanonicalPath());
+			String[] command = {"CMD", "/C", file.getCanonicalPath()};
+			this.execCommand(command);
 		} else if (OSValidator.isUnix()) {
 			File file = unixCommandFilePath.getFile();
-			this.runCommand("sh " +file.getCanonicalPath());
+				// Old way
+				//this.runCommand("sh " +file.getCanonicalPath());
+			String[] command = {"sh", file.getCanonicalPath()};
+			this.execCommand(command);
 		} else {
 			throw new RuntimeException("program cannot execute commands for OS - " + OSValidator.OS);
 		}
 		return RepeatStatus.FINISHED;
 	}
 
+	/**
+	 * Since JDK1.5 ProcessBuilder was introduced, it must be used in place of runtime class methods.
+	 */
+	@SuppressWarnings("unused")
 	private void runCommand(String command) throws IOException, InterruptedException {
-		log.info("executing command: " + command);
+		log.info("command to execute: " + command);
 		Process p = Runtime.getRuntime().exec(command);
 		p.waitFor();
 		BufferedReader brIn = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -51,6 +64,24 @@ public class ExecuteSystemCommand implements Tasklet{
 			log.warn(result);
 		}
 	}
+	
+	private void execCommand(String[] command) throws IOException, InterruptedException {
+		log.info("command to execute: " +Arrays.toString(command));
+		ProcessBuilder pb = new ProcessBuilder().command(command).redirectErrorStream(true);		
+		File workFilePath = new File(workingDirectory);
+		if (! workFilePath.exists() || ! workFilePath.isDirectory()) {
+			throw new RuntimeException("Working directory must be an existing directory.");
+		}
+		pb.directory(workFilePath);		
+		Process process = pb.start();
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+		String result = "";
+		while ((result = br.readLine()) != null) {
+			log.info(result);
+		}
+		process.waitFor();
+	}
 
 	public Resource getWindowsCommandFilePath() {
 		return windowsCommandFilePath;
@@ -63,6 +94,12 @@ public class ExecuteSystemCommand implements Tasklet{
 	}
 	public void setUnixCommandFilePath(Resource unixCommandFilePath) {
 		this.unixCommandFilePath = unixCommandFilePath;
+	}
+	public String getWorkingDirectory() {
+		return workingDirectory;
+	}
+	public void setWorkingDirectory(String workingDirectory) {
+		this.workingDirectory = workingDirectory;
 	}
 
 }
