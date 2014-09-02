@@ -14,7 +14,7 @@ public class DumpDbMysqlCmd {
 			log.info("Starting...");
 			Process p = Runtime
 					.getRuntime()
-					.exec("cmd /c I:/SELF_WORKSPACE/demo-general-common/src/main/resources/dump_dms_mysql.bat");
+					.exec("cmd /c /SELF_WORKSPACE/demo-general-common/src/main/resources/dump_dms_mysql.bat");
 			p.waitFor();
 			BufferedReader brIn = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
