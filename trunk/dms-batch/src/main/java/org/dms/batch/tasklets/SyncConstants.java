@@ -31,9 +31,22 @@ public class SyncConstants implements Tasklet{
 					= constantsRepository.save(new org.dms.web.document.Constants(cons.getVariable(),cons.getVariableId(), cons.getValue(), cons.getParentVariableId()));
 				log.info("added new constant to mongo with id "+ savedConstant.getId());
 			} else {
-				log.info("need to check for updating record ...");
+				if (mongoConst.getVariableName().equals(cons.getVariable()) &&
+					mongoConst.getVariableValue().equals(cons.getValue()) &&
+					mongoConst.getVariableId() == cons.getVariableId() &&
+					mongoConst.getParentVariableId() == cons.getParentVariableId()) {
+					log.info("constant "+ cons.getVariable()+"/"+cons.getValue()+ " records same in mongo as compared to mysql.");
+				} else {
+					mongoConst.setVariableName(cons.getVariable());
+					mongoConst.setVariableValue(cons.getValue());
+					mongoConst.setVariableId(cons.getVariableId());
+					mongoConst.setParentVariableId(cons.getParentVariableId());
+					constantsRepository.save(mongoConst);
+					log.info("constant "+ cons.getVariable()+"/"+cons.getValue()+ " records updated in mongo.");
+				}
 			}
 		}
+		log.info("starting to sync constants records in mysql ...");
 		
 	}
 

@@ -39,8 +39,7 @@ public class MoveDumpToHdfs implements Tasklet{
 			hdfs.mkdirs(newFolderPath); //Create new Directory
 			log.info("created hdfs path "+ newFolderPath);
 
-			this.localFileMoveToHdfs(hdfs, filesPath+"/dms_mysql*", newFolderPath+"/dms_mysql.dump");
-			this.localFileMoveToHdfs(hdfs, filesPath+"/dms_mongo*", newFolderPath+"/dms_mongo.dump");
+			this.localFileMoveToHdfs(hdfs, filesPath, newFolderPath.toString());
 			log.info("finished: moving database dump files to HDFS.");	
 	}
 	
