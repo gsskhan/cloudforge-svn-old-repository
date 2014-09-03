@@ -15,18 +15,7 @@ public class MoveDumpToHdfs implements Tasklet{
 	private Logger log = Logger.getLogger(this.getClass());
 	
 	private String hdfsUrl;
-	private String mysqlDumpPath;
-	private String mysqlUsersFilename;
-	private String mysqlConstantsFilename;
-	private String mysqlPaperStoreFilename;
-	private String mysqlPaperStatusInfoFilename;
-	private String mysqlPaperWorkflowFilename;
-	private String mongoDumpPath;
-	private String mongoUsersFilename;
-	private String mongoConstantsFilename;
-	private String mongoPaperStoreFilename;
-	private String mongoPaperStatusInfoFilename;
-	private String mongoPaperWorkflowFilename;
+	private String filesPath;
 
 	@Override
 	public RepeatStatus execute(StepContribution sc, ChunkContext cc) throws Exception {
@@ -50,18 +39,8 @@ public class MoveDumpToHdfs implements Tasklet{
 			hdfs.mkdirs(newFolderPath); //Create new Directory
 			log.info("created hdfs path "+ newFolderPath);
 
-			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlUsersFilename, newFolderPath+"/"+mysqlUsersFilename);
-			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlConstantsFilename, newFolderPath+"/"+mysqlConstantsFilename);
-			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperStoreFilename, newFolderPath+"/"+mysqlPaperStoreFilename);
-			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperStatusInfoFilename, newFolderPath+"/"+mysqlPaperStatusInfoFilename);
-			this.localFileMoveToHdfs(hdfs, mysqlDumpPath+"/"+mysqlPaperWorkflowFilename, newFolderPath+"/"+mysqlPaperWorkflowFilename);
-			
-			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoUsersFilename, newFolderPath+"/"+mongoUsersFilename);
-			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoConstantsFilename, newFolderPath+"/"+mongoConstantsFilename);
-			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoPaperStoreFilename, newFolderPath+"/"+mongoPaperStoreFilename);
-			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoPaperStatusInfoFilename, newFolderPath+"/"+mongoPaperStatusInfoFilename);
-			this.localFileMoveToHdfs(hdfs, mongoDumpPath+"/"+mongoPaperWorkflowFilename, newFolderPath+"/"+mongoPaperWorkflowFilename);
-			
+			this.localFileMoveToHdfs(hdfs, filesPath+"/dms_mysql*", newFolderPath+"/dms_mysql.dump");
+			this.localFileMoveToHdfs(hdfs, filesPath+"/dms_mongo*", newFolderPath+"/dms_mongo.dump");
 			log.info("finished: moving database dump files to HDFS.");	
 	}
 	
@@ -72,107 +51,17 @@ public class MoveDumpToHdfs implements Tasklet{
 		log.info("moved file from local "+localPath+" to hdfs path "+ hdfsPath);
 	}
 
-	public String getMysqlDumpPath() {
-		return mysqlDumpPath;
-	}
-
-	public void setMysqlDumpPath(String mysqlDumpPath) {
-		this.mysqlDumpPath = mysqlDumpPath;
-	}
-
 	public String getHdfsUrl() {
 		return hdfsUrl;
 	}
-
 	public void setHdfsUrl(String hdfsUrl) {
 		this.hdfsUrl = hdfsUrl;
 	}
-
-	public String getMysqlUsersFilename() {
-		return mysqlUsersFilename;
+	public String getFilesPath() {
+		return filesPath;
 	}
-
-	public void setMysqlUsersFilename(String mysqlUsersFilename) {
-		this.mysqlUsersFilename = mysqlUsersFilename;
-	}
-
-	public String getMysqlConstantsFilename() {
-		return mysqlConstantsFilename;
-	}
-
-	public void setMysqlConstantsFilename(String mysqlConstantsFilename) {
-		this.mysqlConstantsFilename = mysqlConstantsFilename;
-	}
-
-	public String getMysqlPaperStoreFilename() {
-		return mysqlPaperStoreFilename;
-	}
-
-	public void setMysqlPaperStoreFilename(String mysqlPaperStoreFilename) {
-		this.mysqlPaperStoreFilename = mysqlPaperStoreFilename;
-	}
-
-	public String getMysqlPaperStatusInfoFilename() {
-		return mysqlPaperStatusInfoFilename;
-	}
-
-	public void setMysqlPaperStatusInfoFilename(String mysqlPaperStatusInfoFilename) {
-		this.mysqlPaperStatusInfoFilename = mysqlPaperStatusInfoFilename;
-	}
-
-	public String getMysqlPaperWorkflowFilename() {
-		return mysqlPaperWorkflowFilename;
-	}
-
-	public void setMysqlPaperWorkflowFilename(String mysqlPaperWorkflowFilename) {
-		this.mysqlPaperWorkflowFilename = mysqlPaperWorkflowFilename;
-	}
-	public String getMongoDumpPath() {
-		return mongoDumpPath;
-	}
-
-	public void setMongoDumpPath(String mongoDumpPath) {
-		this.mongoDumpPath = mongoDumpPath;
-	}
-
-	public String getMongoUsersFilename() {
-		return mongoUsersFilename;
-	}
-
-	public void setMongoUsersFilename(String mongoUsersFilename) {
-		this.mongoUsersFilename = mongoUsersFilename;
-	}
-
-	public String getMongoConstantsFilename() {
-		return mongoConstantsFilename;
-	}
-
-	public void setMongoConstantsFilename(String mongoConstantsFilename) {
-		this.mongoConstantsFilename = mongoConstantsFilename;
-	}
-
-	public String getMongoPaperStoreFilename() {
-		return mongoPaperStoreFilename;
-	}
-
-	public void setMongoPaperStoreFilename(String mongoPaperStoreFilename) {
-		this.mongoPaperStoreFilename = mongoPaperStoreFilename;
-	}
-
-	public String getMongoPaperStatusInfoFilename() {
-		return mongoPaperStatusInfoFilename;
-	}
-
-	public void setMongoPaperStatusInfoFilename(String mongoPaperStatusInfoFilename) {
-		this.mongoPaperStatusInfoFilename = mongoPaperStatusInfoFilename;
-	}
-
-	public String getMongoPaperWorkflowFilename() {
-		return mongoPaperWorkflowFilename;
-	}
-
-	public void setMongoPaperWorkflowFilename(String mongoPaperWorkflowFilename) {
-		this.mongoPaperWorkflowFilename = mongoPaperWorkflowFilename;
-	}
+	public void setFilesPath(String filesPath) {
+		this.filesPath = filesPath;
+	}	
 
 }
