@@ -18,15 +18,16 @@
 </batch:step>
 <batch:job id="syncDbJob" restartable="true" >
 	<batch:step id="createMysqlDbDumpFilesStep" parent="commonStep" next="createMongoDbDumpFilesStep">
-		<batch:tasklet ref="mysqlDbDumpCommandRun" transaction-manager="dbTxManager">
-		</batch:tasklet>
+		<batch:tasklet ref="mysqlDbDumpCommandRun" transaction-manager="dbTxManager" />
 	</batch:step>
 	<batch:step id="createMongoDbDumpFilesStep" parent="commonStep" next="syncUsersStep">
-		<batch:tasklet ref="mongoDbDumpCommandRun" transaction-manager="dbTxManager">
-		</batch:tasklet>
+		<batch:tasklet ref="mongoDbDumpCommandRun" transaction-manager="dbTxManager"/>
 	</batch:step>
-	<batch:step id="syncUsersStep" parent="commonStep" next="moveFilesToHdfsStep">
+	<batch:step id="syncUsersStep" parent="commonStep" next="syncConstantsStep">
 		<batch:tasklet ref="syncUsers" transaction-manager="dbTxManager" />	
+	</batch:step>
+	<batch:step id="syncConstantsStep" parent="commonStep" next="moveFilesToHdfsStep">
+		<batch:tasklet ref="syncConstants" transaction-manager="dbTxManager" />
 	</batch:step>
 	<batch:step id="moveFilesToHdfsStep" parent="commonStep">
 		<batch:tasklet ref="moveDumpToHdfs" transaction-manager="dbTxManager">
@@ -49,6 +50,10 @@
 <bean id="syncUsers" class="org.dms.batch.tasklets.SyncUsers">
 	<property name="usersRepository" ref="usersRepository" />
 	<property name="genericDao" ref="genericDao" />
+</bean>
+<bean id="syncConstants" class="org.dms.batch.tasklets.SyncConstants">
+	<property name="genericDao" ref="genericDao" />
+	<property name="constantsRepository" ref="constantsRepository" />
 </bean>
 <bean id="moveDumpToHdfs" class="org.dms.batch.tasklets.MoveDumpToHdfs">
 	<property name="hdfsUrl" value="${hdfs.url}" />
