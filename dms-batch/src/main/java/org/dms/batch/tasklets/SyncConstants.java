@@ -1,6 +1,9 @@
 package org.dms.batch.tasklets;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.dms.web.dao.GenericDao;
 import org.dms.web.entity.Constants;
@@ -47,7 +50,32 @@ public class SyncConstants implements Tasklet{
 			}
 		}
 		log.info("starting to sync constants records in mysql ...");
-		
+		for (org.dms.web.document.Constants cons : constantsRepository.findAll()) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("variable", cons.getVariableName());
+			paramMap.put("value", cons.getVariableValue());
+			Constants mysqlCons = genericDao.getEntityWhereEq(Constants.class, paramMap);
+			if (mysqlCons == null) {
+				long savedId = (long) genericDao.saveEntity(new Constants(cons.getVariableName(),cons.getVariableId(), cons.getVariableValue(), cons.getParentVariableId()));
+				log.info("added new constant to mysql with id "+ savedId);
+			} else {
+				if (mysqlCons.getValue().equals(cons.getVariableValue()) &&
+					mysqlCons.getVariable().equals(cons.getVariableName()) &&
+					mysqlCons.getVariableId() == cons.getVariableId() &&
+					mysqlCons.getParentVariableId() == cons.getParentVariableId() ) {
+					log.info("constant "+ cons.getVariableName()+"/"+cons.getVariableValue()+ " records same in mysql as compared to mongo.");
+				} else {
+					mysqlCons.setVariable(cons.getVariableName());
+					mysqlCons.setValue(cons.getVariableValue());
+					mysqlCons.setVariableId(cons.getVariableId());
+					mysqlCons.setParentVariableId(cons.getParentVariableId());
+					genericDao.updateEntity(mysqlCons);
+					log.info("constant "+ cons.getVariableName()+"/"+cons.getVariableValue()+ " records updated in mysql.");
+				}
+
+			}
+			
+		}
 	}
 
 	public GenericDao getGenericDao() {
