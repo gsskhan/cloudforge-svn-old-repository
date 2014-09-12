@@ -7,20 +7,19 @@
 <div class="manage-paper-container ui-widget ui-widget-content ui-corner-all">
 	<s:actionmessage theme="jquery" />
 	<s:actionerror theme="jquery" />
+	
+	<sj:accordion id="managePaperAccordion" heightStyle="content" collapsible="true" active="false">		
 		<!-- Form to find a paper -->
-	<div class="find-paper-container ui-widget-content ui-corner-all">
-		<h4 align="center">Search papers (Please enter paper number)</h4>
-		<s:form action="searchPaperDetails">
+		<sj:accordionItem title="Search papers (Please enter paper number)" >
+			<s:form action="searchPaperDetails">
 				Paper Number:<s:textfield name="searchpapernumber" theme="simple"/>
 				<s:submit value="Search Paper" theme="simple" />
-		</s:form>
-	</div>
-	<!-- Form to upload new paper & check pending workflows -->
-	<div id="paper-wf-container" align="left" style="font-size: 12px;">
-		<div class="paper-container ui-widget-content ui-corner-all">
-			<h4 align="center">Please fill-in the form and press 'Save' to upload new document.</h4>
-			<hr/><br/><br/>
-			<s:form action="addNewPaper" enctype="multipart/form-data" method="post">
+			</s:form>		
+		</sj:accordionItem>
+		
+		<!-- Form to upload new paper -->
+		<sj:accordionItem title="Please fill-in the form and press 'Save' to upload new document.">
+			<s:form action="addNewPaper" enctype="multipart/form-data" method="post" >
 				<sj:textfield name="papertitle" label="Paper Title" labelposition="left" requiredLabel="true" required="true" />
 				<s:file name="fileUpload" label="File" requiredLabel="true" labelposition="left" required="true" />
 				<s:checkbox name="authrequired" label="Authorization Required" requiredLabel="true" fieldValue="true" value="true" labelposition="left" required="true" />
@@ -30,10 +29,8 @@
 							<s:property value="#session.uname" />
 						</s:param>
 					</s:url>
-					<sj:select href="%{ajaxurl}" name="authorizerName"
-						list="authorizersNameList" headerKey="-1"
-						headerValue="-- SELECT --" required="true" labelposition="left"
-						label="Authorizer's Name" />
+					<sj:select href="%{ajaxurl}" name="authorizerName" list="authorizersNameList" headerKey="-1"
+						headerValue="-- SELECT --" required="true" labelposition="left" label="Authorizer's Name" />
 				</s:div>
 				<s:textfield name="ownername" label="Owner" labelposition="left" readonly="true" required="true">
 					<s:param name="value">
@@ -41,47 +38,50 @@
 					</s:param>
 				</s:textfield>
 				<sj:submit value="Save" button="true" cssStyle="width:100px;" />
-			</s:form>
-		</div>
-		<div class="wf-container ui-widget-content ui-corner-all">
-			<h4 align="center">Workflow(s) pending for action</h4>
-			<hr />
-			<div class="workflow-link">
-				<s:url id="pendingwfurl" value="pendingWorkflowActions" />
-				<s:a href="%{pendingwfurl}" button="false">Find Workflows</s:a>
-			</div>
-			<table style="font-size: 10px; width: 100%">
-				<thead class="ui-widget-header ui-corner-all">
-					<tr align="center">
-						<th>PAPER NUMBER</th>
-						<th>PAPER TITLE</th>
-						<th>PENDING FOR ACTION BY</th>
-						<th>COMMENTS</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody class="ui-widget-content ui-corner-all">
-					<s:iterator value="pendingActionWorkflowsList" var="wf">
+			</s:form>		
+		</sj:accordionItem>
+		
+		<!-- To find pending workflow(s) -->
+		<sj:accordionItem title="Workflow(s) pending for action">
+			<div class="wf-container">
+				<div class="workflow-link">
+					<s:url id="pendingwfurl" value="pendingWorkflowActions" />
+					<s:a href="%{pendingwfurl}" button="false">Find Workflows</s:a>
+				</div>
+				<table style="font-size: 10px; width: 100%">
+					<thead class="ui-widget-header ui-corner-all">
 						<tr align="center">
-							<td><s:property value="paperNumber" /></td>
-							<td><s:property value="paperTitle" /></td>
-							<td><s:property value="pendingActionFromUsername" /></td>
-							<td><s:property value="comments" /></td>
-							<td><s:url id="url" action="launchWorkflow">
+							<th>PAPER NUMBER</th>
+							<th>PAPER TITLE</th>
+							<th>PENDING FOR ACTION BY</th>
+							<th>COMMENTS</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody class="ui-widget-content ui-corner-all">
+						<s:iterator value="pendingActionWorkflowsList" var="wf">
+							<tr align="center">
+								<td><s:property value="paperNumber" /></td>
+								<td><s:property value="paperTitle" /></td>
+								<td><s:property value="pendingActionFromUsername" /></td>
+								<td><s:property value="comments" /></td>
+								<td><s:url id="url" action="launchWorkflow">
 									<s:param name="wfid">
 										<s:property value="workflowId" />
 									</s:param>
-								</s:url> <s:a href="%{url}">Launch</s:a></td>
-							<td>
-						<tr>
-					</s:iterator>
-				</tbody>
-			</table>
-		</div>
-		<div style="clear: both;"></div>
-	</div>
-	<!-- Form to check workflow -->
-	<div class="paper-manage-body ui-widget-content ui-corner-all">		
+									</s:url> <s:a href="%{url}">Launch</s:a></td>
+								<td>
+							<tr>
+						</s:iterator>
+					</tbody>
+				</table>
+			</div>			
+		</sj:accordionItem>	
+	
+	</sj:accordion>
+	
+	<!-- To view Papers or work on launched workflow(s) -->
+	<div class="paper-manage-body">		
 		<s:if test="#request.paperstore != null">
 		<h4 align="center">Section for viewing paper. Please enter a paper number on top and search.</h4>
 		<hr />

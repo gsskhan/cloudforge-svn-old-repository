@@ -7,21 +7,16 @@
 	font-weight: bold;
 }
 .paper-container{
-	float: left;
-	width: 38%; 
-	height: 250px;
+	height: 180px;
 	margin-left: 2px;
-	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-x: scroll;
+	overflow-y: hidden;
 }
 
 .wf-container{
-	float: right; 
-	width: 61%; 
-	height: 250px; 
+	height: 350px; 
 	vertical-align: top; 
 	text-align: left; 
-	overflow-x: hidden;
 	overflow-y: scroll;
 }
 
@@ -33,13 +28,12 @@
 }
 
 .paper-manage-body{
-	overflow-x: hidden;
-	overflow-y: scroll;
-	height: 475px;
+	height: 550px;
 }
 
 .find-paper-container{
-	height: 75px;
+	height: 65px;
+	overflow-x: scroll;
 }
 
 .workflow-link{
@@ -54,7 +48,7 @@
 
 .view-paper{
 	text-align: left; 
-	width: 80%";
+	width: 80%;
 	border-spacing: 1px;
 	border-collapse: collapse;
 	overflow: scroll;
