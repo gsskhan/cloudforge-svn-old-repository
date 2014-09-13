@@ -9,7 +9,7 @@
 	<title><tiles:insertAttribute name="title" defaultValue="Document Management System" /></title>
 </head>
 <body style="font-family: Courier New; font-size: 12px; background-color: #E1F0FF;">
-	<table style="border: 1; width: 100%; padding: 1px;">
+	<table style="border: 1; width: 1024px; padding: 1px;">
 		<tr>
 			<td colspan="2" height="50"><tiles:insertAttribute name="header" />
 			</td>
