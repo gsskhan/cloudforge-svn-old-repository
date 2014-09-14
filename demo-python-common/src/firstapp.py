@@ -4,6 +4,8 @@ author - gsskhan
 '''
 # first program of learning python
 
+import maxnumber
+
 print 'program started ...'
 
 print 'hello' ,
@@ -34,5 +36,7 @@ for i in range(1, 7):
 else:
     print 'done.'
 
+print "11. program to find maximum b/w two numbers (10, 6)..."
+maxnumber.print_max(10, 6)
 
 print 'program finished ...'
