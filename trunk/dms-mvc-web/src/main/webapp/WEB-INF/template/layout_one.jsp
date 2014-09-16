@@ -26,10 +26,10 @@
 		<t:insertAttribute name="header" ignore="true"/>
 	</div>
 	<div id="menudiv" class="menu">
-		<t:insertAttribute name="menu" />
+		<t:insertAttribute name="menu" ignore="true" />
 	</div>
 	<div id="middlediv" class="middle">
-		<t:insertAttribute name="middle" />
+		<t:insertAttribute name="middle" ignore="true" />
 	</div>
 	<div id="bottomdiv" class="footer ui-widget-header">		
 		<t:insertAttribute name="footer" ignore="true"/>

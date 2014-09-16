@@ -17,4 +17,10 @@
 	<put-attribute name="title" value="DMS - Administrator's home" />
 	<put-attribute name="middle" value="/WEB-INF/pages/admin/admin_home.jsp" />		
 </definition>
+<definition name="admin.home.paper.details.def" template="/WEB-INF/template/layout_one.jsp">
+	<put-attribute name="title" value="DMS - Administrator's home - Paper details" />
+	<put-attribute name="header" value="/WEB-INF/template/header_one.jsp" />
+	<put-attribute name="middle" value="/WEB-INF/pages/admin/paper_details.jsp" />		
+	<put-attribute name="footer" value="/WEB-INF/template/footer_one.jsp" />
+</definition>
 </tiles-definitions>
