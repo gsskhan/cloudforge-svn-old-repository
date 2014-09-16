@@ -70,8 +70,7 @@
 		</div>
 	</div>
 	<div class="panel panel-info">
-		<div class="panel-heading" data-toggle="collapse"
-			data-parent="#accordion" data-target="#collapseThree">
+		<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseThree">
 			<h3 class="panel-title">Manage Papers</h3>
 		</div>
 		<div id="collapseThree" class="panel-collapse collapse">
@@ -79,7 +78,7 @@
 				<div id="papermanagetabs">
 					<ul>
 						<li><a href="#papermanagetab-1"><span>Add</span></a></li>
-						<li><a href="#papermanagetab-2"><span>Modify - Remove</span></a></li>
+						<li><a href="#papermanagetab-2"><span>Search</span></a></li>
 					</ul>
 					<div id="papermanagetab-1">
 						<!-- START: code to upload new paper form -->
@@ -87,7 +86,9 @@
 						<!-- END: code to upload new paper form -->
 					</div>
 					<div id="papermanagetab-2">
-						
+						<!-- START: code to search new paper -->
+						<jsp:include page="/WEB-INF/pages/admin/search_paper.jsp"></jsp:include>
+						<!-- END: code to search new paper form -->						
 					</div>
 				</div>
 			</div>
