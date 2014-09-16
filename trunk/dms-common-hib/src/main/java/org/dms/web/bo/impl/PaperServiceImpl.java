@@ -93,4 +93,11 @@ public class PaperServiceImpl implements PaperService {
 		return tmpList;
 	}
 
+	@Override
+	public PaperStore getPaper(String paperTitle, long paperNumber) throws DmsException {
+		PaperStore paperStore = new PaperStore();
+		paperStore.setPaperTitle(paperTitle);
+		return paperStore;
+	}
+
 }

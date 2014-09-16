@@ -2,6 +2,7 @@ package org.dms.web.bo;
 
 import java.util.List;
 
+import org.dms.web.entity.PaperStore;
 import org.dms.web.exception.DmsException;
 
 
@@ -12,5 +13,7 @@ public interface PaperService {
 			, boolean assignForauthorization, String assignedAuthorizerName) throws DmsException;
 	
 	List<String> getAuthorizerListWhenCreatorIs(String creatorName) throws DmsException;
+	
+	PaperStore getPaper(String paperTitle, long paperNumber) throws DmsException;
 
 }
