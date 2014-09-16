@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.dms.web.bo.PaperService;
 import org.dms.web.constants.ViewConstants;
 import org.dms.web.core.JsonUtil;
+import org.dms.web.entity.PaperStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -69,5 +70,22 @@ public class UploadController {
 			log.error("error in getting authorizers name list.", e);
 		}		
 		return JsonUtil.getJsonAsString(names);
+	}
+	
+	@RequestMapping(value="/search-paper", method=RequestMethod.POST)
+	public ModelAndView findPaperDetails(@RequestParam(value="paper-title") String papertitle
+			, @RequestParam(value="paper-number") long papernumber){
+		ModelAndView mav = new ModelAndView(ViewConstants.ADMIN_HOME_PAPER_DETAILS_PAGE.getValue());
+		try {
+			log.info("searching paper with number["+papernumber+"] / title["+papertitle+"] ..." );
+			PaperStore paper = paperService.getPaper(papertitle, papernumber);
+			mav.getModel().put("paper", paper);
+			log.info("paper found, returning details.");
+		} catch (Exception e) {
+			mav.getModel().put("statusmsg", "Unable to find paper, please try again. "+ e.getMessage());
+			mav.getModel().put("status", "error");
+			log.error("error in getting paper details.", e);
+		}
+		return mav;		
 	}
 }

@@ -7,6 +7,6 @@
 		<label for="paper-number-id" class="control-label">Paper Number:</label> 
 		<input type="text" name="paper-number" id="paper-number-id" class="form-control" />	
 		<br/>	
-		<input type="button" value="Find Paper" class="btn btn-primary" id="searchPaperBtn" />
+		<input type="submit" value="Find Paper" class="btn btn-primary" id="searchPaperBtn" />
 	</div>
 </form>
