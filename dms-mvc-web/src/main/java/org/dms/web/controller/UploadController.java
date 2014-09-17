@@ -73,8 +73,8 @@ public class UploadController {
 	}
 	
 	@RequestMapping(value="/search-paper", method=RequestMethod.POST)
-	public ModelAndView findPaperDetails(@RequestParam(value="paper-title") String papertitle
-			, @RequestParam(value="paper-number") long papernumber){
+	public ModelAndView findPaperDetails(@RequestParam(value="paper-title",required=false) String papertitle
+			, @RequestParam(value="paper-number",required=false) long papernumber){
 		ModelAndView mav = new ModelAndView(ViewConstants.ADMIN_HOME_PAPER_DETAILS_PAGE.getValue());
 		try {
 			log.info("searching paper with number["+papernumber+"] / title["+papertitle+"] ..." );
