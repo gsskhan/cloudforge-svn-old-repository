@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class UploadController {
+public class PaperManageController {
 
 	private Logger log = Logger.getLogger(this.getClass());
 	
