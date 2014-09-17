@@ -93,10 +93,22 @@ public class PaperServiceImpl implements PaperService {
 		return tmpList;
 	}
 
+	/**
+	 * @return the complete paper details having title or number as passed in parameters
+	 */
 	@Override
-	public PaperStore getPaper(String paperTitle, long paperNumber) throws DmsException {
+	public PaperStore getPaper(String paperTitle, long paperNumber) throws DmsException {		
+		if (StringUtils.isEmpty(paperTitle) && paperNumber == 0) {
+			throw new DmsRuntimeException("paper title and number both can't be null/empty/zero.");
+		}
 		PaperStore paperStore = new PaperStore();
-		paperStore.setPaperTitle(paperTitle);
+		if (paperNumber > 0) {
+			hqlparam.clear();
+			hqlparam.put("paperNumber", paperNumber);
+			paperStore = genericDao.getEntityWhereEq(PaperStore.class, hqlparam);			
+		} else if (StringUtils.isNotEmpty(paperTitle)) {
+			
+		}
 		return paperStore;
 	}
 
