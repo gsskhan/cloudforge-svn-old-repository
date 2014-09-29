@@ -4,7 +4,6 @@ Created on 30-Sep-2014
 @author: gsskhan
 '''
 
-import pymongo
 from pymongo import MongoClient
 
 client = MongoClient('localhost', 27017)
@@ -20,3 +19,5 @@ print 'All records:'
 results = collection.find()
 for record in results:
     print record
+    
+client.close();
