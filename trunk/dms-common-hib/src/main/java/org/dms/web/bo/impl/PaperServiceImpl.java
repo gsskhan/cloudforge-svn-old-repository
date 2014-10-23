@@ -36,7 +36,7 @@ public class PaperServiceImpl implements PaperService {
 	private Map<String, Object> hqlparam = new HashMap<String, Object>();
 	
 	@Override
-	public String addNewPaperToStore(String paperTitle, byte[] uploadedData, String uploaderName, boolean assignForauthorization, String assignedAuthorizerName) throws DmsException {
+	public String addNewPaperToStore(String paperTitle,String filename, byte[] uploadedData, String uploaderName, boolean assignForauthorization, String assignedAuthorizerName) throws DmsException {
 		if (StringUtils.isEmpty(uploaderName) || StringUtils.isEmpty(paperTitle) || StringUtils.isEmpty(assignedAuthorizerName) || !assignForauthorization ) {
 			throw new DmsException("one/more parameters received incorrect/empty/required. [UploaderName = "+ uploaderName +", PaperTitle= "+ paperTitle
 								+", AssignForAuthorization= "+ assignForauthorization+", AssignedAuthorizerName= "+ assignedAuthorizerName+"].");
@@ -51,7 +51,7 @@ public class PaperServiceImpl implements PaperService {
 			throw new DmsRuntimeException("No record of user having name as "+authorizer+" found in database.");
 		}
 		/* create new paper record, status info and workflow for this newly created paper. */
-		PaperStore paper = new PaperStore(randumNumber.getRandomLong(), paperTitle , uploadedData, creator.getUserId(), currentTime, null, null, null);
+		PaperStore paper = new PaperStore(randumNumber.getRandomLong(), paperTitle, filename, uploadedData, creator.getUserId(), currentTime, null, null, null);
 		log.info("To be saved paper contents = "+ paper);
 		genericDao.saveEntity(paper);
 		log.info("saved new paper, id = "+ paper.getPaperStoreId());
