@@ -37,7 +37,7 @@ public class PaperStoreDaoTest {
 		long paperNumber = genericDao.getEntity("select count(paperNumber) from PaperStore", null);
 		paperNumber++;
 		PaperStore newPaper = new PaperStore(paperNumber
-				, "dummy test paper", "just test data".getBytes()
+				, "dummy test paper" ,"testpaper.txt" , "just test data".getBytes()
 				, 1 , new Timestamp(new Date().getTime())
 				, null , null , null);
 		genericDao.saveEntity(newPaper);		
