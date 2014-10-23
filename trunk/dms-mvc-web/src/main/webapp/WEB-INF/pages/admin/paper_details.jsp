@@ -21,16 +21,23 @@
 			<p class="text-info">Number: ${paper.paperNumber}</p> 
 		</div>
 		<div class="col-xs-6" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
-			<p class="text-info">Number: ${paper.paperNumber}</p> 
+			<p class="text-info">Original file name: ${paper.originalFilename}</p> 
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-6" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
-			<p class="text-info">Number: ${paper.paperNumber}</p> 
+			<p class="text-info">Download: ${paper.paperData}</p> 
 		</div>
 		<div class="col-xs-6" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
-			<p class="text-info">Number: ${paper.paperNumber}</p> 
+			<p class="text-info">Creator: ${paper.createdByUserId}</p> 
 		</div>	
 	</div>
-	
+	<div class="row">
+		<div class="col-xs-6" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+			<p class="text-info">Creation Time: ${paper.creationTime}</p> 
+		</div>
+		<div class="col-xs-6" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+			<p class="text-info">Comments: ${paper.creationTime}</p> 
+		</div>	
+	</div>
 </div>
