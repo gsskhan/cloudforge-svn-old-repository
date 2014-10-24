@@ -29,7 +29,7 @@ public class PaperServiceImplTest {
 	@Test
 	public void testGetPaper() throws DmsException{
 		String testTitle = "Test Paper";
-		long testNumber = 1408871292726L;
+		String testNumber = "1408871292726";
 		PaperStore paperStore =	paperService.getPaper(testTitle, testNumber);
 		Assert.assertNotNull(paperStore);
 		Assert.assertSame(testTitle, paperStore.getPaperTitle());
