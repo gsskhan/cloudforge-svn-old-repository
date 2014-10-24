@@ -78,7 +78,7 @@
 				<div id="papermanagetabs">
 					<ul>
 						<li><a href="#papermanagetab-1"><span>Add</span></a></li>
-						<li><a href="#papermanagetab-2"><span>Search</span></a></li>
+						<li><a href="#papermanagetab-2"><span>Download</span></a></li>
 					</ul>
 					<div id="papermanagetab-1">
 						<!-- START: code to upload new paper form -->
@@ -87,7 +87,7 @@
 					</div>
 					<div id="papermanagetab-2">
 						<!-- START: code to search new paper -->
-						<jsp:include page="/WEB-INF/pages/admin/search_paper.jsp"></jsp:include>
+						<jsp:include page="/WEB-INF/pages/admin/download_paper.jsp"></jsp:include>
 						<!-- END: code to search new paper form -->						
 					</div>
 				</div>

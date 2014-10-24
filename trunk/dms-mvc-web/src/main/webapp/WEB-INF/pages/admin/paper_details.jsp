@@ -37,7 +37,7 @@
 			<p class="text-info">Creation Time: ${paper.creationTime}</p> 
 		</div>
 		<div class="col-xs-6" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
-			<p class="text-info">Comments: ${paper.creationTime}</p> 
+			<p class="text-info">Comments: ${paper.paperStatusInfos.comments}</p> 
 		</div>	
 	</div>
 </div>
