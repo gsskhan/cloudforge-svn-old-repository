@@ -1,15 +1,19 @@
 package org.dms.web.controller;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.dms.web.bo.PaperService;
 import org.dms.web.constants.ViewConstants;
 import org.dms.web.core.JsonUtil;
 import org.dms.web.entity.PaperStore;
+import org.dms.web.exception.DmsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -72,20 +76,20 @@ public class PaperManageController {
 		return JsonUtil.getJsonAsString(names);
 	}
 	
-	@RequestMapping(value="/search-paper", method=RequestMethod.POST)
-	public ModelAndView findPaperDetails(@RequestParam(value="paper-title",required=false) String papertitle
-			, @RequestParam(value="paper-number",required=false) long papernumber){
-		ModelAndView mav = new ModelAndView(ViewConstants.ADMIN_HOME_PAPER_DETAILS_PAGE.getValue());
+	@RequestMapping(value="/download-paper", method=RequestMethod.POST)
+	public void downloadPaper( @RequestParam(value="paper-title",required=false) String papertitle
+							 , @RequestParam(value="paper-number",required=false) String papernumber
+							 , HttpServletResponse response){
 		try {
 			log.info("searching paper with number["+papernumber+"] / title["+papertitle+"] ..." );
-			PaperStore paper = paperService.getPaper(papertitle, papernumber);
-			mav.getModel().put("paper", paper);
-			log.info("paper found, returning details.");
-		} catch (Exception e) {
-			mav.getModel().put("statusmsg", "Unable to find paper, please try again. "+ e.getMessage());
-			mav.getModel().put("status", "error");
-			log.error("error in getting paper details.", e);
+			PaperStore paper = paperService.getPaper(papertitle, papertitle);
+			response.setHeader("Content-Disposition","attachment;filename="+paper.getOriginalFilename());
+			response.getOutputStream().write(paper.getPaperData());
+			log.info("paper found, returning for download ...");
+		} catch (DmsException | IOException e) {
+			log.error("error in getting paper details for download.", e);
 		}
-		return mav;		
 	}
+	
+
 }
