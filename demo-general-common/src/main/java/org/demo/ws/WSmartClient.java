@@ -6,6 +6,11 @@ import com.webservicemart.ws.USZipSoap;
 public class WSmartClient {
 	
 	public static void main(String[] args) {
+		System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
+		System.setProperty("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump", "true");
+		System.setProperty("com.sun.xml.ws.transport.http.HttpAdapter.dump", "true");
+		System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", "true");
+		
 		USZip usZip = new USZip();
 		USZipSoap usZipSoap = usZip.getUSZipSoap();
 		String result = usZipSoap.validateZip("08863");
