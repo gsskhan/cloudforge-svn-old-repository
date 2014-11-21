@@ -2,8 +2,18 @@ package org.demo.ws;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
@@ -51,7 +61,7 @@ public class SoapWSClientTwo {
 			// First create the connection
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-			URL destination = new URL("http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx");
+			URL destination = new URL("https://ws.cdyne.com/emailverify/Emailvernotestemail.asmx");
 			
 			// Next, create the actual message
 			MessageFactory messageFactory = MessageFactory.newInstance();
@@ -86,6 +96,9 @@ public class SoapWSClientTwo {
             //message.writeTo(System.out);
             log.info("\n" +getSOAPMessageAsString(message));
             
+            // For SSL bypass (Optional)
+            doTrustToCertificates();
+            
             // Send the message and get the reply
             SOAPMessage reply = soapConnection.call(message, destination);
             
@@ -110,7 +123,7 @@ public class SoapWSClientTwo {
 	         tf.setOutputProperty(OutputKeys.INDENT, "yes");
 	         tf.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 	         
-	         Iterator<MimeHeader> itr = soapMessage.getMimeHeaders().getAllHeaders();
+	         Iterator<?> itr = soapMessage.getMimeHeaders().getAllHeaders();
 	         while (itr.hasNext()) {
 				MimeHeader mimeHeader = (MimeHeader) itr.next();
 				strMessage = strMessage + mimeHeader.getName()+":"+mimeHeader.getValue()+"\n";				
@@ -129,6 +142,56 @@ public class SoapWSClientTwo {
 	         return null;
 	      }
 
-	   }
+	}
+	
+	/*
+	 *
+	 *Code from http://blog.hexican.com/2010/12/sending-soap-messages-through-https-using-saaj/
+	 *Code from http://ruelajingsantiago.wordpress.com/2013/08/16/saaj-web-service-client-over-ssl/
+	 *
+	 */
+	
+	static public void doTrustToCertificates() throws Exception {
+			Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+			TrustManager[] trustAllCerts = new TrustManager[]{
+					new X509TrustManager() {
+						
+						@Override
+						public X509Certificate[] getAcceptedIssuers() {
+							// TODO Auto-generated method stub
+							return null;
+						}
+						
+						@Override
+						public void checkServerTrusted(X509Certificate[] arg0, String arg1)
+								throws CertificateException {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void checkClientTrusted(X509Certificate[] arg0, String arg1)
+								throws CertificateException {
+							// TODO Auto-generated method stub
+							
+						}
+					}
+			};
+	 
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			HostnameVerifier hv = new HostnameVerifier() {		
+				@Override
+				public boolean verify(String urlHostName, SSLSession session) {
+					if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
+						log.warn("Warning: URL host '" + urlHostName + "' is different to SSLSession host '"
+									+ session.getPeerHost() + "'.");
+					}
+					return true;				 
+				}
+			};
+			HttpsURLConnection.setDefaultHostnameVerifier(hv);	 
+	}
 
 }
