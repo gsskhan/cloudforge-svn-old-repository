@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class TestProcessBuilder {
 	
 	public static void main(String[] args) {
-		ProcessBuilder processBuilder = new ProcessBuilder("/home/gsskhan/sample/sample.sh");
+		ProcessBuilder processBuilder = new ProcessBuilder("nohup","/home/gsskhan/sample/sample.sh", "&");
 		processBuilder.directory(new File("/tmp"));
 		processBuilder.redirectErrorStream(true);
 		try {
