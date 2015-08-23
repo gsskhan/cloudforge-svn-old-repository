@@ -6,11 +6,11 @@ public class TestExecutor {
 		System.out.println("program started ...");
 		try {
 			SampleExecutor job = new SampleExecutor();
-			job.executeJob();					
+			job.executeJob();		
 		} catch (Exception e) {
 			System.out.println("error in main >>>> " + e);
 			e.printStackTrace();
-		}		
+		}
 		System.out.println("program end ...");
 	}
 
