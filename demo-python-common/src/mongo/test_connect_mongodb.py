@@ -6,6 +6,7 @@ Created on 30-Sep-2014
 
 from pymongo import MongoClient
 
+
 client = MongoClient('localhost', 27017)
 
 db = client.dms
