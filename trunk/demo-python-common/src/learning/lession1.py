@@ -3,6 +3,10 @@ Created on 06-Dec-2015
 
 @author: gsskhan
 '''
-print 'Welcome! to python ...' + '\n' + 'Author: Gulam'+ '\n'
 
-print 'Two raised to power of four = ' + str (2 ** 4) 
+import platform
+
+print ('Started program with python ' + platform.python_version() +'... \n');       
+
+print ('Two raised to power of four = ' + str (2 ** 4) );
+
