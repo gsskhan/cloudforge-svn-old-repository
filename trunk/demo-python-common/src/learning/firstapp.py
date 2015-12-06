@@ -4,7 +4,7 @@ author - gsskhan
 '''
 # first program of learning python
 
-import maxnumber
+from learning import maxnumber
 
 print 'program started ...'
 
@@ -37,6 +37,6 @@ else:
     print 'done.'
 
 print "11. program to find maximum b/w two numbers (10, 6)..."
-maxnumber.print_max(10, 6)
+learning.maxnumber.print_max(10, 6)
 
 print 'program finished ...'
