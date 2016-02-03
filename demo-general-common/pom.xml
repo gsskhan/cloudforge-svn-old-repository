@@ -7,6 +7,12 @@
 	<name>demo-general-common</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
+		<!-- Apache poi Dependencies -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.13</version>
+		</dependency>		
 		<!-- JasperReport Dependencies -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
